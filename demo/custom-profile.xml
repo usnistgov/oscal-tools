@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile xmlns="http://csrc.nist.gov/ns/oscal/1.0"
+  id="uuid-051e9699-fc3e-4178-9c9c-5159f3e22dc1">
+  <title>SP800-53 Custom Profile</title>
+  <import href="SP800-53-rev4-catalog.xml">
+    <include>
+      <call control-id="ac.1"/>
+      <call control-id="ac.2"/>
+      <call subcontrol-id="ac.2.1."/>
+    </include>
+  </import>
+  <import href="SP800-53-rev5-catalog.xml">
+    <include>
+      <call control-id="cm.12"/>
+    </include>
+  </import>
+</profile>
