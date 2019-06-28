@@ -86,11 +86,20 @@ public class JsonCLI {
       schema.validate(jsonObject);
       System.out.println("Content is valid.");
     } catch (ValidationException e) {
-      System.out.println(e.getMessage());
-      e.getCausingExceptions().stream().map(ValidationException::getMessage).forEach(System.out::println);
+      outputCause(e,0);
       exitCode = 1;
     }
     System.exit(exitCode);
+  }
+
+  private static void outputCause(ValidationException ex, int level) {
+    String padding = (level > 0) ? String.format("%1$"+(level *2)+"s", "") : "";
+    ++level;
+    
+    System.out.println(padding + ex.getMessage());
+    for (ValidationException cause : ex.getCausingExceptions()) {
+      outputCause(cause, level);
+    }
   }
 
   private static JSONObject newJSONObject(File file) throws JSONException, FileNotFoundException {
