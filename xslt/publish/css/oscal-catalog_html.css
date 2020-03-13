@@ -1,0 +1,343 @@
+
+.tag { color: green; font-family: sans-serif; font-size: 80%; font-weight: bold }
+.UNKNOWN { color: red; font-family: sans-serif; font-size: 80%; font-weight: bold }
+.UNKNOWN .tag { color: darkred }
+
+.lbl { background-color: midnightblue; color: white;
+  font-size: 80%; font-weight: bold; font-family: sans-serif;
+  padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
+
+.lbl2 { background-color: white; color: black; border: thin solid black;
+  font-size: 80%; font-weight: bold; font-family: sans-serif;
+  padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
+
+.metadata, section.ToC { padding: 0.4em; border: thin solid black; margin-top: 1em }
+.metadata > * { margin-top: 0em }
+
+.back-matter { padding: 0.4em; border: thin solid black }
+.back-matter > * { margin-top: 0em }
+
+div > .line { margin: 0.5em 0em 0em 0em }
+
+section.ToC { font-family: sans-serif }
+
+div.ToC { margin-left: 2em; margin-top: 0em }
+details p.toc-listing { margin: 0em 0em 0em 1em }
+div.enhancements p.toc-listing { display: inline-block }
+
+.toc-label { font-size: 90% }
+
+.toc-title { font-weight: bold }
+.enhancements .toc-title { font-weight: inherit; font-size: 80% }
+
+.withdrawn-status { font-family: sans-serif; font-size: 90% }
+
+.description {  }
+
+.party-id {  }
+
+.annotation {  }
+.annotation > * { margin: 0em }
+.annotation > .remarks { margin-left: 2em; font-size: 87%; margin: 0.2em 0em }
+.remarks > *:first-child { margin-top: 0em }
+.remarks > *:last-child  { margin-bottom: 0em }
+
+.annotation:hover { background-color: lemonchiffon }
+
+.roles { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
+.roles:before { content: "Roles:"; display: block; font-family: sans-serif; font-size: 80% }
+
+.parties { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
+.parties:before { content: "Parties:"; display: block; font-family: sans-serif; font-size: 80%  }
+
+
+.metadata details div.role { background-color: white; border: thin dotted black; padding: 0.5em;
+  display: inline-block; margin: 1em 0em 0em 0em; vertical-align: top }
+
+.metadata details div.party { background-color: white; border: thin dotted black; padding: 0.5em;
+  display: inline-block; margin: 1em 0em 0em 0em; vertical-align: top }
+
+
+.party .line { display: block; margin-left: 1em; font-size: smaller }
+.line.city  { display: inline-block }
+.line.state { display: inline-block }
+.line.postal-code { display: inline-block }
+
+.back-matter div { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
+
+.rlink { background-color: gainsboro }
+
+
+span.seal { color: midnightblue;
+  font-family: sans-serif; font-weight: bold; border-radius: 0.25em;
+  padding: 0.25em; border: thin solid midnightblue; margin-right: 0.25em }
+
+span.label { font-weight: normal; padding: 0em 0.5em 0em 0em }
+div > * { margin-top: 0.5em; margin-bottom: 0em }
+div > *:first-child { margin-top: 0em }
+
+div.control-body { margin-left: 7em }
+
+div.control-body > * { margin: 1em 0em 0em 0em }
+
+div.statement div       { border: medium solid white }
+div.statement div:hover { border: medium solid lightsteelblue }
+
+.withdrawn { background-color: gainsboro }
+.withdrawn .h3 { text-decoration: line-through }
+
+div.none { display: none }
+
+summary > h2, summary > h3, summary > h4 { display: inline-block; font-family: sans-serif }
+
+summary > .head:after { content: ': ' }
+
+summary > h1, summary > h2, summary > h3, summary > h4 { max-width: 80%;
+  vertical-align: top; margin: 0em }
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .head { font-family: sans-serif }
+
+.h1 { font-size: 2em;    font-weight: bold }
+.h2 { font-size: 1.5em;  font-weight: bold }
+.h3 { font-size: 1.17em; font-weight: bold }
+.h4 { font-size: 1.0em;  font-weight: bold }
+.h5 { font-size: .83em;  font-weight: bold }
+.h6 { font-size: .67em;  font-weight: bold }
+
+p .inline-head { text-decoration: underline; font-family: sans-serif; font-size: 90% }
+
+.insert { font-style: italic; font-weight: bold }
+.insert a { font-size: 80%; font-weight: bold; font-family: sans-serif }
+
+.group { border-top: thin solid black; padding: 0.5em 0em }
+
+.references { border-top: thin solid black; padding: 0.5em 0em }
+
+.control { margin-top: 1em; border: thin solid black; border-bottom: medium solid black; padding: 0.5em }
+
+div.part.statement { border: thin solid black; padding: 0.5em 1em 0.5em 1em }
+
+.param { margin-top: 0.5em }
+
+.part { margin-left: 2em; margin-top: 0.5em }
+
+td > div.part { margin: 0em 0em 0em 0em }
+
+.label {  }
+
+.usage {  }
+
+.constraint {  }
+
+.guideline {  }
+
+.value {  }
+
+.select {  }
+
+p.link { margin: 0.5em 0em 0em 0em; padding-left: 2em; text-indent: -2em }
+
+.prose {  }
+
+.choice {  }
+
+span.count:before { content: '(' }
+span.count:after  { content: ')' }
+
+td { vertical-align: text-top }
+
+td > p { margin: 0em; margin-top: 0.5em }
+td > p:first-child { margin-top: 0em }
+
+p.object { margin-top: 0.5em; margin-left: 1em }
+
+a { text-decoration: none }
+a:hover { text-decoration: underline }
+
+
+.responsible-party {  }
+
+.title {  }
+
+.published {  }
+
+.last-modified {  }
+
+.version {  }
+
+.oscal-version {  }
+
+.doc-id {  }
+
+.prop { }
+
+.link {  }
+
+.role {  }
+
+.citation {  }
+
+.resource {  }
+
+.person {  }
+
+.org { }
+
+.person-name {  }
+
+.short-name {  }
+
+.org-name {  }
+
+.person-id {  }
+
+.org-id {  }
+
+.address {  }
+
+.email {  }
+
+.phone {  }
+
+.url {  }
+
+.hash {  }
+
+.addr-line {  }
+
+.city {  }
+
+.state {  }
+
+.postal-code {  }
+
+.country {  }
+
+.desc {  }
+
+.base64 {  }
+
+.target {  }
+
+
+.lbl { background-color: midnightblue; color: white;
+  font-size: 80%; font-weight: bold; font-family: sans-serif;
+  padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
+
+.lbl2 { display: inline-block; border: thin solid black;
+  font-size: 80%; font-family: sans-serif;
+  padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
+
+.metadata { padding: 0.4em; border: thin solid black }
+.metadata > * { margin-top: 0em }
+
+.back-matter { padding: 0.4em; border: thin solid black }
+.back-matter > * { margin-top: 0em }
+
+div > .line { margin: 0.5em 0em 0em 0em }
+
+.back-matter {  }
+
+.description {  }
+
+.remarks {  }
+
+.party-id {  }
+
+.annotation {  }
+.annotation > * { margin: 0em }
+.annotation > .remarks { margin-left: 2em; font-size: 87%; margin: 0.2em 0em }
+.remarks > *:first-child { margin-top: 0em }
+.remarks > *:last-child  { margin-bottom: 0em }
+
+.annotation:hover { background-color: lemonchiffon }
+
+.responsible-party {  }
+
+.title {  }
+
+.published {  }
+
+.last-modified {  }
+
+.version {  }
+
+.oscal-version {  }
+
+.doc-id {  }
+
+.prop { }
+
+.link {  }
+
+.role {  }
+
+.roles { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
+.roles:before { content: "Roles:"; display: block; font-family: sans-serif; font-size: 80% }
+
+.parties { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
+.parties:before { content: "Parties:"; display: block; font-family: sans-serif; font-size: 80%  }
+
+
+.metadata details div.role { background-color: white; border: thin dotted black; padding: 0.5em;
+  display: inline-block; margin: 1em 0em 0em 0em; vertical-align: top }
+
+.metadata details div.party { background-color: white; border: thin dotted black; padding: 0.5em;
+  display: inline-block; margin: 1em 0em 0em 0em; vertical-align: top }
+
+
+.party .line { display: block; margin-left: 1em; font-size: smaller }
+.line.city  { display: inline-block }
+.line.state { display: inline-block }
+.line.postal-code { display: inline-block }
+
+.back-matter div { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
+
+.rlink { background-color: gainsboro }
+
+.citation {  }
+
+.resource {  }
+
+.person {  }
+
+.org { }
+
+.person-name {  }
+
+.short-name {  }
+
+.org-name {  }
+
+.person-id {  }
+
+.org-id {  }
+
+.address {  }
+
+.email {  }
+
+.phone {  }
+
+.url {  }
+
+.hash {  }
+
+.addr-line {  }
+
+.city {  }
+
+.state {  }
+
+.postal-code {  }
+
+.country {  }
+
+.desc {  }
+
+.rlink {  }
+
+.base64 {  }
+
+.target {  }
+
