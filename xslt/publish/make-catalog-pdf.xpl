@@ -9,26 +9,25 @@
   <p:input port="source" primary="true"/>
   <p:input port="parameters" kind="parameter"/>
   
+  <p:serialization port="input" indent="true"/>
   <p:output port="input" primary="false">
     <p:pipe port="result" step="input"/>
   </p:output>
   <p:output port="HTML" primary="false">
     <p:pipe port="result" step="make-html"/>
   </p:output>
+  
+  <p:serialization port="FO"    indent="true"/>
   <p:output port="FO" primary="false">
     <p:pipe port="result" step="make-xsl-fo"/>
   </p:output>
   
-  <p:serialization port="HTML" indent="true" method="xml"
-    doctype-public="-//W3C//DTD XHTML 1.1//EN"
-    doctype-system="http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"
-   />
+  <p:serialization port="HTML" indent="true" method="xml"/>
+  
   <!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">-->
   <!--<p:serialization port="markdown"     indent="false" method="text"/>-->
   
-  <p:serialization port="input" indent="true"/>
-  <p:serialization port="FO"    indent="true"/>
   
   <p:identity name="input"/>
   

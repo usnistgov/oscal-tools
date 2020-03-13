@@ -14,7 +14,7 @@
       profile import merge custom modify include exclude set-parameter alter add"/>
    
    <xsl:template match="back-matter" mode="toc">
-      <xsl:if test="exists(citation)">
+      <xsl:if test="exists(resource)">
          <p class="toc-listing">
             <a class="toc-label" href="#references">References</a>
          </p>
@@ -418,11 +418,11 @@
    </xsl:template>
    
    <xsl:template match="back-matter" mode="back-matter">
-      <xsl:if test="exists(citation)">
+      <xsl:if test="exists(resource)">
       <section class="references" id="references">
          <details open="open">
             <summary class="h3">References</summary>
-            <xsl:apply-templates select="citation"/>
+            <xsl:call-template name="make-resource-table"/>
          </details>
       </section>
       </xsl:if>
@@ -430,29 +430,50 @@
    
    <xsl:key name="cross-references" match="link[starts-with(@href,'#')]" use="replace(@href,'^#','')"/>
    
-   <xsl:template match="citation">
-      <p class="citation">
-         <xsl:apply-templates select="./title"/>
-         <xsl:for-each-group select="key('cross-references',@id)" group-by="true()">
-            <xsl:text expand-text="true"> Cited in: </xsl:text>
-            <xsl:for-each select="current-group()">
-               <xsl:if test="position() gt 1">, </xsl:if>
-               <xsl:apply-templates select="ancestor::control[1]" mode="link"/>
-            </xsl:for-each>
-         </xsl:for-each-group>
-         <xsl:text>.</xsl:text>
-      </p>   
+   <xsl:template name="make-resource-table">
+      <table class="resources">
+         <xsl:apply-templates select="resource"/>
+      </table>
    </xsl:template>
    
-   <xsl:template priority="2" match="citation[target]/title">
-      <a href="{ ../target }">         
+   <xsl:template match="back-matter/resource">
+      <tr class="resource">
+         <xsl:apply-templates/>
+      </tr>
+   </xsl:template>
+   
+   
+   <xsl:template match="resource/*">
+      <td class="{ local-name() }">
+         <xsl:apply-templates/>
+      </td>   
+   </xsl:template>
+   
+   <xsl:template priority="2" match="resource/citation">
+      <td class="{ local-name() }">
+         <xsl:apply-templates select="./text"/>
+         <xsl:apply-templates select="../rlink" mode="cited"/>
+      </td>   
+   </xsl:template>
+   
+   <xsl:template priority="2" match="resource/citation/text">
       <xsl:apply-templates/>
+      <xsl:if test="not(matches(string(.),'\.$'))">.</xsl:if>
+   </xsl:template>
+   
+   <xsl:template match="rlink"/>
+   
+   <xsl:template match="rlink" mode="cited" priority="2">
+      <xsl:text> </xsl:text>
+      <a class="{ local-name() }">
+         <xsl:copy-of select="@href"/>
+         <xsl:value-of select="@href"/>   
       </a>
+      <xsl:if test="not(matches(@href,'\.$'))">.</xsl:if>
    </xsl:template>
    
-   <xsl:template match="citation/title">
-      <xsl:apply-templates/>
-   </xsl:template>
+   
+   
    
    <xsl:template match="control" mode="link">
       <a href="#{@id}">

@@ -147,6 +147,7 @@ span.count:after  { content: ')' }
 td { vertical-align: text-top }
 
 td > p { margin: 0em; margin-top: 0.5em }
+
 td > p:first-child { margin-top: 0em }
 
 p.object { margin-top: 0.5em; margin-left: 1em }
@@ -228,7 +229,7 @@ div > .line { margin: 0.5em 0em 0em 0em }
 
 .back-matter div, #references div.resource { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
 
-.citation > p { text-indent: -3em; padding-left: 3em }
-
 .rlink { background-color: gainsboro }
 
+.resource td { padding-top: 0.5em }
+.resource td.title { width: 10% }

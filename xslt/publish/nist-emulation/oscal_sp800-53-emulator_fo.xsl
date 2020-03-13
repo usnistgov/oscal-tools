@@ -467,22 +467,29 @@
   
   <xsl:template priority="2" match="div[contains-token(@class,'assessment')]"/>
   
+<!-- We recognize certain sorts of tables (indicated by 'class') as def-list structures,
+     potentially nested. (A useful pattern.) -->
+  
+  <xsl:variable name="list-tables" select="('objective-part','resources')"/>
+  
 <!-- for now, every table is assumed to be a layout structure.
      They should have a @class to distinguish them. -->
-  <xsl:template match="table[@class='objective-part']">
+  <xsl:template match="table[@class=$list-tables]">
     <fo:list-block provisional-distance-between-starts="2em"
       provisional-label-separation="1em"  space-before="0.5em">
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
   
-  <xsl:template match="table[@class='objective-part']//tr">
+  <xsl:template match="table[@class=$list-tables]//tr">
     <fo:list-item space-before="0.5em">
+      <xsl:apply-templates select="." mode="tailor-list-item"/>
       <fo:list-item-label end-indent="label-end()">
         <fo:block>
           <xsl:apply-templates select="child::*[1]"/>
         </fo:block>
-      </fo:list-item-label><fo:list-item-body start-indent="body-start()">
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
         <fo:block>
           <xsl:apply-templates select="child::*[2]"/>
         </fo:block>
@@ -490,6 +497,12 @@
     </fo:list-item>
   </xsl:template>
   
+  <xsl:template match="*" mode="tailor-list-item"/>
+  
+  <xsl:template match="table[@class=$list-tables]//tr" mode="tailor-list-item">
+    <xsl:attribute name="provisional-distance-between-starts">8em</xsl:attribute>
+    <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
+  </xsl:template>
   
   <xsl:template match="ol">
     <fo:list-block provisional-distance-between-starts="2em"
