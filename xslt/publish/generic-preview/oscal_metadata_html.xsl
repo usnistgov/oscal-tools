@@ -145,6 +145,13 @@
       </span>
    </xsl:template>
    
+   <xsl:template match="citation/*" mode="decorate-inline">
+      <span class="lbl">
+         <xsl:text>citation </xsl:text>
+         <xsl:value-of select="local-name()"/>
+      </span>
+   </xsl:template>
+   
    <xsl:template match="annotation">
       <div class="{ @ns ! (. || '_') || @name ! (. || ' ')}annotation">
          <p class="line"><xsl:apply-templates select="." mode="decorate-inline"/>
@@ -155,7 +162,6 @@
          <xsl:apply-templates/>
       </div>
    </xsl:template>
-
 
    <xsl:template match="description">
       <div class="description">
@@ -184,11 +190,17 @@
       </div>
    </xsl:template>
    
-   <xsl:template match="resource/* | citation/*">
-      <p class="{ local-name() }">
+   <xsl:template match="resource/title | resource/desc | resource/prop | resource/citation/*">
+      <p class="{ local-name() }{ @name ! (' ' || .) }">
          <xsl:apply-templates select="." mode="decorate-inline"/>
          <xsl:apply-templates/>
       </p>
+   </xsl:template>
+   
+   <xsl:template match="resource/citation" priority="2">
+      <div class="{ local-name() }">
+         <xsl:apply-templates/>
+      </div>
    </xsl:template>
    
    <xsl:template match="rlink" priority="2">

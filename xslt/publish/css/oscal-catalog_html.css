@@ -155,71 +155,6 @@ a { text-decoration: none }
 a:hover { text-decoration: underline }
 
 
-.responsible-party {  }
-
-.title {  }
-
-.published {  }
-
-.last-modified {  }
-
-.version {  }
-
-.oscal-version {  }
-
-.doc-id {  }
-
-.prop { }
-
-.link {  }
-
-.role {  }
-
-.citation {  }
-
-.resource {  }
-
-.person {  }
-
-.org { }
-
-.person-name {  }
-
-.short-name {  }
-
-.org-name {  }
-
-.person-id {  }
-
-.org-id {  }
-
-.address {  }
-
-.email {  }
-
-.phone {  }
-
-.url {  }
-
-.hash {  }
-
-.addr-line {  }
-
-.city {  }
-
-.state {  }
-
-.postal-code {  }
-
-.country {  }
-
-.desc {  }
-
-.base64 {  }
-
-.target {  }
-
-
 .lbl { background-color: midnightblue; color: white;
   font-size: 80%; font-weight: bold; font-family: sans-serif;
   padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
@@ -291,53 +226,9 @@ div > .line { margin: 0.5em 0em 0em 0em }
 .line.state { display: inline-block }
 .line.postal-code { display: inline-block }
 
-.back-matter div { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
+.back-matter div, #references div.resource { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
+
+.citation > p { text-indent: -3em; padding-left: 3em }
 
 .rlink { background-color: gainsboro }
-
-.citation {  }
-
-.resource {  }
-
-.person {  }
-
-.org { }
-
-.person-name {  }
-
-.short-name {  }
-
-.org-name {  }
-
-.person-id {  }
-
-.org-id {  }
-
-.address {  }
-
-.email {  }
-
-.phone {  }
-
-.url {  }
-
-.hash {  }
-
-.addr-line {  }
-
-.city {  }
-
-.state {  }
-
-.postal-code {  }
-
-.country {  }
-
-.desc {  }
-
-.rlink {  }
-
-.base64 {  }
-
-.target {  }
 
