@@ -65,7 +65,7 @@ div.enhancements p.toc-listing { display: inline-block }
 
 .back-matter div { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
 
-.rlink { background-color: gainsboro }
+.rlink {  }
 
 
 span.seal { color: midnightblue;
@@ -228,8 +228,6 @@ div > .line { margin: 0.5em 0em 0em 0em }
 .line.postal-code { display: inline-block }
 
 .back-matter div, #references div.resource { margin-left: 1em; margin-top: 0.5em; padding: 0.2em; border: thin solid black }
-
-.rlink { background-color: gainsboro }
 
 .resource td { padding-top: 0.5em }
 .resource td.title { width: 10% }
