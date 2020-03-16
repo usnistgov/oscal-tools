@@ -70,7 +70,7 @@
                   </xsl:call-template>
                   <xsl:if test="not($withdrawn)">
                      <xsl:call-template name="unconditional-listing">
-                        <xsl:with-param name="things" select="child::link"/>
+                        <xsl:with-param name="things" select="child::link[@rel='reference']"/>
                         <xsl:with-param name="sg">Reference</xsl:with-param>
                         <xsl:with-param name="pl">References</xsl:with-param>
                         <xsl:with-param name="css-class">control-references</xsl:with-param>
@@ -340,13 +340,13 @@
    </xsl:template>-->
    
    <!-- Makes links to related controls at the end of the last text inside the 'guidance' part
-        before any subparts or links. Depends on 'link' elements being at the end of 'part'  -->
+        before any subparts or links. All 'related' links within the (closest) control are collected  -->
    <xsl:template match="part[@name='guidance']//text()" mode="#default html-ns">
       <xsl:variable name="scope" select="ancestor::part[@name='guidance']/(* except (part|link))"/>
       <xsl:value-of select="."/>
       <xsl:if test=". is $scope/descendant::text()[last()]">
          <xsl:call-template name="guidance-links">
-            <xsl:with-param name="links" select="$scope/following-sibling::link[@rel = 'related']"/>
+            <xsl:with-param name="links" select="ancestor::control[1]//link[@rel = 'related']"/>
          </xsl:call-template>
       </xsl:if>
    </xsl:template>
@@ -437,11 +437,17 @@
    </xsl:template>
    
    <xsl:template match="back-matter/resource">
-      <tr class="resource">
+      <tr class="resource" id="{@id}">
          <xsl:apply-templates/>
       </tr>
    </xsl:template>
    
+   
+   <xsl:template match="resource">
+      <td class="{ local-name() }">
+         <xsl:apply-templates/>
+      </td>   
+   </xsl:template>
    
    <xsl:template match="resource/*">
       <td class="{ local-name() }">
@@ -461,7 +467,7 @@
       <xsl:if test="not(matches(string(.),'\.$'))">.</xsl:if>
    </xsl:template>
    
-   <xsl:template match="rlink"/>
+   <xsl:template match="rlink" priority="2"/>
    
    <xsl:template match="rlink" mode="cited" priority="2">
       <xsl:text> </xsl:text>

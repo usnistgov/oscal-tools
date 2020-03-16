@@ -392,31 +392,18 @@
       </xsl:choose>
    </xsl:template>
    
-   <xsl:template match="citation[empty(target)]" mode="link-as-link">
-      <xsl:apply-templates select="child::title"/>
-   </xsl:template>
-   
    <xsl:template match="*" mode="link-as-link">
       <a href="#{ @id }">
          <xsl:apply-templates select="." mode="link-text"/>
       </a>
    </xsl:template>
    
-   <xsl:template match="citation" mode="link-as-link">
-      <a href="{ child::target }">
-         <xsl:for-each select="child::title">
-            <span class="citation-title">
-               <xsl:apply-templates/>
-            </span>
-         </xsl:for-each>
-         <xsl:if test="not(matches(child::title,'\S'))" expand-text="true">{ child::target }</xsl:if>
-      </a>
-   </xsl:template>
-   
    <xsl:template priority="2" match="resource[empty(rlink)]" mode="link-as-link">
       <xsl:param name="link" select="()"/>
          <xsl:for-each select="$link">
-            <xsl:apply-templates/>
+            <span class="ref-label">
+               <xsl:apply-templates/>
+            </span>
             <xsl:if test="exists(desc | citation/text)">
               <xsl:text>: </xsl:text>
             </xsl:if>
@@ -429,7 +416,9 @@
       <xsl:param name="link" select="()"/>
       <a href="{ child::rlink[1]/@href }">
          <xsl:for-each select="$link">
-            <xsl:apply-templates/>
+            <span class="ref-label">
+              <xsl:apply-templates/>
+            </span>
             <xsl:text>: </xsl:text>
          </xsl:for-each>
          <xsl:apply-templates select="child::desc"/>

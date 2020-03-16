@@ -156,15 +156,17 @@
         <xsl:call-template name="footer-table">
           <xsl:with-param name="left-side">
             <xsl:if test="not(@id='references')">FAMILY: </xsl:if>
-            <fo:retrieve-marker retrieve-class-name="family-abbr"/>
+            <fo:basic-link internal-destination="{ @id }"> 
+              <fo:retrieve-marker retrieve-class-name="family-abbr"/>
+            </fo:basic-link>
           </xsl:with-param>
           <xsl:with-param name="right-side">
             <xsl:text>PAGE </xsl:text>
             <fo:page-number/>
           </xsl:with-param>
-          <xsl:with-param name="notice">
+          <!--<xsl:with-param name="notice">
             <fo:block font-size="80%" font-style="italic" text-align="center">This document is produced from OSCAL source data</fo:block>
-          </xsl:with-param>
+          </xsl:with-param>-->
         </xsl:call-template>
       </fo:static-content>
       <fo:static-content flow-name="xsl-footnote-separator">
@@ -369,6 +371,23 @@
     <xsl:if test="not(starts-with(following-sibling::text()[1],':'))">: </xsl:if>
   </xsl:template>
   
+<!-- External links from citations rewritten as internal -->
+  <xsl:template match="p[@class='link']/a[span/@class='ref-label']">
+     <xsl:variable name="citation" select="key('resource-by-label',span[@class='ref-label'])"/>
+    <xsl:choose>
+      <xsl:when test="exists($citation)">
+        <fo:basic-link internal-destination="{$citation/@id}">
+          <xsl:apply-templates select="span"/>
+        </fo:basic-link>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:key name="resource-by-label" match="tr[@class='resource']" use="td[@class='title']"/>
+    
   <xsl:template match="span[@class='count'][not(.=' None')]"/>
   
   <xsl:template match="details[summary[@class='h4']]/p[1]">
@@ -477,12 +496,14 @@
   <xsl:template match="table[@class=$list-tables]">
     <fo:list-block provisional-distance-between-starts="2em"
       provisional-label-separation="1em"  space-before="0.5em">
+      <xsl:copy-of select="@id"/>
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
   
   <xsl:template match="table[@class=$list-tables]//tr">
     <fo:list-item space-before="0.5em">
+      <xsl:copy-of select="@id"/>
       <xsl:apply-templates select="." mode="tailor-list-item"/>
       <fo:list-item-label end-indent="label-end()">
         <fo:block>
@@ -499,7 +520,7 @@
   
   <xsl:template match="*" mode="tailor-list-item"/>
   
-  <xsl:template match="table[@class=$list-tables]//tr" mode="tailor-list-item">
+  <xsl:template match="table[@class='resources']//tr" mode="tailor-list-item">
     <xsl:attribute name="provisional-distance-between-starts">8em</xsl:attribute>
     <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
   </xsl:template>
