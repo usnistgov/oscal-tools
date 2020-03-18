@@ -42,6 +42,28 @@
     
     <xsl:template match="part[@name=('objective','assessment')]" priority="2"/>
     
+    <xsl:key name="param-by-id" match="param" use="@id"/>
+    
+    <xsl:template match="insert">
+        <xsl:apply-templates select="key('param-by-id',@param-id)" mode="show.parameter"/>
+    </xsl:template>
+    
+    <xsl:template match="param" mode="show.parameter">
+        <xsl:text>[Assign: </xsl:text>
+        <xsl:apply-templates select="(value,label)[1]"/>
+        <xsl:text>]</xsl:text>
+    </xsl:template>
+    
+    <xsl:template match="param[select]" mode="show.parameter">
+        <xsl:text expand-text="true">[Select{ @how-many ! ' (' || . || ')'}:</xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text>]</xsl:text>
+    </xsl:template>
+    
+    <xsl:template match="select/choice">
+        <xsl:if test="exists(preceding-sibling::*)">; </xsl:if>
+        <xsl:apply-templates/>
+    </xsl:template>
     
     <!-- Links after the first link in a control are dropped. -->
     <xsl:template match="control/link" priority="2"/>

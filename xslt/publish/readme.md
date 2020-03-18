@@ -2,9 +2,43 @@
 
 This is a demo OSCAL publishing platform. It is designed to be freely adapted, used, and reverse engineered.
 
-(Proposed architecture and command-line syntax offered below.)
+## Applications
 
-## Applications provided for
+### Generic preview
+
+Apply this XSLT to your OSCAL catalog or to the results of resolving an OSCAL profile (as a catalog baseline).
+
+Generic preview logic attempts to provide any valid input with a "fair and honest" representation. This means that elements that are specifically presentational in their scope (such as paragraphs or inline italic) are simply rendered as such for display, while generic (typed) structures are labeled to indicate their type.
+
+While these transformations provide no validation support as such, even the generic fallback logic for any/all valid OSCAL might support checking the data "by eye", to an extent.
+
+### NIST emulation
+
+These XSLTs produce a more polished formatted result than the rough previews. They rely on the preview stylesheets for fallback processing, but they provide their own formatting in emulation of an official NIST publication.
+
+They are designed to work specifically with OSCAL as exemplified in test and common samples, such as the SP800-53 catalogs or baselines derived from them.
+
+They can also serve also as the site of extension; that is, you can build on this logic to add support for specialized data constructs.
+
+## Setup and use
+
+These applications are implemented as *sequences* of transformations, not always single transformations (invocations of a processor with a runtime stylesheet).
+
+
+## Customization
+
+Either or both of these XSLT transformations may be further customized, either by direct intervention or by importing or including into local/customizing XSLT stylesheets.
+
+## Proposed command-line syntax
+
+We need (do not yet have) a script that can:
+
+- instigate XSLT processing over provided source data
+- designate a target pathway via argument e.g. 'catalog'
+- provide for user to name output (result) file(s)
+- provide for any necessary parameterization
+
+In the below, our (not yet developed) script is called `produce-oscal.sh`.
 
 ### Generic preview
 
