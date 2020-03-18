@@ -25,7 +25,6 @@
         </xsl:element>
     </xsl:template>
     
-    
     <xsl:template match="control/title" priority="1.5">
         <title>
             <xsl:apply-templates/>
@@ -49,19 +48,23 @@
     </xsl:template>
     
     <xsl:template match="param" mode="show.parameter">
-        <xsl:text>[Assign: </xsl:text>
+        <xsl:text>[Assignment: </xsl:text>
         <xsl:apply-templates select="(value,label)[1]"/>
         <xsl:text>]</xsl:text>
     </xsl:template>
     
     <xsl:template match="param[select]" mode="show.parameter">
-        <xsl:text expand-text="true">[Select{ @how-many ! ' (' || . || ')'}:</xsl:text>
+        <xsl:text expand-text="true">[Selection{ @how-many ! ' (' || . || ')'}:</xsl:text>
         <xsl:apply-templates/>
         <xsl:text>]</xsl:text>
     </xsl:template>
     
     <xsl:template match="select/choice">
-        <xsl:if test="exists(preceding-sibling::*)">; </xsl:if>
+        <xsl:text>; </xsl:text>
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <xsl:template match="select/choice[1]" priority="2">
         <xsl:apply-templates/>
     </xsl:template>
     
@@ -78,6 +81,5 @@
             </xsl:for-each>
         </links>
     </xsl:template>
-    
     
 </xsl:stylesheet>
