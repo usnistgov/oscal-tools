@@ -18,7 +18,7 @@
    <xsl:variable name="include-toc" select="$with-toc=('yes','true')"/>
    
    <xsl:template match="/">
-      <html>
+      <html lang="en">
          <head>
             <title>
                <xsl:value-of select="/descendant::title[1]/normalize-space(.)"/>

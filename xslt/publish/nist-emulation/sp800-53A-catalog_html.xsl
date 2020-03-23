@@ -184,7 +184,7 @@
       <div class="part {@name}">
          <xsl:copy-of select="@id"/>
          <xsl:apply-templates select="." mode="title"/>
-            <xsl:apply-templates/>
+         <xsl:apply-templates/>
       </div>
    </xsl:template>
    
@@ -364,6 +364,12 @@
       </xsl:for-each-group>
    </xsl:template>
    
+   <xsl:template match="part[empty(title)]" mode="title">
+         <h4 class="part-title">
+            <xsl:apply-templates select="." mode="decorate-inline"/>
+         </h4>
+   </xsl:template>
+      
    <xsl:template match="*" mode="title">
       <p class="title">
          <xsl:value-of select="@name"/>
