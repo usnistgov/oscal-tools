@@ -271,28 +271,26 @@
    
    <xsl:template match="part/prop[@name='label']"/>
    
-   
-   
    <xsl:template match="group" mode="title">
       <xsl:apply-templates select="./title"/>
    </xsl:template>
    
-   <xsl:template match="part[@name='statement']" mode="title">
+   <xsl:template priority="2" match="part[@name='statement']" mode="title">
       <h4>Control</h4>
    </xsl:template>
    
-   <xsl:template match="part[@name='guidance']" mode="title">
+   <xsl:template priority="2" match="part[@name='guidance']" mode="title">
       <h4>Supplemental guidance</h4>
    </xsl:template>
    
-   <xsl:template match="part[@name='objective']" mode="title">
+   <xsl:template priority="2" match="part[@name='objective']" mode="title">
       <h4>
          <xsl:text>Objective</xsl:text>
          <xsl:if test="part">s</xsl:if>
       </h4>
    </xsl:template>
    
-   <xsl:template match="part[@name='assessment']" mode="title">
+   <xsl:template  priority="2" match="part[@name='assessment']" mode="title">
       <h4>
          <xsl:text>Assessment: </xsl:text>
          <xsl:value-of select="prop[@name='method']"/>
