@@ -1,29 +1,70 @@
+
 # OSCAL Publishing Demos
 
-In this repo are XSLT transformations that together form a starter/demo OSCAL publishing platform. It is designed to be freely adapted, used, and reverse engineered.
+The repository provides XSLT transformations that together form a starter/demo OSCAL publishing platform. The stylesheets are in the public domain, and are designed to be freely used, adapted, and reverse engineered.
 
-XSLT transformations can be applied to XML data to produce results (outputs) in various formats, including other forms of XML, HTML or PDF (for processing by software that know how to read those). Since this is a publishing application (that is, aiming at legible display for human readers), we aim at HTML (readily installed into any web site) and PDF.
-
-While the application semantics of the various targets of OSCAL processing are open-ended, it also remains the case that human-readable versions and representations of all these data sets will remain indispensable, even at different stages of creation, production, processing and review. Accordingly, the generic logic provided in these utilities may be useful and adaptable across a wide range of scenarios, wherever OSCAL is involved.
+XSLT transformations can be applied to XML data to produce results (outputs) in various formats, including other forms of XML, HTML or PDF (for processing by software that know how to read those formats). Since this is a publishing application (that is, aiming at legible display for human readers), we aim at HTML (readily installed into any web site) and PDF.
 
 Neither the HTML nor the PDF outputs produced by this software is or can be warranted for any purpose. They are published mainly for the purpose of providing a starting point for others.
-
-To set up and run this software requires development skills. It is possible to embed these stylesheets in systems used by persons (human operators) who invoke this software without being able to install or test it. This readme is not for those users (who do not know enough for it to be useful), or even for advanced developers who plan to embed the software in their own (who probably know too much, and can learn what they need by skimming). Rather, it aims at the developer who needs to test and demonstrate the capability -- and, perhaps, produce useful HTML or PDF from OSCAL inputs -- without (yet) being able to adapt it or run it at scale.
-
-At the same time, the resources are designed such that more advanced users especially with XSLT skills will be able to drop these stylesheets into any framework supporting XSLT 3.0. With these use cases in mind, interfaces are designed to be as simple as possible, with minimal parameterization or runtime options, and the XSLT code itself is provided with internal documentation.
-
-(Devs please feel free to offer feedback about how we can make it easier.)
 
 ## Prerequisites for this guide
 
 * You are comfortable at the command line (e.g. *nix, Mac, Windows shell)
 * You are comfortable installing and running Java applications
 
-The Java applications are SaxonHE (open source XSLT 3.0 engine from Saxonica) and Apache FOP. HTML can be produced using Saxon only. PDF requires the combination of Saxon and FOP.
+To set up and run this software requires (rudimentary) development skills. These stylesheets are designed to be embedded in systems used by persons (human operators) who invoke their functionality without being able to install or test them. This guidance is not for those users (who have no use for it), or even for advanced developers who plan not only to run the transformations, but to embed them in their own applications. (These users probably know too much, and can learn what they need by skimming). Rather, this "how-to" aims at the developer who needs to test and demonstrate the capability ("producing readable OSCAL"), even if intermittently -- without (yet) having the skills or tools needed to adapt the tools or run them at scale.
 
-SaxonHE is produced by Saxonica, Inc. and documented as part of commercial offerings [links]. Windows users may note that a standalone Windows installation of Saxon is also available, which should also work.
+At the same time, the resources are designed such that more advanced users especially with XSLT skills will be able to drop these stylesheets into any framework supporting XSLT 3.0, then use them as a springboard for further development. With these use cases in mind, interfaces are designed to be as simple as possible, with minimal parameterization or runtime options, and the XSLT code itself is provided with internal documentation.
 
-FOP is documented [...]
+(Devs please feel free to offer feedback about how we can make it easier.)
+
+### XSLT dependencies
+
+The XSLT is documented internally, but developers can assume that features of XSLT 3.0 are sometimes exploited, meaning these stylesheets will not always run correctly, unaltered, in an XSLT 1.0 environment.
+
+### Java
+
+The Java applications we rely on here are SaxonHE (open source XSLT 3.0 engine from Saxonica) and Apache FOP. HTML can be produced using Saxon only. PDF requires the combination of Saxon and FOP.
+
+#### Saxon
+[https://sourceforge.net/projects/saxon/files/Saxon-HE/](https://sourceforge.net/projects/saxon/files/Saxon-HE/)SaxonHE is produced by Saxonica.com and documented as part of commercial offerings
+[https://www.saxonica.com/products/products.xml](https://www.saxonica.com/products/products.xml) [links].
+
+To back up this guide, see especially documentation on  
+[Getting started on Java](https://www.saxonica.com/documentation/index.html#!about/gettingstarted/gettingstartedjava) page and the page on 
+[Running XSLT from the Command Line](https://www.saxonica.com/documentation/index.html#!using-xsl/commandline)
+
+To produce HTML preview file called `html-preview.html` from XML file `latest-catalog.xml` using XSLT transformation `imaginary-html.xsl`, using Saxon, use
+
+```bash
+java -cp saxon-he-10.0.jar net.sf.saxon.Transform -t -s:latest-catalog.xml -xsl:imaginary-html.xsl -o:html-preview.html
+```     
+
+Of course you will substitute the names and paths with your own.
+
+The flags here:
+
+- `-cp` Java classpath (followed by the class to invoke)
+- `-t` Run noisy (displaying version and timing info)
+- `-s` Path to (primary) source file resource
+- `-xsl` Path to transformation (XSLT) resource
+- `-o` Path for output file
+
+#### Apache FOP
+
+For easy production of lightly-formatted PDF from HTML, we rely on the open-source Apache FOP processor. Again, this can be switched out: use a different XSL engine or an entirely different HTML-to-PDF pathway for your PDF production.
+
+The Apache Foundation has a 
+[Quick Start Guide](https://xmlgraphics.apache.org/fop/quickstartguide.html) for FOP.
+
+
+*Developers should also take note that the XSLT and XSL code in this repository is written to be standards-conformant, and should have no formal dependency on the tools described here. Any conformant XSLT or XSL-FO processors should be able to execute these transformations as coded - including other versions of Saxon, other current XSLT engines, and other formatting engines supporting XSL (FO). If your testing shows this not to be the case please let us know.*
+
+## Paths and `jar` files
+
+In these examples, all resources are assumed to be present in a local subdirectory, including source document(s) (XML), stylesheets (XSLT) and Java `jar` files. In your own deployment, you might prefer a better arrangement. Adjust your scripts accordingly.
+
+
 
 ## Applications
 
