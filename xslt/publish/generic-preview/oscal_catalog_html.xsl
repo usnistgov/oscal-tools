@@ -227,7 +227,7 @@
    
    <xsl:template match="control/title">
       <xsl:apply-templates select=".." mode="seal"/>
-      <h2 class="control-title">
+      <span class="h2 control-title">
          <!--<xsl:for-each select="ancestor::group/title">
             <small><xsl:apply-templates/>
                <xsl:text> | </xsl:text></small>
@@ -238,12 +238,12 @@
             <small> ({ $c })</small>
             <!--<small> ({ $c } { if ($c eq 1) then 'enhancement' else 'enhancements' })</small>-->
          </xsl:for-each-group>
-      </h2>
+      </span>
    </xsl:template>
    
    <xsl:template priority="3" match="control/control/title">
       <xsl:apply-templates select=".." mode="seal"/>
-      <h4 class="subcontrol-title">
+      <span class="h4 subcontrol-title">
          <xsl:for-each select="../ancestor::control/title">
             <small>
                <xsl:apply-templates/>
@@ -251,7 +251,7 @@
             </small>
          </xsl:for-each>
          <xsl:apply-templates/>
-      </h4>
+      </span>
    </xsl:template>
    
    <xsl:template match="control" mode="seal">
