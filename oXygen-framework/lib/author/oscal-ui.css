@@ -1,0 +1,56 @@
+@import 'oscal.css';
+
+
+group:before { content: 'group: ' oxy_textfield(
+          edit, '@name',
+          columns, 10); }
+
+control:before { content: 'control: '
+          oxy_combobox( 
+            edit, '@id',
+            editable, true ); }
+
+control control:before { font-weight: bold; color: darkred; font-family: sans-serif;
+          content: 
+           oxy_capitalize(attr(name)) ' '
+            oxy_combobox( 
+              edit, '@id',
+              editable, true )
+}
+
+prop:before { content: oxy_textfield(
+          edit, '@name',
+          columns, 15); }
+
+control p:before[class], component p:before[class] { content: oxy_textfield(
+          edit, '@name',
+          columns, 15); }
+
+part:before { font-weight: bold; color: midnightblue; font-family: sans-serif;
+          content: 
+           oxy_capitalize(attr(name)) ' '
+            oxy_combobox( 
+              edit, '@name',
+              editable, true,
+              values, 'description, objectives, guidance, information, remarks' )
+}
+
+param:before { content: 'param targets ' oxy_textfield(
+          edit, '@target',
+          columns, 10) 
+           'class ' oxy_textfield(
+          edit, '@name',
+          columns, 10); }
+          
+insert:before { content: 'id ' oxy_textfield(
+          edit, '@param-id',
+          columns, 7); }
+
+
+a:after { content:
+   oxy_urlChooser(
+          edit, '@href',
+          columns, 50 ) 
+ }
+
+

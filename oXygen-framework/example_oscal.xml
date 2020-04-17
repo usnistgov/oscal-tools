@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="lib/oscal-author.css" title="Simple" alternate="yes"?>
+<?xml-model href="lib/oscal-checkup.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type="text/css" href="oscal-ui.css" title="Fancy" alternate="yes"?>
+<catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0" id="SP800-53A-template_oscal"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://csrc.nist.gov/ns/oscal/1.0 file:/C:/Users/wap1/Documents/Gitlab/oscal-tools/53A-editing/lib/oscal_catalog_schema.xsd">
+    <metadata>
+        <title>SP 800-53A OSCAL Scratch Template</title>
+        <last-modified>2020-04-15T15:30:25.493-04:00</last-modified>
+        <version>version 0</version>
+        <oscal-version>1.0_Milestone2</oscal-version>
+    </metadata>
+    <group>
+        <title>Grocery shopping</title>
+        <control id="control2">
+            <title>Parking Lot</title>
+            <control id="control2.a">
+                <title>Fire lane and pedestrian crossings</title>
+            </control>
+            <control id="control2.b">
+                <title>Handicapped spots</title>
+            </control>
+        </control>
+        <control id="control1">
+            <title>Express Lane</title>
+            <part name="statement">
+                <p>No more than about fifteen items per customer.</p>
+            </part>
+            
+            <part name="objectives">
+                <prop name="method">interview</prop>
+                <p>A customer may be asked how many items she or he has procured for purchase.</p>
+                <p>A <em>customer</em> who admits to having more than about fifteen items, can be
+                    asked if they would please use another line.</p>
+            </part>
+        </control>
+    </group>
+    <group>
+        <title>Features of structured (XML) editors</title>
+        <part name="summary">
+            <ul>
+                <li>Designed for <em>documentary data</em>, supports prose, running text, inline
+                    formatting, lists and tables</li>
+                <li>Editable, context-sensitive formatting and <q>false colors</q> (color-coding
+                    semantics and relations) - this means that by authoring CSS, users can even help
+                    design appropriate data models</li>
+                <li>Outline vs details views; alternative presentations</li>
+                <li>Validation of structures against defined models and patterns (both
+                    OSCAL/standard, and local/custom)</li>
+                <li>Consistency checking both in the background and at intervals (milestones)</li>
+                <li>Automatic numbering and content generation; data regularization and
+                    normalization</li>
+                <li>Forms controls (checkboxes, pulldowns, date widgets etc.)</li>
+                <li>Outlining, drag-and-drop</li>
+                <li>Macros, hot keys, code snippets, refactoring operations</li>
+                <li>Structural and semantic querying (such as <q>show me all paragraphs shorter than
+                        50 characters long</q>)</li>
+                <li>Integration with external processes (filters, crunchers, content
+                    converters)</li>
+                <li>A generic XML toolkit will support authoring in OSCAL when we want. The same
+                    tool would also support authoring in any other XML format, including something
+                    further tuned and optimized. Think about what your data could look like produced
+                    in its own custom-fitted and outfitted tagging – then converted into OSCAL (or
+                    what-have-you) on demand —</li>
+            </ul>
+        </part>
+    </group>
+</catalog>
