@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/css" href="lib/oscal-author.css" title="Simple" alternate="yes"?>
-<?xml-model href="lib/oscal-checkup.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type="text/css" href="lib/author/oscal-author.css" title="Simple" alternate="yes"?>
+<?xml-model href="lib/author/oscal-checkup.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <?xml-stylesheet type="text/css" href="oscal-ui.css" title="Fancy" alternate="yes"?>
-<catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0" id="SP800-53A-template_oscal"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://csrc.nist.gov/ns/oscal/1.0 file:/C:/Users/wap1/Documents/Gitlab/oscal-tools/53A-editing/lib/oscal_catalog_schema.xsd">
+<catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://csrc.nist.gov/ns/oscal/1.0 lib/schema/oscal_catalog_schema.xsd"
+ xmlns="http://csrc.nist.gov/ns/oscal/1.0" id="example_oscal">
     <metadata>
-        <title>SP 800-53A OSCAL Scratch Template</title>
+        <title>OSCAL Scratch Template</title>
         <last-modified>2020-04-15T15:30:25.493-04:00</last-modified>
         <version>version 0</version>
         <oscal-version>1.0_Milestone2</oscal-version>
     </metadata>
     <group>
         <title>Grocery shopping</title>
+        <param id="param1">
+            <label>enforcing official</label>
+            <value>store manager or designee</value>
+        </param>
         <control id="control2">
             <title>Parking Lot</title>
             <control id="control2.a">
@@ -24,6 +28,10 @@
         </control>
         <control id="control1">
             <title>Express Lane</title>
+            <param id="param2">
+                <label>offending individual</label>
+                <value>customer</value>
+            </param>
             <part name="statement">
                 <p>No more than about fifteen items per customer.</p>
             </part>
@@ -31,8 +39,8 @@
             <part name="objectives">
                 <prop name="method">interview</prop>
                 <p>A customer may be asked how many items she or he has procured for purchase.</p>
-                <p>A <em>customer</em> who admits to having more than about fifteen items, can be
-                    asked if they would please use another line.</p>
+                <p>A <insert param-id="param2"/> who admits to having more than about fifteen items,
+                    can be asked if they would please use another line.</p>
             </part>
         </control>
     </group>
