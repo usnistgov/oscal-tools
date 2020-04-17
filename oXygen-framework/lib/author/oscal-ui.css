@@ -1,6 +1,10 @@
 @import 'oscal.css';
 
 
+catalog:before { content: 'catalog ID: ' oxy_textfield(
+          edit, '@id',
+          columns, 20); }
+
 group:before { content: 'group: ' oxy_textfield(
           edit, '@name',
           columns, 10); }
@@ -35,17 +39,13 @@ part:before { font-weight: bold; color: midnightblue; font-family: sans-serif;
               values, 'description, objectives, guidance, information, remarks' )
 }
 
-param:before { content: 'param targets ' oxy_textfield(
-          edit, '@target',
+param:before { content: 'param id ' oxy_textfield(
+          edit, '@id',
           columns, 10) 
            'class ' oxy_textfield(
           edit, '@name',
           columns, 10); }
           
-insert:before { content: 'id ' oxy_textfield(
-          edit, '@param-id',
-          columns, 7); }
-
 
 a:after { content:
    oxy_urlChooser(
