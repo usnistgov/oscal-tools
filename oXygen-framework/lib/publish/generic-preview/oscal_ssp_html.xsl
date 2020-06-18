@@ -6,10 +6,10 @@
                 xpath-default-namespace="http://csrc.nist.gov/ns/oscal/1.0"
                 exclude-result-prefixes="#all">
 
-<!-- XSLT produced from Metaschema ... -->
-
-   <xsl:import href="oscal_metadata_html.xsl"/>
-   <xsl:import href="oscal_common_html.xsl"/>
+<!-- SSP rendering not ready yet ... this XSLT includes many no-op templates
+     marked 'mode="asleep"' - also has not been updated to latest models (M3) -->
+   
+   <xsl:import href="oscal_catalog_html.xsl"/>
    
    <xsl:template match="/" expand-text="true">
       <html>
