@@ -393,7 +393,7 @@
    </xsl:template>
    
    <xsl:template match="*" mode="link-as-link">
-      <a href="#{ @id }">
+      <a href="#{ (@uuid, @id)[1] }">
          <xsl:apply-templates select="." mode="link-text"/>
       </a>
    </xsl:template>
