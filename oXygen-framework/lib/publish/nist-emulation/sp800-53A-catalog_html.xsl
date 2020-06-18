@@ -271,6 +271,8 @@
    
    <xsl:template match="part/prop[@name='label']"/>
    
+   
+   
    <xsl:template match="group" mode="title">
       <xsl:apply-templates select="./title"/>
    </xsl:template>
@@ -290,7 +292,7 @@
       </h4>
    </xsl:template>
    
-   <xsl:template  priority="2" match="part[@name='assessment']" mode="title">
+   <xsl:template priority="2" match="part[@name='assessment']" mode="title">
       <h4>
          <xsl:text>Assessment: </xsl:text>
          <xsl:value-of select="prop[@name='method']"/>
@@ -441,7 +443,7 @@
    </xsl:template>
    
    <xsl:template match="back-matter/resource">
-      <tr class="resource" id="{@uuid}">
+      <tr class="resource" id="{@id}">
          <xsl:apply-templates/>
       </tr>
    </xsl:template>

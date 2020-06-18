@@ -18,7 +18,7 @@
    <xsl:variable name="include-toc" select="$with-toc=('yes','true')"/>
    
    <xsl:template match="/">
-      <html lang="en">
+      <html>
          <head>
             <title>
                <xsl:value-of select="/descendant::title[1]/normalize-space(.)"/>
@@ -227,7 +227,7 @@
    
    <xsl:template match="control/title">
       <xsl:apply-templates select=".." mode="seal"/>
-      <span class="h2 control-title">
+      <h2 class="control-title">
          <!--<xsl:for-each select="ancestor::group/title">
             <small><xsl:apply-templates/>
                <xsl:text> | </xsl:text></small>
@@ -238,12 +238,12 @@
             <small> ({ $c })</small>
             <!--<small> ({ $c } { if ($c eq 1) then 'enhancement' else 'enhancements' })</small>-->
          </xsl:for-each-group>
-      </span>
+      </h2>
    </xsl:template>
    
    <xsl:template priority="3" match="control/control/title">
       <xsl:apply-templates select=".." mode="seal"/>
-      <span class="h4 subcontrol-title">
+      <h4 class="subcontrol-title">
          <xsl:for-each select="../ancestor::control/title">
             <small>
                <xsl:apply-templates/>
@@ -251,7 +251,7 @@
             </small>
          </xsl:for-each>
          <xsl:apply-templates/>
-      </span>
+      </h4>
    </xsl:template>
    
    <xsl:template match="control" mode="seal">
@@ -393,7 +393,7 @@
    </xsl:template>
    
    <xsl:template match="*" mode="link-as-link">
-      <a href="#{ (@uuid, @id)[1] }">
+      <a href="#{ @id }">
          <xsl:apply-templates select="." mode="link-text"/>
       </a>
    </xsl:template>
