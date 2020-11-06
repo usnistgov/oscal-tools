@@ -43,10 +43,10 @@
         <xsl:attribute name="new-uuid" select="uuid:randomUUID()" xmlns:uuid="java:java.util.UUID"/>
     </xsl:template>
 
-    <!-- but don't add one here -->
-    <xsl:template match="back-matter/resource/@uuid" mode="modify">
+    <!-- a template like this will keep these UUIDs stable instead of rewriting them -->
+    <!--<xsl:template match="back-matter/resource/@uuid" mode="modify">
         <xsl:copy-of select="."/>
-    </xsl:template>
+    </xsl:template>-->
     
     <xsl:key name="by-uuid" match="*[exists(@uuid)]" use="@uuid"/>
     
