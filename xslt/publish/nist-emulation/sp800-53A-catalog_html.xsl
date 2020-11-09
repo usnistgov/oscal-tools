@@ -34,7 +34,7 @@
    </xsl:template>
    
    <xsl:template match="control">
-      <xsl:variable name="withdrawn" select="prop[@name='status']='Withdrawn'"/>
+      <xsl:variable name="withdrawn" select="prop[@name='status']=('Withdrawn','withdrawn')"/>
       <div class="control{ $withdrawn[boolean(.)] ! ' withdrawn' }">
          <xsl:copy-of select="@id"/>
          <details>
@@ -301,7 +301,7 @@
    
    <xsl:template match="part[@name='guidance']/link"/>
    
-   <xsl:template match="prop[@name='status'][.='Withdrawn']">
+   <xsl:template match="prop[@name='status'][.=('Withdrawn','withdrawn')]">
       <p class="withdrawn-status">
          <xsl:text>[Withdrawn</xsl:text>
          <xsl:for-each-group select="../link[@rel='incorporated-into']" group-by="true()">
