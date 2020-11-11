@@ -35,8 +35,6 @@
         <last-modified>{ current-dateTime() }</last-modified>
     </xsl:template>
     
-    
-    
     <!-- adding a new UUID -->
     <xsl:template match="@uuid" mode="modify">
         <xsl:copy-of select="."/>
