@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:math="http://www.w3.org/2005/xpath-functions/math" exclude-result-prefixes="xs math"
+    xmlns:math="http://www.w3.org/2005/xpath-functions/math" exclude-result-prefixes="xs math r"
     xmlns:r="http://csrc.nist.gov/ns/random" version="3.0">
 
     <!-- from the spec https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator
@@ -29,13 +29,12 @@ v4 UUID
 
     <xsl:variable name="hex-digits" select="tokenize('0 1 2 3 4 5 6 7 8 9 a b c d e f', ' ')"/>
     
-    <xsl:variable name="uuid-v4-template" as="xs:string">########-####-4###-=###-############</xsl:variable>
-
+    <xsl:variable name="uuid-v4-template" as="xs:string">________-____-4___-=___-____________</xsl:variable>
+    <!--                                                 a847eaab-cec8-41bd-98e2-02d02900b554            -->
     <!-- replacements for UUID v4:
-           '#' becomes a random hex value
+           '_' becomes a random hex value 0-9a-f
            '=' becomes one of '8','9','a','b' at random
            any other character is copied -->
-
 
     <!-- for testing random number features   -->
     <xsl:template match="/" name="xsl:initial-template" expand-text="true">
@@ -94,7 +93,7 @@ v4 UUID
         <xsl:sequence select="."/>
     </xsl:template>
 
-    <xsl:template match=".[. = '#']" mode="uuid-char">
+    <xsl:template match=".[. = '_']" mode="uuid-char">
         <xsl:param name="PRNG" as="map(xs:string, item())"/>
         <xsl:sequence select="$PRNG?permute($hex-digits)[1]"/>
     </xsl:template>
@@ -103,29 +102,5 @@ v4 UUID
         <xsl:param name="PRNG" as="map(xs:string, item())"/>
         <xsl:sequence select="$PRNG?permute(('8', '9', 'a', 'b'))[1]"/>
     </xsl:template>
-
-    <!--<xsl:function name="r:random-hex-digit" as="xs:string*">
-        <xsl:param name="seed" as="item()"/>
-        <xsl:sequence select="r:random-hex-sequence($seed, 1, random-number-generator($seed))"/>
-    </xsl:function>
-
-    <xsl:function name="r:random-hex-sequence" as="xs:string*">
-        <xsl:param name="seed" as="item()"/>
-        <xsl:param name="length" as="xs:integer"/>
-        <xsl:sequence select="r:random-hex-sequence($seed, $length, random-number-generator($seed))"
-        />
-    </xsl:function>
-
-    <xsl:function name="r:random-hex-sequence" as="xs:string*">
-        <xsl:param name="seed" as="item()"/>
-        <xsl:param name="length" as="xs:integer"/>
-        <xsl:param name="PRNG" as="map(xs:string, item())"/>
-        <xsl:if test="$length ne 0">
-            <xsl:sequence
-                select="$PRNG?permute($hex-digits)[1], r:random-hex-sequence($seed, $length - 1, $PRNG?next())"
-            />
-        </xsl:if>
-    </xsl:function>-->
-
 
 </xsl:stylesheet>
