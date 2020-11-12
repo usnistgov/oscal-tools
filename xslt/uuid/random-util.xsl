@@ -27,6 +27,11 @@ v4 UUID
     -->
     <xsl:output indent="yes"/>
 
+    <!-- set $germ to a string for reproducible outputs of r:make-uuid-sequence
+         pass in a blind value - and don't save it - for irreproducible outputs -->
+    
+    <xsl:param name="germ" select="current-dateTime()"/>
+    
     <xsl:variable name="hex-digits" select="tokenize('0 1 2 3 4 5 6 7 8 9 a b c d e f', ' ')"/>
     
     <xsl:variable name="uuid-v4-template" as="xs:string">________-____-4___-=___-____________</xsl:variable>
@@ -45,7 +50,7 @@ v4 UUID
             <a>{ r:make-uuid('a') }</a>
             <b>{ r:make-uuid('b') }</b>
             <ten>
-                <xsl:for-each select="r:make-uuid-sequence('a', 10)">
+                <xsl:for-each select="r:make-uuid-sequence($germ, 10)">
                     <uuid>{ . }</uuid>
                 </xsl:for-each>
             </ten>
@@ -62,7 +67,7 @@ v4 UUID
         <xsl:param name="length" as="xs:integer"/>
         <xsl:param name="PRNG" as="map(xs:string, item())"/>
         <xsl:if test="$length gt 0">
-            <xsl:sequence select="($PRNG?number => string() => r:make-uuid()), r:produce-uuid-sequence($length - 1, $PRNG?next())"/>
+            <xsl:sequence select="( string($PRNG?number) => r:make-uuid()), r:produce-uuid-sequence($length - 1, $PRNG?next())"/>
         </xsl:if>
     </xsl:function>
     
