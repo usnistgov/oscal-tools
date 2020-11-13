@@ -441,7 +441,7 @@
    </xsl:template>
    
    <xsl:template match="back-matter/resource">
-      <tr class="resource" id="{@id}">
+      <tr class="resource" id="{@uuid}">
          <xsl:apply-templates/>
       </tr>
    </xsl:template>

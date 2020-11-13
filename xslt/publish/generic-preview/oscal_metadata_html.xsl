@@ -78,16 +78,16 @@
    </xsl:template>
    
    
-   <xsl:key name="assignment-by-party-id" match="responsible-party" use="party-id"/>
+   <xsl:key name="assignment-by-party-id" match="responsible-party" use="party-uuid"/>
    
    <xsl:template match="metadata/party">
       <div class="block party">
-         <xsl:variable name="assignments" select="key('assignment-by-party-id',@id,..)"/>
+         <xsl:variable name="assignments" select="key('assignment-by-party-id',@uuid,..)"/>
          <xsl:variable name="roles" select="../role[@id=$assignments/@role-id]"/>
          <xsl:apply-templates select="$roles" mode="include"/>
          <xsl:if test="empty($roles)">
             <span class="role lbl">
-               <xsl:value-of select="@id"/>
+               <xsl:value-of select="tokenize(@uuid,'\-')[1]"/>
             </span>
          </xsl:if>
          <xsl:apply-templates/>
@@ -129,7 +129,8 @@
       </p>
    </xsl:template>
    
-   <xsl:key name="cross-reference-targets" match="*[exists(@id)]" use="'#' || @id"/>
+   <!-- Any @id or @uuid is considered suitable to target via href -->
+   <xsl:key name="cross-reference-targets" match="*[exists(@id|@uuid)]" use="(@uuid | @id) ! ('#' || .)"/>
    
    <xsl:template match="*" mode="decorate-inline">
       <span class="lbl">
@@ -184,8 +185,13 @@
       </xsl:where-populated>
    </xsl:template>
    
+   <xsl:template match="@uuid">
+      <xsl:attribute name="id" select="."/>
+   </xsl:template>
+   
    <xsl:template match="back-matter/*">
       <div class="{ local-name() }">
+         <xsl:apply-templates select="@*"/>
          <xsl:apply-templates/>
       </div>
    </xsl:template>
