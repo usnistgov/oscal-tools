@@ -7,7 +7,51 @@ XSLT transformations can be applied to XML data to produce results (outputs) in 
 
 Neither the HTML nor the PDF outputs produced by this software is or can be warranted for any purpose. They are published mainly for the purpose of providing baseline functionality, as a starting point for others.
 
-## Prerequisites for this guide
+## Summary of XSLT transformations available
+
+### Producing HTML (web pages)
+
+To produce a "clean" legible catalog as an HTML page, use `generic-preview/oscal_catalog_html.xsl` as your entry point. From a valid OSCAL XML catalog, this produces HTML, with some 'ornamentation' to reflect the OSCAL structure.
+
+For "NIST emulation" output, use `nist-emulation/sp800-53A-catalog_html.xsl` as your entry point. This also produces HTML, except it is enhanced with styling to resemble a formal publication. (While the "emulation" is loose here, this rendering respects some special features of OSCAL usage in the published NIST catalog.) This XSLT imports the `generic-preview` XSLT.
+
+The XSLT can also be customized, whether by patching, layering, or pipelining, to produce enhanced outputs given consistent usage patterns in your OSCAL.   
+
+**Note: neither of these renditions by any means guarantees that a data set is fit for any purpose! They are only renditions. GARBAGE IN GARBAGE OUT.**
+
+### Producing PDF
+
+To create PDFs, supplement either of these transformations with a second step, applied to the HTML representations produced above. These create XSL formatting objects suitable for processing in a conformant XSL formatter, including commercially available formatters.
+The XSLT to apply in this step is `nist-emulation/oscal_sp800-53-emulator_fo.xsl`. It can be applied to (XML-conformant) HTML produced by either of the HTML transformations.
+
+Where XSL-FO is not well supported, other means of producing PDFs are however also viable, either as applied directly to OSCAL, or producing PDFs from the same (HTML) or other intermediary resources; for those who need formatted (printable) pages, more expedient methods may be available.
+
+### Adjusting results with runtime parameters
+
+These are wired into `generic-preview/oscal_catalog_html.xsl` but available to both transformations at runtime:
+
+- `css-path` (string) A literal value providing a path to a CSS. If this value is not given, CSS is written into the HTML file.
+- `with-toc` (string `yes|no`) Whether to provide a table of contents (by default, yes).
+
+### Customizing these stylesheets
+
+#### Via CSS
+
+The easiest quickest customization can be achieved by modifying the CSS. The file `css/oscal-catalog_html.css` contains CSS that is included (as literal data) into HTML results by default; this can be rewritten or overwritten.
+
+Alternatively (more robustly) the `css-path` parameter used to point the HTML page to any path to a customized or rewritten) CSS file to be applied to the page.
+
+Since OSCAL structural semantics are reflected directly in the HTML class structure, this is a reasonable way of accomplishing many basic adjustments to global look-and-feel.
+
+#### Via XSLT
+
+Where CSS applied to the generic results is not sufficient -- and especially to support advanced functionality such as indexing, dynamic analysis or data validations -- the XSLT can also be imported, supplemented, rewritten or adapted.
+
+## Command-line use
+
+If you are familiar with XSLT transformations, and have a preferred environment for applying XSLT to XML, you can probably skip this section. If what you need to know is not given in the summary above, please let us know.
+
+### Prerequisites for this guide
 
 * You are comfortable at the command line (e.g. *nix, Mac, Windows shell)
 * You are comfortable installing and running Java applications

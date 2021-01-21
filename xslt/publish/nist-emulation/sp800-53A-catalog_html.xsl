@@ -34,7 +34,7 @@
    </xsl:template>
    
    <xsl:template match="control">
-      <xsl:variable name="withdrawn" select="prop[@name='status']='Withdrawn'"/>
+      <xsl:variable name="withdrawn" select="matches(prop[@name='status'],'Withdrawn','i')"/>
       <div class="control{ $withdrawn[boolean(.)] ! ' withdrawn' }">
          <xsl:copy-of select="@id"/>
          <details>
@@ -279,8 +279,9 @@
       <h4>Control</h4>
    </xsl:template>
    
+<!-- Now matching Rev 5 display -->
    <xsl:template priority="2" match="part[@name='guidance']" mode="title">
-      <h4>Supplemental guidance</h4>
+      <h4>Discussion</h4>
    </xsl:template>
    
    <xsl:template priority="2" match="part[@name='objective']" mode="title">
@@ -301,7 +302,7 @@
    
    <xsl:template match="part[@name='guidance']/link"/>
    
-   <xsl:template match="prop[@name='status'][.='Withdrawn']">
+   <xsl:template match="prop[@name='status'][matches(.,'Withdrawn','i')]">
       <p class="withdrawn-status">
          <xsl:text>[Withdrawn</xsl:text>
          <xsl:for-each-group select="../link[@rel='incorporated-into']" group-by="true()">
@@ -342,7 +343,7 @@
    <xsl:template match="part[@name='guidance']//text()" mode="#default html-ns">
       <xsl:variable name="scope" select="ancestor::part[@name='guidance']/(* except (part|link))"/>
       <xsl:value-of select="."/>
-      <xsl:if test=". is $scope/descendant::text()[last()]">
+      <xsl:if test=". is ($scope/descendant::text())[last()]">
          <xsl:call-template name="guidance-links">
             <xsl:with-param name="links" select="ancestor::control[1]//link[@rel = 'related']"/>
          </xsl:call-template>
@@ -456,6 +457,20 @@
    <xsl:template match="resource/*">
       <td class="{ local-name() }">
          <xsl:apply-templates/>
+      </td>   
+   </xsl:template>
+   
+   <xsl:template match="resource[empty(citation)]/title" priority="4">
+      <td class="{ local-name() }" colspan="2">
+         <xsl:apply-templates/>
+      </td>   
+   </xsl:template>
+   
+   <xsl:template match="resource[empty(citation)][exists(rlink/@href)]/title" priority="6">
+      <td class="{ local-name() }" colspan="2">
+         <a href="../rlink/@href">
+           <xsl:apply-templates/>
+         </a>
       </td>   
    </xsl:template>
    

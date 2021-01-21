@@ -140,8 +140,7 @@
          <xsl:value-of select="substring-after(.,$parent-label)"/>
       </span>
    </xsl:template>
-   
-   
+
    <xsl:template match="group">
       <section class="group">
          <xsl:copy-of select="@id"/>
@@ -168,6 +167,9 @@
    </xsl:template>
 
    <xsl:key name="param-for-id" match="param" use="@id"/>
+   
+   <!-- Working around Saxon bug https://saxonica.plan.io/issues/4624  -->
+   <xsl:key name="param-for-id" match="param" use="@id" xmlns:o="http://csrc.nist.gov/ns/oscal/1.0"/>
    
    <xsl:template match="insert">
       <xsl:variable name="best-param"

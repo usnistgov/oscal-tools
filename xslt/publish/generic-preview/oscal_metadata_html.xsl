@@ -106,11 +106,17 @@
       </p>
    </xsl:template>
    
+   <xsl:template match="party/name">
+      <p class="line party-name">
+         <xsl:apply-templates/>
+      </p>
+   </xsl:template>
+   
    <xsl:template priority="2" match="address">
       <xsl:apply-templates/>
    </xsl:template>
    
-   <xsl:template priority="3" match="email">
+   <xsl:template priority="3" match="email-address">
       <p class="line email">
          <span class="lbl2">email</span>
          <xsl:text> </xsl:text>
