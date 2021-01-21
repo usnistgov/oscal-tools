@@ -406,25 +406,25 @@
             <span class="ref-label">
                <xsl:apply-templates/>
             </span>
-            <xsl:if test="exists(desc | citation/text)">
+            <xsl:if test="exists(description | citation/text)">
               <xsl:text>: </xsl:text>
             </xsl:if>
          </xsl:for-each>
-      <xsl:apply-templates select="child::desc"/>
+      <xsl:apply-templates select="child::description"/>
       <xsl:apply-templates select="child::citation/text"/>
    </xsl:template>
    
    <xsl:template match="resource" mode="link-as-link">
       <xsl:param name="link" select="()"/>
       <a href="{ child::rlink[1]/@href }">
-         <xsl:for-each select="$link">
+         <xsl:for-each select="$link/text">
             <span class="ref-label">
               <xsl:apply-templates/>
             </span>
             <xsl:text>: </xsl:text>
          </xsl:for-each>
-         <xsl:apply-templates select="child::desc"/>
-         <xsl:if test="not(matches(child::desc,'\S'))" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
+         <xsl:apply-templates select="child::description | child::text"/>
+         <xsl:if test="empty(child::description | child::text)" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
       </a>
    </xsl:template>
    
