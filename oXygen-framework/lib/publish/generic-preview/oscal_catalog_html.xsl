@@ -18,7 +18,7 @@
    <xsl:variable name="include-toc" select="$with-toc=('yes','true')"/>
    
    <xsl:template match="/">
-      <html lang="en">
+      <html>
          <head>
             <title>
                <xsl:value-of select="/descendant::title[1]/normalize-space(.)"/>
@@ -140,7 +140,8 @@
          <xsl:value-of select="substring-after(.,$parent-label)"/>
       </span>
    </xsl:template>
-
+   
+   
    <xsl:template match="group">
       <section class="group">
          <xsl:copy-of select="@id"/>
@@ -167,9 +168,6 @@
    </xsl:template>
 
    <xsl:key name="param-for-id" match="param" use="@id"/>
-   
-   <!-- Working around Saxon bug https://saxonica.plan.io/issues/4624  -->
-   <xsl:key name="param-for-id" match="param" use="@id" xmlns:o="http://csrc.nist.gov/ns/oscal/1.0"/>
    
    <xsl:template match="insert">
       <xsl:variable name="best-param"
@@ -229,7 +227,7 @@
    
    <xsl:template match="control/title">
       <xsl:apply-templates select=".." mode="seal"/>
-      <span class="h2 control-title">
+      <h2 class="control-title">
          <!--<xsl:for-each select="ancestor::group/title">
             <small><xsl:apply-templates/>
                <xsl:text> | </xsl:text></small>
@@ -240,12 +238,12 @@
             <small> ({ $c })</small>
             <!--<small> ({ $c } { if ($c eq 1) then 'enhancement' else 'enhancements' })</small>-->
          </xsl:for-each-group>
-      </span>
+      </h2>
    </xsl:template>
    
    <xsl:template priority="3" match="control/control/title">
       <xsl:apply-templates select=".." mode="seal"/>
-      <span class="h4 subcontrol-title">
+      <h4 class="subcontrol-title">
          <xsl:for-each select="../ancestor::control/title">
             <small>
                <xsl:apply-templates/>
@@ -253,7 +251,7 @@
             </small>
          </xsl:for-each>
          <xsl:apply-templates/>
-      </span>
+      </h4>
    </xsl:template>
    
    <xsl:template match="control" mode="seal">
@@ -395,7 +393,7 @@
    </xsl:template>
    
    <xsl:template match="*" mode="link-as-link">
-      <a href="#{ (@uuid, @id)[1] }">
+      <a href="#{ @id }">
          <xsl:apply-templates select="." mode="link-text"/>
       </a>
    </xsl:template>
@@ -406,25 +404,25 @@
             <span class="ref-label">
                <xsl:apply-templates/>
             </span>
-            <xsl:if test="exists(description | citation/text)">
+            <xsl:if test="exists(desc | citation/text)">
               <xsl:text>: </xsl:text>
             </xsl:if>
          </xsl:for-each>
-      <xsl:apply-templates select="child::description"/>
+      <xsl:apply-templates select="child::desc"/>
       <xsl:apply-templates select="child::citation/text"/>
    </xsl:template>
    
    <xsl:template match="resource" mode="link-as-link">
       <xsl:param name="link" select="()"/>
       <a href="{ child::rlink[1]/@href }">
-         <xsl:for-each select="$link/text">
+         <xsl:for-each select="$link">
             <span class="ref-label">
               <xsl:apply-templates/>
             </span>
             <xsl:text>: </xsl:text>
          </xsl:for-each>
-         <xsl:apply-templates select="child::description | child::text"/>
-         <xsl:if test="empty(child::description | child::text)" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
+         <xsl:apply-templates select="child::desc"/>
+         <xsl:if test="not(matches(child::desc,'\S'))" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
       </a>
    </xsl:template>
    

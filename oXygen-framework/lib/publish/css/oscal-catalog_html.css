@@ -30,7 +30,7 @@ div.enhancements p.toc-listing { display: inline-block }
 .toc-title { font-weight: bold }
 .enhancements .toc-title { font-weight: inherit; font-size: 80% }
 
-.withdrawn-status { font-family: sans-serif; font-size: 90%; font-style: italic }
+.withdrawn-status { font-family: sans-serif; font-size: 90% }
 
 .description {  }
 
