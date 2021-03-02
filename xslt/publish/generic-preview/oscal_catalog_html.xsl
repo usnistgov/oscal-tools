@@ -423,8 +423,8 @@
             </span>
             <xsl:text>: </xsl:text>
          </xsl:for-each>
-         <xsl:apply-templates select="child::description | child::text"/>
-         <xsl:if test="empty(child::description | child::text)" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
+         <xsl:apply-templates select="child::title | child::description | child::text" mode="inline-resource"/>
+         <xsl:if test="empty(child::title | child::description | child::text)" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
       </a>
    </xsl:template>
    
