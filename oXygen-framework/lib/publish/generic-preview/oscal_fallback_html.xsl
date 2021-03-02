@@ -7,7 +7,7 @@
    exclude-result-prefixes="#all">
    
    <xsl:template match="p | table | pre | ul | ol | li | h1 | h2 | h3 | h4 | h5 | h6 | code |      
-                        a | img | strong | em | b | i | sup | sub | q">
+                        a | img | strong | em | b | i | sup | sub">
       <xsl:apply-templates select="." mode="html-ns"/>
    </xsl:template>
    
