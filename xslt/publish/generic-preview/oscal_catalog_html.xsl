@@ -140,8 +140,7 @@
          <xsl:value-of select="substring-after(.,$parent-label)"/>
       </span>
    </xsl:template>
-   
-   
+
    <xsl:template match="group">
       <section class="group">
          <xsl:copy-of select="@id"/>
@@ -168,6 +167,9 @@
    </xsl:template>
 
    <xsl:key name="param-for-id" match="param" use="@id"/>
+   
+   <!-- Working around Saxon bug https://saxonica.plan.io/issues/4624  -->
+   <xsl:key name="param-for-id" match="param" use="@id" xmlns:o="http://csrc.nist.gov/ns/oscal/1.0"/>
    
    <xsl:template match="insert">
       <xsl:variable name="best-param"
@@ -404,25 +406,25 @@
             <span class="ref-label">
                <xsl:apply-templates/>
             </span>
-            <xsl:if test="exists(desc | citation/text)">
+            <xsl:if test="exists(description | citation/text)">
               <xsl:text>: </xsl:text>
             </xsl:if>
          </xsl:for-each>
-      <xsl:apply-templates select="child::desc"/>
+      <xsl:apply-templates select="child::description"/>
       <xsl:apply-templates select="child::citation/text"/>
    </xsl:template>
    
    <xsl:template match="resource" mode="link-as-link">
       <xsl:param name="link" select="()"/>
       <a href="{ child::rlink[1]/@href }">
-         <xsl:for-each select="$link">
+         <xsl:for-each select="$link/text">
             <span class="ref-label">
               <xsl:apply-templates/>
             </span>
             <xsl:text>: </xsl:text>
          </xsl:for-each>
-         <xsl:apply-templates select="child::desc"/>
-         <xsl:if test="not(matches(child::desc,'\S'))" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
+         <xsl:apply-templates select="child::title | child::description | child::text" mode="inline-resource"/>
+         <xsl:if test="empty(child::title | child::description | child::text)" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
       </a>
    </xsl:template>
    
