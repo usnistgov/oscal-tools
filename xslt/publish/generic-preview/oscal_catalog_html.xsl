@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="3.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns="http://www.w3.org/1999/xhtml"
@@ -203,6 +203,7 @@
    </xsl:template>
    
    <xsl:template match="part">
+      if @ns is given emit 
       <div class="{ @ns ! (. || '_') || @name ! (. || ' ')}part">
          <xsl:if test="empty(title)">
             <xsl:call-template name="make-title"/>
@@ -225,26 +226,21 @@
       </h3>
    </xsl:template>
    
-   <xsl:template match="*" mode="seal"/>
+   <xsl:template match="*" mode="badge"/>
    
    <xsl:template match="control/title">
-      <xsl:apply-templates select=".." mode="seal"/>
+      <xsl:apply-templates select=".." mode="badge"/>
       <span class="h2 control-title">
-         <!--<xsl:for-each select="ancestor::group/title">
-            <small><xsl:apply-templates/>
-               <xsl:text> | </xsl:text></small>
-         </xsl:for-each>-->
          <xsl:apply-templates/>
          <xsl:for-each-group select="../control" expand-text="true" group-by="true()">
             <xsl:variable name="c" select="count(current-group())"/>
             <small> ({ $c })</small>
-            <!--<small> ({ $c } { if ($c eq 1) then 'enhancement' else 'enhancements' })</small>-->
          </xsl:for-each-group>
       </span>
    </xsl:template>
    
    <xsl:template priority="3" match="control/control/title">
-      <xsl:apply-templates select=".." mode="seal"/>
+      <xsl:apply-templates select=".." mode="badge"/>
       <span class="h4 subcontrol-title">
          <xsl:for-each select="../ancestor::control/title">
             <small>
@@ -256,8 +252,17 @@
       </span>
    </xsl:template>
    
-   <xsl:template match="control" mode="seal">
-      <span class="seal">
+   
+<!-- 'badge' mode makes an inline, stylable element
+     marking the control - extensible to other object types. -->
+   
+   
+   <!-- unless matched otherwise, nothing actually gets a badge: it's a no-op -->
+   <xsl:template match="*" mode="badge"/>
+   
+   <!-- controls show their labels as their badges -->
+   <xsl:template match="control" mode="badge">
+      <span class="badge">
          <xsl:for-each select="prop[@name='label']">
             <xsl:apply-templates/>
          </xsl:for-each>

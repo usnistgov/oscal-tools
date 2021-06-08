@@ -68,7 +68,7 @@ div.enhancements p.toc-listing { display: inline-block }
 .rlink {  }
 
 
-span.seal { color: midnightblue;
+span.badge { color: midnightblue;
   font-family: sans-serif; font-weight: bold; border-radius: 0.25em;
   padding: 0.25em; border: thin solid midnightblue; margin-right: 0.25em }
 
