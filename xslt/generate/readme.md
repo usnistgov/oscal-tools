@@ -47,3 +47,7 @@ This is a useful way to produce outputs from a calling stylesheet or application
 ### Refresher utility
 
 Applied to any OSCAL document, this XSLT will produce a copy with fresh top-level UUID and metadata timestamp.
+
+## Folder contents
+
+In addition to `generate-oscal.xsl`, this folder contains an XSLT used to produce it (from a composed OSCAL metaschema source).
