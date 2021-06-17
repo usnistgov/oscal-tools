@@ -8,8 +8,8 @@
                 exclude-result-prefixes="#all">
    <xsl:output indent="true"/>
    <!-- Apply this XSLT to itself with a runtime parameter, e.g. 'make=catalog' to produce a blank (but nominally valid) OSCAL catalog XML instance.-->
-   <!--The OSCAL produced can be either minimal - only required structures are given - or maximal. Use parameter 'include=all' to include optional contents, or leave the setting with default 'required-only' and the XSLT will produce only elements and attributes required in each model.-->
-   <!--All OSCAL formats supported: -->
+   <!-- The OSCAL produced can be either minimal - only required structures are given - or maximal. Use parameter 'include=all' to include optional contents, or leave the setting with default 'required-only' and the XSLT will produce only elements and attributes required in each model.-->
+   <!-- All OSCAL formats supported: -->
    <!-- - make=catalog -->
    <!-- - make=profile -->
    <!-- - make=component-definition -->
@@ -17,11 +17,11 @@
    <!-- - make=assessment-plan -->
    <!-- - make=assessment-results -->
    <!-- - make=plan-of-action-and-milestones -->
-   <!--Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This is sometimes more convenient for example when calling the XSLT programmatically.-->
-   <!--When applied to an OSCAL document (as source), this XSLT ignores runtime parameters produces a copy of the input with new timestamp (in OSCAL metadata) and top-level @uuid.-->
-   <!--Limitations:-->
-   <!-- - when a model permits a choice, only the first defined or referenced of the permitted elements is included. Delete this element to permit alternate members of the choice. -->
-   <!-- - all (permitted-->
+   <!-- Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more  lightweight: for example `xslt3 -xsl:generate-oscal.sef -it:make-catalog` for SaxonJS.-->
+   <!-- When applied to an OSCAL document (as source), this XSLT ignores runtime parameters produces a copy of the input with new timestamp (in OSCAL metadata) and top-level @uuid.-->
+   <!-- Limitations: -->
+   <!-- - When a model permits a choice, only the first defined or referenced of the permitted elements is included. Delete this element to permit alternate members of the choice. As indicators, other available alternatives are included in comments. -->
+   <!-- - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = -->
    <xsl:param name="make" as="xs:string">none</xsl:param>
    <xsl:param name="include" as="xs:string">required-only</xsl:param>
    <xsl:variable name="including-optional" select="$include='all'"/>
