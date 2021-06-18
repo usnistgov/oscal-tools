@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:uuid="java:java.util.UUID"
+                xmlns:r="http://csrc.nist.gov/ns/random"
                 version="3.0"
-                extension-element-prefixes="uuid"
                 xpath-default-namespace="http://csrc.nist.gov/ns/oscal/1.0"
                 exclude-result-prefixes="#all">
    <xsl:output indent="true"/>
@@ -17,7 +16,7 @@
    <!-- - make=assessment-plan -->
    <!-- - make=assessment-results -->
    <!-- - make=plan-of-action-and-milestones -->
-   <!-- Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more  lightweight: for example `xslt3 -xsl:generate-oscal.sef -it:make-catalog` for SaxonJS.-->
+   <!-- Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more lightweight: for example `xslt3 -xsl:generate-oscal.sef -it:make-catalog` for SaxonJS.-->
    <!-- When applied to an OSCAL document (as source), this XSLT ignores runtime parameters produces a copy of the input with new timestamp (in OSCAL metadata) and top-level @uuid.-->
    <!-- Limitations: -->
    <!-- - When a model permits a choice, only the first defined or referenced of the permitted elements is included. Delete this element to permit alternate members of the choice. As indicators, other available alternatives are included in comments. -->
@@ -25,27 +24,67 @@
    <xsl:param name="make" as="xs:string">none</xsl:param>
    <xsl:param name="include" as="xs:string">required-only</xsl:param>
    <xsl:variable name="including-optional" select="$include='all'"/>
+   <!-- - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = -->
+   <xsl:function name="r:make-uuid-sequence" as="xs:string*">
+      <xsl:param name="seed" as="item()"/>
+      <xsl:param name="length" as="xs:integer"/>
+      <xsl:sequence select="r:produce-uuid-sequence($length,random-number-generator($seed))"/>
+   </xsl:function>
+   <xsl:function name="r:produce-uuid-sequence" as="xs:string*">
+      <xsl:param name="length" as="xs:integer"/>
+      <xsl:param name="PRNG" as="map(xs:string, item())"/>
+      <xsl:if test="$length gt 0">
+         <xsl:sequence select="string($PRNG?number) =&gt; r:make-uuid()"/>
+         <xsl:sequence select="r:produce-uuid-sequence($length - 1, $PRNG?next())"/>
+      </xsl:if>
+   </xsl:function>
+   <xsl:function name="r:make-uuid" as="xs:string">
+      <xsl:param name="seed" as="item()"/>
+      <xsl:sequence select="r:produce-uuid($uuid-v4-template, random-number-generator($seed))"/>
+   </xsl:function>
+   <xsl:function name="r:produce-uuid" as="xs:string">
+      <xsl:param name="template" as="xs:string"/>
+      <xsl:param name="PRNG" as="map(xs:string, item())"/>
+      <xsl:value-of>
+         <xsl:apply-templates select="substring($template, 1, 1)" mode="uuid-char">
+            <xsl:with-param name="PRNG" select="$PRNG"/>
+         </xsl:apply-templates>
+         <xsl:if test="matches($template, '.')">
+            <xsl:sequence select="r:produce-uuid(substring($template, 2), $PRNG?next())"/>
+         </xsl:if>
+      </xsl:value-of>
+   </xsl:function>
+   <xsl:variable name="uuid-v4-template" as="xs:string">________-____-4___-=___-____________</xsl:variable>
+   <xsl:variable name="hex-digits"
+                 select="tokenize('0 1 2 3 4 5 6 7 8 9 a b c d e f', ' ')"/>
+   <xsl:template match=".[. = '_']" mode="uuid-char">
+      <xsl:param name="PRNG" as="map(xs:string, item())"/>
+      <xsl:sequence select="$PRNG?permute($hex-digits)[1]"/>
+   </xsl:template>
+   <xsl:template match=".[. = '=']" mode="uuid-char">
+      <xsl:param name="PRNG" as="map(xs:string, item())"/>
+      <xsl:sequence select="$PRNG?permute(('8', '9', 'a', 'b'))[1]"/>
+   </xsl:template>
+   <!-- - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = -->
    <xsl:mode on-no-match="shallow-copy"/>
    <xsl:template match="/*/@uuid">
-      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                     name="uuid"
-                     select="uuid:randomUUID()"/>
+      <xsl:attribute name="uuid" select="r:make-uuid(current-time())"/>
    </xsl:template>
    <xsl:template xmlns="http://csrc.nist.gov/ns/oscal/1.0"
                  match="last-modified"
                  expand-text="true">
       <last-modified>{ current-dateTime() }</last-modified>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template match="/xsl:stylesheet">
+      <xsl:message>Invoke with parameter make=(catalog|profile|component-definition|system-security-plan|assessment-plan|assessment-results|plan-of-action-and-milestones)</xsl:message>
+   </xsl:template>
+   <!-- - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = -->
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='catalog']"
                  name="make-catalog">
       <catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-               uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+               uuid="{ r:make-uuid( string-join( (current-time(),'d1e13a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -65,85 +104,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -158,9 +188,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -171,11 +199,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -216,9 +239,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -229,11 +250,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -264,12 +280,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -325,9 +336,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -338,11 +347,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -373,12 +377,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -397,9 +397,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -410,11 +408,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -486,8 +479,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -500,15 +492,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -519,11 +508,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -569,9 +553,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -582,11 +564,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -680,9 +657,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -693,11 +668,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -774,9 +744,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -787,11 +755,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -839,9 +802,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -852,11 +813,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -942,9 +898,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -955,11 +909,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -1036,9 +985,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -1049,11 +996,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -1101,9 +1043,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1114,11 +1054,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -1193,12 +1128,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -1212,9 +1142,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1225,11 +1153,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -1256,9 +1179,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -1269,11 +1190,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -1328,16 +1244,12 @@
          </xsl:if>
       </catalog>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='profile']"
                  name="make-profile">
       <profile xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-               uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+               uuid="{ r:make-uuid( string-join( (current-time(),'d1e1409a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -1357,85 +1269,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -1450,9 +1353,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -1463,11 +1364,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -1508,9 +1404,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1521,11 +1415,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -1556,12 +1445,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -1617,9 +1501,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1630,11 +1512,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -1665,12 +1542,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -1689,9 +1562,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1702,11 +1573,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -1778,8 +1644,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -1792,15 +1657,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1811,11 +1673,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -1896,9 +1753,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1909,11 +1764,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -2040,9 +1890,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -2053,11 +1901,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -2134,9 +1977,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -2147,11 +1988,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -2199,9 +2035,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -2212,11 +2046,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -2272,12 +2101,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -2291,9 +2115,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -2304,11 +2126,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -2335,9 +2152,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -2348,11 +2163,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -2407,16 +2217,12 @@
          </xsl:if>
       </profile>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='component-definition']"
                  name="make-component-definition">
       <component-definition xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                            uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+                            uuid="{ r:make-uuid( string-join( (current-time(),'d1e1868a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -2436,85 +2242,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -2529,9 +2326,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -2542,11 +2337,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -2587,9 +2377,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2600,11 +2388,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -2635,12 +2418,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -2696,9 +2474,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2709,11 +2485,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -2744,12 +2515,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -2768,9 +2535,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2781,11 +2546,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -2857,8 +2617,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -2871,15 +2630,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2890,11 +2646,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -2934,12 +2685,8 @@
             <import-component-definition href="uri-reference"/>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e1909a1065', document-uri( document('') )) ) ) }"
+                       type="string">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -2954,9 +2701,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -2967,11 +2712,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -2999,9 +2739,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3012,11 +2750,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -3041,8 +2774,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                           <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -3055,14 +2787,7 @@
                <xsl:if test="$including-optional">
                   <protocol name="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
@@ -3091,21 +2816,15 @@
                   </protocol>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <control-implementation uuid="00000000-0000-4000-8000-000000000000" source="uri-reference">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <control-implementation uuid="{ r:make-uuid( string-join( (current-time(),'d1e2168a1065', document-uri( document('') )) ) ) }"
+                                          source="uri-reference">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3116,11 +2835,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -3155,21 +2869,15 @@
                            </xsl:if>
                         </set-parameter>
                      </xsl:if>
-                     <implemented-requirement uuid="00000000-0000-4000-8000-000000000000" control-id="token">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <implemented-requirement uuid="{ r:make-uuid( string-join( (current-time(),'d1e2206a1065', document-uri( document('') )) ) ) }"
+                                              control-id="token">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -3180,11 +2888,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -3224,9 +2927,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3237,11 +2938,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -3266,8 +2962,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -3278,21 +2973,15 @@
                            </responsible-role>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <statement statement-id="token" uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <statement statement-id="token"
+                                      uuid="{ r:make-uuid( string-join( (current-time(),'d1e2257a1065', document-uri( document('') )) ) ) }">
                               <description>
                                  <p>Paragraphs and (block-level) markup contents.</p>
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3303,11 +2992,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -3335,9 +3019,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -3348,11 +3030,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -3377,8 +3054,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -3411,21 +3087,15 @@
             </component>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <capability uuid="00000000-0000-4000-8000-000000000000" name="string">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <capability uuid="{ r:make-uuid( string-join( (current-time(),'d1e2125a1065', document-uri( document('') )) ) ) }"
+                        name="string">
                <description>
                   <p>Paragraphs and (block-level) markup contents.</p>
                </description>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -3436,11 +3106,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -3464,33 +3129,22 @@
                   </link>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <incorporates-component component-uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="component-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <incorporates-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2158a1065', document-uri( document('') )) ) ) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                   </incorporates-component>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <control-implementation uuid="00000000-0000-4000-8000-000000000000" source="uri-reference">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <control-implementation uuid="{ r:make-uuid( string-join( (current-time(),'d1e2168a1065', document-uri( document('') )) ) ) }"
+                                          source="uri-reference">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3501,11 +3155,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -3540,21 +3189,15 @@
                            </xsl:if>
                         </set-parameter>
                      </xsl:if>
-                     <implemented-requirement uuid="00000000-0000-4000-8000-000000000000" control-id="token">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <implemented-requirement uuid="{ r:make-uuid( string-join( (current-time(),'d1e2206a1065', document-uri( document('') )) ) ) }"
+                                              control-id="token">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -3565,11 +3208,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -3609,9 +3247,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3622,11 +3258,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -3651,8 +3282,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -3663,21 +3293,15 @@
                            </responsible-role>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <statement statement-id="token" uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <statement statement-id="token"
+                                      uuid="{ r:make-uuid( string-join( (current-time(),'d1e2257a1065', document-uri( document('') )) ) ) }">
                               <description>
                                  <p>Paragraphs and (block-level) markup contents.</p>
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3688,11 +3312,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -3720,9 +3339,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -3733,11 +3350,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -3762,8 +3374,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -3798,12 +3409,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -3817,9 +3423,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3830,11 +3434,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -3861,9 +3460,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -3874,11 +3471,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -3933,16 +3525,12 @@
          </xsl:if>
       </component-definition>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='system-security-plan']"
                  name="make-system-security-plan">
       <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                            uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+                            uuid="{ r:make-uuid( string-join( (current-time(),'d1e2995a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -3962,85 +3550,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -4055,9 +3634,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -4068,11 +3645,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -4113,9 +3685,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4126,11 +3696,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -4161,12 +3726,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -4222,9 +3782,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4235,11 +3793,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -4270,12 +3823,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -4294,9 +3843,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4307,11 +3854,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -4383,8 +3925,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -4397,15 +3938,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4416,11 +3954,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -4486,9 +4019,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -4499,11 +4030,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -4538,9 +4064,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -4551,11 +4075,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -4580,14 +4099,7 @@
                </xsl:if>
                <information-type>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e3204a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -4607,9 +4119,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4620,11 +4130,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -4651,9 +4156,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4664,11 +4167,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -4709,9 +4207,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4722,11 +4218,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -4767,9 +4258,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4780,11 +4269,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -4848,9 +4332,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -4861,11 +4343,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -4889,12 +4366,7 @@
                   </link>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <diagram uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <diagram uuid="{ r:make-uuid( string-join( (current-time(),'d1e3388a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -4903,9 +4375,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4916,11 +4386,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -4969,9 +4434,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4982,11 +4445,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -5010,12 +4468,7 @@
                      </link>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <diagram uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <diagram uuid="{ r:make-uuid( string-join( (current-time(),'d1e3388a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
@@ -5024,9 +4477,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -5037,11 +4488,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -5091,9 +4537,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -5104,11 +4548,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -5132,12 +4571,7 @@
                      </link>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <diagram uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <diagram uuid="{ r:make-uuid( string-join( (current-time(),'d1e3388a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
@@ -5146,9 +4580,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -5159,11 +4591,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -5208,15 +4635,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -5227,11 +4651,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -5271,9 +4690,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -5284,11 +4701,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -5312,21 +4724,14 @@
                </link>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <leveraged-authorization uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <leveraged-authorization uuid="{ r:make-uuid( string-join( (current-time(),'d1e3496a1065', document-uri( document('') )) ) ) }">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -5337,11 +4742,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -5365,8 +4765,7 @@
                      </link>
                   </xsl:if>
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e3507a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <date-authorized>
                      <xsl:text>{ current-date() }</xsl:text>
@@ -5378,12 +4777,7 @@
                   </xsl:if>
                </leveraged-authorization>
             </xsl:if>
-            <user uuid="00000000-0000-4000-8000-000000000000">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <user uuid="{ r:make-uuid( string-join( (current-time(),'d1e2646a1065', document-uri( document('') )) ) ) }">
                <xsl:if test="$including-optional">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -5402,9 +4796,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -5415,11 +4807,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -5468,12 +4855,8 @@
                   </remarks>
                </xsl:if>
             </user>
-            <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
+                       type="string">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -5488,9 +4871,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -5501,11 +4882,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -5540,9 +4916,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -5553,11 +4927,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -5582,8 +4951,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                           <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -5596,14 +4964,7 @@
                <xsl:if test="$including-optional">
                   <protocol name="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
@@ -5638,21 +4999,14 @@
                </xsl:if>
             </component>
             <xsl:if test="$including-optional">
-               <inventory-item uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
                   <description>
                      <p>Paragraphs and (block-level) markup contents.</p>
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -5663,11 +5017,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -5693,15 +5042,12 @@
                   <xsl:if test="$including-optional">
                      <responsible-party role-id="token">
                         <party-uuid>
-                           <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                           <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -5712,11 +5058,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -5747,18 +5088,11 @@
                      </responsible-party>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <implemented-component component-uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="component-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -5769,11 +5103,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -5799,15 +5128,12 @@
                         <xsl:if test="$including-optional">
                            <responsible-party role-id="token">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -5818,11 +5144,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -5888,18 +5209,12 @@
                   </xsl:if>
                </set-parameter>
             </xsl:if>
-            <implemented-requirement uuid="00000000-0000-4000-8000-000000000000" control-id="token">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <implemented-requirement uuid="{ r:make-uuid( string-join( (current-time(),'d1e3602a1065', document-uri( document('') )) ) ) }"
+                                     control-id="token">
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -5910,11 +5225,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -5954,9 +5264,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -5967,11 +5275,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -5996,8 +5299,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                           <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -6008,18 +5310,12 @@
                   </responsible-role>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <statement statement-id="token" uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <statement statement-id="token"
+                             uuid="{ r:make-uuid( string-join( (current-time(),'d1e3702a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -6030,11 +5326,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -6062,9 +5353,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6075,11 +5364,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -6104,8 +5388,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -6116,27 +5399,15 @@
                         </responsible-role>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <by-component component-uuid="00000000-0000-4000-8000-000000000000"
-                                      uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="component-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <by-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3756a1065', document-uri( document('') )) ) ) }"
+                                      uuid="{ r:make-uuid( string-join( (current-time(),'d1e3759a1065', document-uri( document('') )) ) ) }">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6147,11 +5418,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -6205,9 +5471,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6218,11 +5482,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -6246,21 +5505,14 @@
                                     </link>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <provided uuid="00000000-0000-4000-8000-000000000000">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <provided uuid="{ r:make-uuid( string-join( (current-time(),'d1e3795a1065', document-uri( document('') )) ) ) }">
                                        <description>
                                           <p>Paragraphs and (block-level) markup contents.</p>
                                        </description>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -6271,11 +5523,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -6303,9 +5550,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -6316,11 +5561,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -6345,8 +5585,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <party-uuid>
-                                                   <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                                   <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                                   <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                                 </party-uuid>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
@@ -6364,27 +5603,15 @@
                                     </provided>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <responsibility uuid="00000000-0000-4000-8000-000000000000"
-                                                    provided-uuid="00000000-0000-4000-8000-000000000000">
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="provided-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <responsibility uuid="{ r:make-uuid( string-join( (current-time(),'d1e3825a1065', document-uri( document('') )) ) ) }"
+                                                    provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
                                        <description>
                                           <p>Paragraphs and (block-level) markup contents.</p>
                                        </description>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -6395,11 +5622,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -6427,9 +5649,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -6440,11 +5660,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -6469,8 +5684,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <party-uuid>
-                                                   <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                                   <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                                   <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                                 </party-uuid>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
@@ -6495,27 +5709,15 @@
                               </export>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <inherited uuid="00000000-0000-4000-8000-000000000000"
-                                         provided-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="provided-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <inherited uuid="{ r:make-uuid( string-join( (current-time(),'d1e3865a1065', document-uri( document('') )) ) ) }"
+                                         provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6526,11 +5728,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -6558,9 +5755,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -6571,11 +5766,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -6600,8 +5790,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -6614,27 +5803,15 @@
                               </inherited>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <satisfied uuid="00000000-0000-4000-8000-000000000000"
-                                         responsibility-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="responsibility-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <satisfied uuid="{ r:make-uuid( string-join( (current-time(),'d1e3895a1065', document-uri( document('') )) ) ) }"
+                                         responsibility-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3955a1065', document-uri( document('') )) ) ) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6645,11 +5822,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -6677,9 +5849,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -6690,11 +5860,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -6719,8 +5884,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -6742,9 +5906,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6755,11 +5917,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -6784,8 +5941,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -6810,27 +5966,15 @@
                   </statement>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <by-component component-uuid="00000000-0000-4000-8000-000000000000"
-                                uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="component-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <by-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3756a1065', document-uri( document('') )) ) ) }"
+                                uuid="{ r:make-uuid( string-join( (current-time(),'d1e3759a1065', document-uri( document('') )) ) ) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -6841,11 +5985,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -6899,9 +6038,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6912,11 +6049,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -6940,21 +6072,14 @@
                               </link>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <provided uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <provided uuid="{ r:make-uuid( string-join( (current-time(),'d1e3795a1065', document-uri( document('') )) ) ) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6965,11 +6090,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -6997,9 +6117,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -7010,11 +6128,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -7039,8 +6152,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -7058,27 +6170,15 @@
                               </provided>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <responsibility uuid="00000000-0000-4000-8000-000000000000"
-                                              provided-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="provided-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <responsibility uuid="{ r:make-uuid( string-join( (current-time(),'d1e3825a1065', document-uri( document('') )) ) ) }"
+                                              provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -7089,11 +6189,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -7121,9 +6216,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -7134,11 +6227,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -7163,8 +6251,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -7189,27 +6276,15 @@
                         </export>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <inherited uuid="00000000-0000-4000-8000-000000000000"
-                                   provided-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="provided-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <inherited uuid="{ r:make-uuid( string-join( (current-time(),'d1e3865a1065', document-uri( document('') )) ) ) }"
+                                   provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7220,11 +6295,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -7252,9 +6322,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -7265,11 +6333,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -7294,8 +6357,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -7308,27 +6370,15 @@
                         </inherited>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <satisfied uuid="00000000-0000-4000-8000-000000000000"
-                                   responsibility-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="responsibility-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <satisfied uuid="{ r:make-uuid( string-join( (current-time(),'d1e3895a1065', document-uri( document('') )) ) ) }"
+                                   responsibility-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3955a1065', document-uri( document('') )) ) ) }">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7339,11 +6389,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -7371,9 +6416,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -7384,11 +6427,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -7413,8 +6451,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -7436,9 +6473,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7449,11 +6484,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -7478,8 +6508,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -7506,12 +6535,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -7525,9 +6549,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -7538,11 +6560,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -7569,9 +6586,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7582,11 +6597,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -7641,16 +6651,12 @@
          </xsl:if>
       </system-security-plan>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='assessment-plan']"
                  name="make-assessment-plan">
       <assessment-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                       uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+                       uuid="{ r:make-uuid( string-join( (current-time(),'d1e3962a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -7670,85 +6676,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -7763,9 +6760,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -7776,11 +6771,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -7821,9 +6811,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -7834,11 +6822,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -7869,12 +6852,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -7930,9 +6908,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -7943,11 +6919,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -7978,12 +6949,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -8002,9 +6969,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -8015,11 +6980,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -8091,8 +7051,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -8105,15 +7064,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -8124,11 +7080,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -8174,12 +7125,8 @@
          <xsl:if test="$including-optional">
             <local-definitions>
                <xsl:if test="$including-optional">
-                  <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
+                             type="string">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -8194,9 +7141,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8207,11 +7152,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -8246,9 +7186,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8259,11 +7197,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -8288,8 +7221,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -8302,14 +7234,7 @@
                      <xsl:if test="$including-optional">
                         <protocol name="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -8345,21 +7270,14 @@
                   </component>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <inventory-item uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8370,11 +7288,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -8400,15 +7313,12 @@
                      <xsl:if test="$including-optional">
                         <responsible-party role-id="token">
                            <party-uuid>
-                              <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                              <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                              <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8419,11 +7329,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -8454,18 +7359,11 @@
                         </responsible-party>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <implemented-component component-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="component-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8476,11 +7374,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -8506,15 +7399,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -8525,11 +7415,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -8574,12 +7459,7 @@
                   </inventory-item>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <user uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <user uuid="{ r:make-uuid( string-join( (current-time(),'d1e2646a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -8598,9 +7478,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8611,11 +7489,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -8675,9 +7548,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8688,11 +7559,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -8739,9 +7605,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -8752,11 +7616,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -8810,12 +7669,7 @@
                   </objectives-and-methods>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <activity uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <activity uuid="{ r:make-uuid( string-join( (current-time(),'d1e4119a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -8827,9 +7681,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8840,11 +7692,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -8868,12 +7715,7 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <step uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <step uuid="{ r:make-uuid( string-join( (current-time(),'d1e4137a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -8885,9 +7727,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8898,11 +7738,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -8935,9 +7770,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -8948,11 +7781,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -8984,9 +7812,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -8997,11 +7823,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -9053,9 +7874,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -9066,11 +7885,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -9119,9 +7933,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -9132,11 +7944,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -9161,8 +7968,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -9189,9 +7995,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -9202,11 +8006,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -9238,9 +8037,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -9251,11 +8048,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -9307,9 +8099,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -9320,11 +8110,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -9373,9 +8158,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -9386,11 +8169,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -9415,8 +8193,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -9445,9 +8222,7 @@
                <xsl:if test="$including-optional">
                   <part name="token">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -9459,11 +8234,6 @@
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -9472,9 +8242,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9485,11 +8253,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -9504,9 +8267,7 @@
                      <xsl:if test="$including-optional">
                         <part name="token">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9517,11 +8278,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                         </part>
                      </xsl:if>
@@ -9552,9 +8308,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -9565,11 +8319,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -9601,9 +8350,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -9614,11 +8361,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -9670,9 +8412,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -9683,11 +8423,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -9740,9 +8475,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -9753,11 +8486,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -9782,21 +8510,15 @@
                </xsl:if>
                <include-all/>
                <xsl:comment>
-                  <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                  <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                </xsl:comment>
                <xsl:if test="$including-optional">
-                  <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="subject-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                   type="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9807,11 +8529,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -9851,12 +8568,8 @@
          <xsl:if test="$including-optional">
             <assessment-assets>
                <xsl:if test="$including-optional">
-                  <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
+                             type="string">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -9871,9 +8584,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9884,11 +8595,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -9923,9 +8629,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -9936,11 +8640,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -9965,8 +8664,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -9979,14 +8677,7 @@
                      <xsl:if test="$including-optional">
                         <protocol name="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -10021,12 +8712,7 @@
                      </xsl:if>
                   </component>
                </xsl:if>
-               <assessment-platform uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <assessment-platform uuid="{ r:make-uuid( string-join( (current-time(),'d1e4589a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -10035,9 +8721,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -10048,11 +8732,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -10076,18 +8755,11 @@
                      </link>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <uses-component component-uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="component-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <uses-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4604a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -10098,11 +8770,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -10128,15 +8795,12 @@
                         <xsl:if test="$including-optional">
                            <responsible-party role-id="token">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -10147,11 +8811,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -10197,12 +8856,8 @@
             </assessment-assets>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                  type="token">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -10214,9 +8869,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -10227,11 +8880,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -10266,12 +8914,7 @@
                   </timing>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <dependency task-uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="task-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <remarks>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -10280,30 +8923,19 @@
                   </dependency>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                        type="token">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
                   </task>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <associated-activity activity-uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="activity-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -10314,11 +8946,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -10346,9 +8973,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -10359,11 +8984,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -10388,8 +9008,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -10408,9 +9027,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -10421,11 +9038,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -10450,21 +9062,15 @@
                         </xsl:if>
                         <include-all/>
                         <xsl:comment>
-                           <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                           <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                         </xsl:comment>
                         <xsl:if test="$including-optional">
-                           <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="subject-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                            type="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -10475,11 +9081,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -10532,9 +9133,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -10545,11 +9144,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -10574,21 +9168,15 @@
                      </xsl:if>
                      <include-all/>
                      <xsl:comment>
-                        <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                        <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                      </xsl:comment>
                      <xsl:if test="$including-optional">
-                        <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="subject-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                         type="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -10599,11 +9187,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -10645,9 +9228,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -10658,11 +9239,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -10687,8 +9263,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                           <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -10708,12 +9283,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -10727,9 +9297,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -10740,11 +9308,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -10771,9 +9334,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -10784,11 +9345,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -10843,16 +9399,12 @@
          </xsl:if>
       </assessment-plan>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='assessment-results']"
                  name="make-assessment-results">
       <assessment-results xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                          uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+                          uuid="{ r:make-uuid( string-join( (current-time(),'d1e5670a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -10872,85 +9424,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -10965,9 +9508,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -10978,11 +9519,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -11023,9 +9559,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -11036,11 +9570,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -11071,12 +9600,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -11132,9 +9656,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -11145,11 +9667,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -11180,12 +9697,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -11204,9 +9717,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -11217,11 +9728,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -11293,8 +9799,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -11307,15 +9812,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -11326,11 +9828,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -11385,9 +9882,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -11398,11 +9893,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -11449,9 +9939,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -11462,11 +9950,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -11520,12 +10003,7 @@
                   </objectives-and-methods>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <activity uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <activity uuid="{ r:make-uuid( string-join( (current-time(),'d1e4119a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -11537,9 +10015,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -11550,11 +10026,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -11578,12 +10049,7 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <step uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <step uuid="{ r:make-uuid( string-join( (current-time(),'d1e4137a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -11595,9 +10061,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -11608,11 +10072,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -11645,9 +10104,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -11658,11 +10115,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -11694,9 +10146,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -11707,11 +10157,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -11763,9 +10208,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -11776,11 +10219,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -11829,9 +10267,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -11842,11 +10278,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -11871,8 +10302,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -11899,9 +10329,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -11912,11 +10340,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -11948,9 +10371,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -11961,11 +10382,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -12017,9 +10433,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -12030,11 +10444,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -12083,9 +10492,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -12096,11 +10503,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -12125,8 +10527,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -12150,12 +10551,7 @@
                </xsl:if>
             </local-definitions>
          </xsl:if>
-         <result uuid="00000000-0000-4000-8000-000000000000">
-            <xsl:if test="$including-optional or true() (: required: yes :)">
-               <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                              name="uuid"
-                              select="uuid:randomUUID()"/>
-            </xsl:if>
+         <result uuid="{ r:make-uuid( string-join( (current-time(),'d1e5696a1065', document-uri( document('') )) ) ) }">
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
             </title>
@@ -12173,9 +10569,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -12186,11 +10580,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -12216,12 +10605,8 @@
             <xsl:if test="$including-optional">
                <local-definitions>
                   <xsl:if test="$including-optional">
-                     <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
+                                type="string">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
                         </title>
@@ -12236,9 +10621,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -12249,11 +10632,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -12288,9 +10666,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -12301,11 +10677,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -12330,8 +10701,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -12344,14 +10714,7 @@
                         <xsl:if test="$including-optional">
                            <protocol name="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <title>
@@ -12387,21 +10750,14 @@
                      </component>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <inventory-item uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -12412,11 +10768,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -12442,15 +10793,12 @@
                         <xsl:if test="$including-optional">
                            <responsible-party role-id="token">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -12461,11 +10809,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -12496,18 +10839,11 @@
                            </responsible-party>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <implemented-component component-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="component-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -12518,11 +10854,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -12548,15 +10879,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -12567,11 +10895,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -12616,12 +10939,7 @@
                      </inventory-item>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <user uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <user uuid="{ r:make-uuid( string-join( (current-time(),'d1e2646a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -12640,9 +10958,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -12653,11 +10969,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -12710,12 +11021,8 @@
                   <xsl:if test="$including-optional">
                      <assessment-assets>
                         <xsl:if test="$including-optional">
-                           <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
+                                      type="string">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
                               </title>
@@ -12730,9 +11037,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -12743,11 +11048,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -12782,9 +11082,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -12795,11 +11093,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -12824,8 +11117,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -12838,14 +11130,7 @@
                               <xsl:if test="$including-optional">
                                  <protocol name="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <title>
@@ -12880,12 +11165,7 @@
                               </xsl:if>
                            </component>
                         </xsl:if>
-                        <assessment-platform uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <assessment-platform uuid="{ r:make-uuid( string-join( (current-time(),'d1e4589a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -12894,9 +11174,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -12907,11 +11185,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -12935,18 +11208,11 @@
                               </link>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <uses-component component-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="component-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <uses-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4604a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -12957,11 +11223,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -12987,15 +11248,12 @@
                                  <xsl:if test="$including-optional">
                                     <responsible-party role-id="token">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -13006,11 +11264,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -13056,12 +11309,8 @@
                      </assessment-assets>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <assessment-task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <assessment-task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                                      type="token">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
                         </title>
@@ -13073,9 +11322,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -13086,11 +11333,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -13125,12 +11367,7 @@
                            </timing>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <dependency task-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="task-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <remarks>
                                     <p>Paragraphs and (block-level) markup contents.</p>
@@ -13139,30 +11376,19 @@
                            </dependency>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                                 type="token">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
                               </title>
                            </task>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <associated-activity activity-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="activity-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -13173,11 +11399,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -13205,9 +11426,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -13218,11 +11437,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -13247,8 +11461,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -13267,9 +11480,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -13280,11 +11491,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -13309,21 +11515,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                     type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -13334,11 +11534,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -13391,9 +11586,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -13404,11 +11597,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -13433,21 +11621,15 @@
                               </xsl:if>
                               <include-all/>
                               <xsl:comment>
-                                 <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                 <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                               </xsl:comment>
                               <xsl:if test="$including-optional">
-                                 <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="subject-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                  type="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -13458,11 +11640,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -13504,9 +11681,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -13517,11 +11692,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -13546,8 +11716,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -13575,9 +11744,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -13588,11 +11755,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -13624,9 +11786,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -13637,11 +11797,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -13693,9 +11848,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -13706,11 +11859,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -13758,15 +11906,12 @@
                   <xsl:if test="$including-optional">
                      <responsible-party role-id="token">
                         <party-uuid>
-                           <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                           <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -13777,11 +11922,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -13813,9 +11953,7 @@
                   </xsl:if>
                   <part name="token">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -13827,11 +11965,6 @@
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -13840,9 +11973,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -13853,11 +11984,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -13872,9 +11998,7 @@
                      <xsl:if test="$including-optional">
                         <part name="token">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -13885,11 +12009,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                         </part>
                      </xsl:if>
@@ -13912,12 +12031,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <assessment-log>
-                  <entry uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <entry uuid="{ r:make-uuid( string-join( (current-time(),'d1e5807a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -13939,9 +12053,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -13952,11 +12064,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -13980,32 +12087,20 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <logged-by party-uuid="00000000-0000-4000-8000-000000000000">
+                        <logged-by party-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5074a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="party-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
                         </logged-by>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="task-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -14016,11 +12111,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -14046,15 +12136,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -14065,11 +12152,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -14109,9 +12191,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -14122,11 +12202,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -14151,21 +12226,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                     type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -14176,11 +12245,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -14218,12 +12282,7 @@
                               </subject>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="subject-placeholder-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                  <subject type="token">
                                     <xsl:if test="$including-optional">
                                        <description>
@@ -14233,9 +12292,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14246,11 +12303,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -14275,21 +12327,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -14300,11 +12346,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -14358,12 +12399,7 @@
                </assessment-log>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <observation uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <observation uuid="{ r:make-uuid( string-join( (current-time(),'d1e4709a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -14375,9 +12411,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -14388,11 +12422,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -14425,23 +12454,17 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <origin>
-                        <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                        <actor type="token"
+                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="actor-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -14452,11 +12475,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -14481,18 +12499,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="task-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -14503,11 +12514,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -14533,15 +12539,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14552,11 +12555,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -14596,9 +12594,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14609,11 +12605,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -14638,21 +12629,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -14663,11 +12648,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -14705,12 +12685,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="subject-placeholder-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -14720,9 +12695,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -14733,11 +12706,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -14762,21 +12730,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -14787,11 +12749,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -14839,12 +12796,8 @@
                      </origin>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="subject-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                              type="token">
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -14853,9 +12806,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -14866,11 +12817,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -14913,9 +12859,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -14926,11 +12870,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -14976,12 +12915,7 @@
                </observation>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <risk uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <risk uuid="{ r:make-uuid( string-join( (current-time(),'d1e4905a1065', document-uri( document('') )) ) ) }">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -14994,9 +12928,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -15007,11 +12939,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -15039,23 +12966,17 @@
                   </status>
                   <xsl:if test="$including-optional">
                      <origin>
-                        <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                        <actor type="token"
+                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="actor-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -15066,11 +12987,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -15095,18 +13011,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="task-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -15117,11 +13026,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -15147,15 +13051,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -15166,11 +13067,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -15210,9 +13106,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -15223,11 +13117,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -15252,21 +13141,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -15277,11 +13160,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -15319,12 +13197,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="subject-placeholder-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -15334,9 +13207,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -15347,11 +13218,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -15376,21 +13242,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -15401,11 +13261,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -15467,9 +13322,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -15480,11 +13333,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -15508,23 +13356,17 @@
                            </link>
                         </xsl:if>
                         <origin>
-                           <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                           <actor type="token"
+                                  actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="actor-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -15535,11 +13377,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -15564,18 +13401,11 @@
                               </xsl:if>
                            </actor>
                            <xsl:if test="$including-optional">
-                              <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="task-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -15586,11 +13416,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -15616,15 +13441,12 @@
                                  <xsl:if test="$including-optional">
                                     <responsible-party role-id="token">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -15635,11 +13457,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -15679,9 +13496,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -15692,11 +13507,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -15721,21 +13531,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -15746,11 +13550,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -15788,12 +13587,7 @@
                                     </subject>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-placeholder-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                        <subject type="token">
                                           <xsl:if test="$including-optional">
                                              <description>
@@ -15803,9 +13597,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -15816,11 +13608,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -15845,21 +13632,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="subject-uuid"
-                                                                  select="uuid:randomUUID()"/>
-                                                </xsl:if>
+                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                              type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">
-                                                            <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                         </xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -15870,11 +13651,6 @@
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
-                                                      </xsl:if>
-                                                      <xsl:if test="$including-optional or false() (: required: no :)">
-                                                         <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                        name="uuid"
-                                                                        select="uuid:randomUUID()"/>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <remarks>
@@ -15924,9 +13700,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -15937,11 +13711,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -15973,21 +13742,9 @@
                      </characterization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <mitigating-factor uuid="00000000-0000-4000-8000-000000000000">
+                     <mitigating-factor uuid="{ r:make-uuid( string-join( (current-time(),'d1e4951a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="implementation-uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="implementation-uuid"
-                                          select="uuid:randomUUID()"/>
+                           <xsl:attribute name="implementation-uuid">{ r:make-uuid( string-join( (current-time(),'d1e4954a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -15995,9 +13752,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -16008,11 +13763,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -16036,12 +13786,8 @@
                            </link>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="subject-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                    type="token">
                               <xsl:if test="$including-optional">
                                  <title>
                                     <xsl:text>Text and (inline) markup</xsl:text>
@@ -16050,9 +13796,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -16063,11 +13807,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -16105,12 +13844,8 @@
                      </deadline>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <response uuid="00000000-0000-4000-8000-000000000000" lifecycle="token">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <response uuid="{ r:make-uuid( string-join( (current-time(),'d1e5444a1065', document-uri( document('') )) ) ) }"
+                               lifecycle="token">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
                         </title>
@@ -16120,9 +13855,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -16133,11 +13866,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -16162,23 +13890,17 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <origin>
-                              <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                              <actor type="token"
+                                     actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="role-id">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="actor-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -16189,11 +13911,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -16218,18 +13935,11 @@
                                  </xsl:if>
                               </actor>
                               <xsl:if test="$including-optional">
-                                 <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="task-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -16240,11 +13950,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -16270,15 +13975,12 @@
                                     <xsl:if test="$including-optional">
                                        <responsible-party role-id="token">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -16289,11 +13991,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -16333,9 +14030,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -16346,11 +14041,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -16375,21 +14065,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="subject-uuid"
-                                                                  select="uuid:randomUUID()"/>
-                                                </xsl:if>
+                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                              type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">
-                                                            <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                         </xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -16400,11 +14084,6 @@
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
-                                                      </xsl:if>
-                                                      <xsl:if test="$including-optional or false() (: required: no :)">
-                                                         <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                        name="uuid"
-                                                                        select="uuid:randomUUID()"/>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <remarks>
@@ -16442,12 +14121,7 @@
                                        </subject>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
-                                       <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-placeholder-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                           <subject type="token">
                                              <xsl:if test="$including-optional">
                                                 <description>
@@ -16457,9 +14131,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -16470,11 +14142,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -16499,21 +14166,15 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment>
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
-                                                <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                   <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="subject-uuid"
-                                                                     select="uuid:randomUUID()"/>
-                                                   </xsl:if>
+                                                <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                                 type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                            <xsl:attribute name="uuid">
-                                                               <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                            </xsl:attribute>
+                                                            <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                             <xsl:attribute name="ns">
@@ -16524,11 +14185,6 @@
                                                             <xsl:attribute name="class">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
-                                                         </xsl:if>
-                                                         <xsl:if test="$including-optional or false() (: required: no :)">
-                                                            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                           name="uuid"
-                                                                           select="uuid:randomUUID()"/>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional">
                                                             <remarks>
@@ -16576,19 +14232,10 @@
                            </origin>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <required-asset uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <required-asset uuid="{ r:make-uuid( string-join( (current-time(),'d1e5477a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
-                                 <subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="subject-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          type="token">
                                     <xsl:if test="$including-optional">
                                        <title>
                                           <xsl:text>Text and (inline) markup</xsl:text>
@@ -16597,9 +14244,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -16610,11 +14255,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -16655,9 +14295,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -16668,11 +14306,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -16703,12 +14336,8 @@
                            </required-asset>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                                 type="token">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
                               </title>
@@ -16720,9 +14349,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -16733,11 +14360,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -16772,12 +14394,7 @@
                                  </timing>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <dependency task-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="task-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
                                     <xsl:if test="$including-optional">
                                        <remarks>
                                           <p>Paragraphs and (block-level) markup contents.</p>
@@ -16786,30 +14403,19 @@
                                  </dependency>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                                       type="token">
                                     <title>
                                        <xsl:text>Text and (inline) markup</xsl:text>
                                     </title>
                                  </task>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <associated-activity activity-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="activity-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -16820,11 +14426,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -16852,9 +14453,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -16865,11 +14464,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -16894,8 +14488,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <party-uuid>
-                                                <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                                <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                                <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                              </party-uuid>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
@@ -16914,9 +14507,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -16927,11 +14518,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -16956,21 +14542,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -16981,11 +14561,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -17038,9 +14613,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17051,11 +14624,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -17080,21 +14648,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -17105,11 +14667,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -17151,9 +14708,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17164,11 +14719,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -17193,8 +14743,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -17220,12 +14769,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <risk-log>
-                        <entry uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <entry uuid="{ r:make-uuid( string-join( (current-time(),'d1e4984a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -17247,9 +14791,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -17260,11 +14802,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -17288,16 +14825,11 @@
                               </link>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <logged-by party-uuid="00000000-0000-4000-8000-000000000000">
+                              <logged-by party-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5074a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="role-id">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="party-uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                               </logged-by>
                            </xsl:if>
@@ -17307,18 +14839,11 @@
                               </status-change>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <related-response response-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="response-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <related-response response-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5014a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -17329,11 +14854,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -17357,18 +14877,11 @@
                                     </link>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="task-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -17379,11 +14892,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -17409,15 +14917,12 @@
                                        <xsl:if test="$including-optional">
                                           <responsible-party role-id="token">
                                              <party-uuid>
-                                                <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                                <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                                <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                              </party-uuid>
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -17428,11 +14933,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -17472,9 +14972,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -17485,11 +14983,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -17514,21 +15007,15 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment>
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
-                                                <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                   <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="subject-uuid"
-                                                                     select="uuid:randomUUID()"/>
-                                                   </xsl:if>
+                                                <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                                 type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                            <xsl:attribute name="uuid">
-                                                               <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                            </xsl:attribute>
+                                                            <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                             <xsl:attribute name="ns">
@@ -17539,11 +15026,6 @@
                                                             <xsl:attribute name="class">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
-                                                         </xsl:if>
-                                                         <xsl:if test="$including-optional or false() (: required: no :)">
-                                                            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                           name="uuid"
-                                                                           select="uuid:randomUUID()"/>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional">
                                                             <remarks>
@@ -17581,12 +15063,7 @@
                                           </subject>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
-                                          <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-placeholder-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                              <subject type="token">
                                                 <xsl:if test="$including-optional">
                                                    <description>
@@ -17596,9 +15073,7 @@
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">
-                                                            <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                         </xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -17609,11 +15084,6 @@
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
-                                                      </xsl:if>
-                                                      <xsl:if test="$including-optional or false() (: required: no :)">
-                                                         <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                        name="uuid"
-                                                                        select="uuid:randomUUID()"/>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <remarks>
@@ -17638,21 +15108,15 @@
                                                 </xsl:if>
                                                 <include-all/>
                                                 <xsl:comment>
-                                                   <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                                   <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                                 </xsl:comment>
                                                 <xsl:if test="$including-optional">
-                                                   <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                      <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                         <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                        name="subject-uuid"
-                                                                        select="uuid:randomUUID()"/>
-                                                      </xsl:if>
+                                                   <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                                    type="token">
                                                       <xsl:if test="$including-optional">
                                                          <prop name="token" value="string">
                                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                               <xsl:attribute name="uuid">
-                                                                  <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                               </xsl:attribute>
+                                                               <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                             </xsl:if>
                                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                                <xsl:attribute name="ns">
@@ -17663,11 +15127,6 @@
                                                                <xsl:attribute name="class">
                                                                   <xsl:text>token</xsl:text>
                                                                </xsl:attribute>
-                                                            </xsl:if>
-                                                            <xsl:if test="$including-optional or false() (: required: no :)">
-                                                               <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                              name="uuid"
-                                                                              select="uuid:randomUUID()"/>
                                                             </xsl:if>
                                                             <xsl:if test="$including-optional">
                                                                <remarks>
@@ -17728,23 +15187,12 @@
                      </risk-log>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <related-observation observation-uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="observation-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
-                     </related-observation>
+                     <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5057a1065', document-uri( document('') )) ) ) }"/>
                   </xsl:if>
                </risk>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <finding uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <finding uuid="{ r:make-uuid( string-join( (current-time(),'d1e5843a1065', document-uri( document('') )) ) ) }">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -17754,9 +15202,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -17767,11 +15213,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -17796,23 +15237,17 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <origin>
-                        <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                        <actor type="token"
+                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="actor-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -17823,11 +15258,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -17852,18 +15282,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="task-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -17874,11 +15297,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -17904,15 +15322,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17923,11 +15338,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -17967,9 +15377,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17980,11 +15388,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -18009,21 +15412,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -18034,11 +15431,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -18076,12 +15468,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="subject-placeholder-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -18091,9 +15478,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -18104,11 +15489,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -18133,21 +15513,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -18158,11 +15532,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -18223,9 +15592,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -18236,11 +15603,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -18292,27 +15654,14 @@
                   </target>
                   <xsl:if test="$including-optional">
                      <implementation-statement-uuid>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e5863a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </implementation-statement-uuid>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <related-observation observation-uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="observation-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
-                     </related-observation>
+                     <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5870a1065', document-uri( document('') )) ) ) }"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <associated-risk risk-uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="risk-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
-                     </associated-risk>
+                     <associated-risk risk-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5877a1065', document-uri( document('') )) ) ) }"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -18330,12 +15679,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -18349,9 +15693,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -18362,11 +15704,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -18393,9 +15730,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -18406,11 +15741,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -18465,16 +15795,12 @@
          </xsl:if>
       </assessment-results>
    </xsl:template>
-   <xsl:template expand-text="true"
+   <xsl:template priority="5"
+                 expand-text="true"
                  match="/xsl:stylesheet[$make='plan-of-action-and-milestones']"
                  name="make-plan-of-action-and-milestones">
       <plan-of-action-and-milestones xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                                     uuid="00000000-0000-4000-8000-000000000000">
-         <xsl:if test="$including-optional or true() (: required: yes :)">
-            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                           name="uuid"
-                           select="uuid:randomUUID()"/>
-         </xsl:if>
+                                     uuid="{ r:make-uuid( string-join( (current-time(),'d1e5912a1065', document-uri( document('') )) ) ) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -18494,85 +15820,76 @@
                <xsl:text>string</xsl:text>
             </oscal-version>
             <xsl:if test="$including-optional">
-               <xsl:if test="$including-optional or false() (: @min-occurs 0 :)">
-                  <revisions>
-                     <revision>
-                        <xsl:if test="$including-optional">
-                           <title>
-                              <xsl:text>Text and (inline) markup</xsl:text>
-                           </title>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <published>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </published>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <last-modified>
-                              <xsl:text>{ current-dateTime() }</xsl:text>
-                           </last-modified>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <version>
-                              <xsl:text>string</xsl:text>
-                           </version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <oscal-version>
-                              <xsl:text>string</xsl:text>
-                           </oscal-version>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="ns">
-                                    <xsl:text>protocol:uri</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="class">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <remarks>
-                                    <p>Paragraphs and (block-level) markup contents.</p>
-                                 </remarks>
-                              </xsl:if>
-                           </prop>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="rel">
-                                    <xsl:text>token</xsl:text>
-                                 </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional">
-                                 <text>
-                                    <xsl:text>Text and (inline) markup</xsl:text>
-                                 </text>
-                              </xsl:if>
-                           </link>
-                        </xsl:if>
-                        <xsl:if test="$including-optional">
-                           <remarks>
-                              <p>Paragraphs and (block-level) markup contents.</p>
-                           </remarks>
-                        </xsl:if>
-                     </revision>
-                  </revisions>
-               </xsl:if>
+               <revisions>
+                  <revision>
+                     <xsl:if test="$including-optional">
+                        <title>
+                           <xsl:text>Text and (inline) markup</xsl:text>
+                        </title>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <published>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </published>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <last-modified>
+                           <xsl:text>{ current-dateTime() }</xsl:text>
+                        </last-modified>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <version>
+                           <xsl:text>string</xsl:text>
+                        </version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <oscal-version>
+                           <xsl:text>string</xsl:text>
+                        </oscal-version>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <prop name="token" value="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="ns">
+                                 <xsl:text>protocol:uri</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="class">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <remarks>
+                                 <p>Paragraphs and (block-level) markup contents.</p>
+                              </remarks>
+                           </xsl:if>
+                        </prop>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <link href="uri-reference" media-type="string">
+                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:attribute name="rel">
+                                 <xsl:text>token</xsl:text>
+                              </xsl:attribute>
+                           </xsl:if>
+                           <xsl:if test="$including-optional">
+                              <text>
+                                 <xsl:text>Text and (inline) markup</xsl:text>
+                              </text>
+                           </xsl:if>
+                        </link>
+                     </xsl:if>
+                     <xsl:if test="$including-optional">
+                        <remarks>
+                           <p>Paragraphs and (block-level) markup contents.</p>
+                        </remarks>
+                     </xsl:if>
+                  </revision>
+               </revisions>
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
@@ -18587,9 +15904,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -18600,11 +15915,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -18645,9 +15955,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -18658,11 +15966,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -18693,12 +15996,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -18754,9 +16052,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -18767,11 +16063,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -18802,12 +16093,8 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="00000000-0000-4000-8000-000000000000" type="string">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
+               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
+                      type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -18826,9 +16113,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -18839,11 +16124,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -18915,8 +16195,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                        <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -18929,15 +16208,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                     <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">
-                              <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                           </xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -18948,11 +16224,6 @@
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="$including-optional or false() (: required: no :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <remarks>
@@ -19010,12 +16281,8 @@
          <xsl:if test="$including-optional">
             <local-definitions>
                <xsl:if test="$including-optional">
-                  <component uuid="00000000-0000-4000-8000-000000000000" type="string">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
+                             type="string">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -19030,9 +16297,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -19043,11 +16308,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -19082,9 +16342,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -19095,11 +16353,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -19124,8 +16377,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                 <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -19138,14 +16390,7 @@
                      <xsl:if test="$including-optional">
                         <protocol name="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -19181,21 +16426,14 @@
                   </component>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <inventory-item uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -19206,11 +16444,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -19236,15 +16469,12 @@
                      <xsl:if test="$including-optional">
                         <responsible-party role-id="token">
                            <party-uuid>
-                              <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                              <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                              <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -19255,11 +16485,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -19290,18 +16515,11 @@
                         </responsible-party>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <implemented-component component-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="component-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -19312,11 +16530,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -19342,15 +16555,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -19361,11 +16571,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -19417,12 +16622,7 @@
             </local-definitions>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <observation uuid="00000000-0000-4000-8000-000000000000">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <observation uuid="{ r:make-uuid( string-join( (current-time(),'d1e4709a1065', document-uri( document('') )) ) ) }">
                <xsl:if test="$including-optional">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -19434,9 +16634,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -19447,11 +16645,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -19484,23 +16677,17 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <origin>
-                     <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                     <actor type="token"
+                            actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="role-id">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="actor-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -19511,11 +16698,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -19540,18 +16722,11 @@
                         </xsl:if>
                      </actor>
                      <xsl:if test="$including-optional">
-                        <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="task-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -19562,11 +16737,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -19592,15 +16762,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -19611,11 +16778,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -19655,9 +16817,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -19668,11 +16828,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -19697,21 +16852,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                     type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -19722,11 +16871,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -19764,12 +16908,7 @@
                               </subject>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="subject-placeholder-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                  <subject type="token">
                                     <xsl:if test="$including-optional">
                                        <description>
@@ -19779,9 +16918,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -19792,11 +16929,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -19821,21 +16953,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -19846,11 +16972,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -19898,12 +17019,8 @@
                   </origin>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="subject-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                           type="token">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -19912,9 +17029,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -19925,11 +17040,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -19972,9 +17082,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -19985,11 +17093,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -20035,12 +17138,7 @@
             </observation>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <risk uuid="00000000-0000-4000-8000-000000000000">
-               <xsl:if test="$including-optional or true() (: required: yes :)">
-                  <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                 name="uuid"
-                                 select="uuid:randomUUID()"/>
-               </xsl:if>
+            <risk uuid="{ r:make-uuid( string-join( (current-time(),'d1e4905a1065', document-uri( document('') )) ) ) }">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -20053,9 +17151,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -20066,11 +17162,6 @@
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <remarks>
@@ -20098,23 +17189,17 @@
                </status>
                <xsl:if test="$including-optional">
                   <origin>
-                     <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                     <actor type="token"
+                            actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="role-id">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="actor-uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -20125,11 +17210,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -20154,18 +17234,11 @@
                         </xsl:if>
                      </actor>
                      <xsl:if test="$including-optional">
-                        <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="task-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -20176,11 +17249,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -20206,15 +17274,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                    <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -20225,11 +17290,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -20269,9 +17329,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -20282,11 +17340,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -20311,21 +17364,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                     type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -20336,11 +17383,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -20378,12 +17420,7 @@
                               </subject>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="subject-placeholder-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                  <subject type="token">
                                     <xsl:if test="$including-optional">
                                        <description>
@@ -20393,9 +17430,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -20406,11 +17441,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -20435,21 +17465,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -20460,11 +17484,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -20526,9 +17545,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -20539,11 +17556,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -20567,23 +17579,17 @@
                         </link>
                      </xsl:if>
                      <origin>
-                        <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                        <actor type="token"
+                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="actor-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -20594,11 +17600,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -20623,18 +17624,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="task-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -20645,11 +17639,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -20675,15 +17664,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -20694,11 +17680,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -20738,9 +17719,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -20751,11 +17730,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -20780,21 +17754,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -20805,11 +17773,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -20847,12 +17810,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="subject-placeholder-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -20862,9 +17820,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -20875,11 +17831,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -20904,21 +17855,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -20929,11 +17874,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -20983,9 +17923,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -20996,11 +17934,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -21032,21 +17965,9 @@
                   </characterization>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <mitigating-factor uuid="00000000-0000-4000-8000-000000000000">
+                  <mitigating-factor uuid="{ r:make-uuid( string-join( (current-time(),'d1e4951a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="implementation-uuid">
-                           <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                        </xsl:attribute>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
-                     <xsl:if test="$including-optional or false() (: required: no :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="implementation-uuid"
-                                       select="uuid:randomUUID()"/>
+                        <xsl:attribute name="implementation-uuid">{ r:make-uuid( string-join( (current-time(),'d1e4954a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                      </xsl:if>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
@@ -21054,9 +17975,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -21067,11 +17986,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -21095,12 +18009,8 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="subject-uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                 type="token">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -21109,9 +18019,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -21122,11 +18030,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -21164,12 +18067,8 @@
                   </deadline>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <response uuid="00000000-0000-4000-8000-000000000000" lifecycle="token">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <response uuid="{ r:make-uuid( string-join( (current-time(),'d1e5444a1065', document-uri( document('') )) ) ) }"
+                            lifecycle="token">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -21179,9 +18078,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -21192,11 +18089,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -21221,23 +18113,17 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <origin>
-                           <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                           <actor type="token"
+                                  actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="actor-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -21248,11 +18134,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -21277,18 +18158,11 @@
                               </xsl:if>
                            </actor>
                            <xsl:if test="$including-optional">
-                              <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="task-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -21299,11 +18173,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -21329,15 +18198,12 @@
                                  <xsl:if test="$including-optional">
                                     <responsible-party role-id="token">
                                        <party-uuid>
-                                          <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                          <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -21348,11 +18214,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -21392,9 +18253,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -21405,11 +18264,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -21434,21 +18288,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                             <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="subject-uuid"
-                                                               select="uuid:randomUUID()"/>
-                                             </xsl:if>
+                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                           type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -21459,11 +18307,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -21501,12 +18344,7 @@
                                     </subject>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-placeholder-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                        <subject type="token">
                                           <xsl:if test="$including-optional">
                                              <description>
@@ -21516,9 +18354,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -21529,11 +18365,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -21558,21 +18389,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="subject-uuid"
-                                                                  select="uuid:randomUUID()"/>
-                                                </xsl:if>
+                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                              type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">
-                                                            <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                         </xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -21583,11 +18408,6 @@
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
-                                                      </xsl:if>
-                                                      <xsl:if test="$including-optional or false() (: required: no :)">
-                                                         <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                        name="uuid"
-                                                                        select="uuid:randomUUID()"/>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <remarks>
@@ -21635,19 +18455,10 @@
                         </origin>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <required-asset uuid="00000000-0000-4000-8000-000000000000">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <required-asset uuid="{ r:make-uuid( string-join( (current-time(),'d1e5477a1065', document-uri( document('') )) ) ) }">
                            <xsl:if test="$including-optional">
-                              <subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="subject-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       type="token">
                                  <xsl:if test="$including-optional">
                                     <title>
                                        <xsl:text>Text and (inline) markup</xsl:text>
@@ -21656,9 +18467,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -21669,11 +18478,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -21714,9 +18518,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -21727,11 +18529,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -21762,12 +18559,8 @@
                         </required-asset>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                           <xsl:if test="$including-optional or true() (: required: yes :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
-                           </xsl:if>
+                        <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                              type="token">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
                            </title>
@@ -21779,9 +18572,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -21792,11 +18583,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
@@ -21831,12 +18617,7 @@
                               </timing>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <dependency task-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="task-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional">
                                     <remarks>
                                        <p>Paragraphs and (block-level) markup contents.</p>
@@ -21845,30 +18626,19 @@
                               </dependency>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <task uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
+                                    type="token">
                                  <title>
                                     <xsl:text>Text and (inline) markup</xsl:text>
                                  </title>
                               </task>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <associated-activity activity-uuid="00000000-0000-4000-8000-000000000000">
-                                 <xsl:if test="$including-optional or true() (: required: yes :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="activity-uuid"
-                                                   select="uuid:randomUUID()"/>
-                                 </xsl:if>
+                              <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -21879,11 +18649,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -21911,9 +18676,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -21924,11 +18687,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -21953,8 +18711,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -21973,9 +18730,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -21986,11 +18741,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -22015,21 +18765,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                        type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -22040,11 +18784,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -22097,9 +18836,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -22110,11 +18847,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -22139,21 +18871,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                       <xsl:if test="$including-optional or true() (: required: yes :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="subject-uuid"
-                                                         select="uuid:randomUUID()"/>
-                                       </xsl:if>
+                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                     type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">
-                                                   <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                </xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -22164,11 +18890,6 @@
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
-                                             </xsl:if>
-                                             <xsl:if test="$including-optional or false() (: required: no :)">
-                                                <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                               name="uuid"
-                                                               select="uuid:randomUUID()"/>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <remarks>
@@ -22210,9 +18931,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">
-                                             <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                          </xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -22223,11 +18942,6 @@
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
-                                       </xsl:if>
-                                       <xsl:if test="$including-optional or false() (: required: no :)">
-                                          <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                         name="uuid"
-                                                         select="uuid:randomUUID()"/>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <remarks>
@@ -22252,8 +18966,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                       <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -22279,12 +18992,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <risk-log>
-                     <entry uuid="00000000-0000-4000-8000-000000000000">
-                        <xsl:if test="$including-optional or true() (: required: yes :)">
-                           <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                          name="uuid"
-                                          select="uuid:randomUUID()"/>
-                        </xsl:if>
+                     <entry uuid="{ r:make-uuid( string-join( (current-time(),'d1e4984a1065', document-uri( document('') )) ) ) }">
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -22306,9 +19014,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">
-                                    <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                 </xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -22319,11 +19025,6 @@
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or false() (: required: no :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <remarks>
@@ -22347,16 +19048,11 @@
                            </link>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <logged-by party-uuid="00000000-0000-4000-8000-000000000000">
+                           <logged-by party-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5074a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                              </xsl:if>
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="party-uuid"
-                                                select="uuid:randomUUID()"/>
                               </xsl:if>
                            </logged-by>
                         </xsl:if>
@@ -22366,18 +19062,11 @@
                            </status-change>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <related-response response-uuid="00000000-0000-4000-8000-000000000000">
-                              <xsl:if test="$including-optional or true() (: required: yes :)">
-                                 <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                name="response-uuid"
-                                                select="uuid:randomUUID()"/>
-                              </xsl:if>
+                           <related-response response-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5014a1065', document-uri( document('') )) ) ) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">
-                                          <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                       </xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -22388,11 +19077,6 @@
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
-                                    </xsl:if>
-                                    <xsl:if test="$including-optional or false() (: required: no :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="uuid"
-                                                      select="uuid:randomUUID()"/>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <remarks>
@@ -22416,18 +19100,11 @@
                                  </link>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <related-task task-uuid="00000000-0000-4000-8000-000000000000">
-                                    <xsl:if test="$including-optional or true() (: required: yes :)">
-                                       <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                      name="task-uuid"
-                                                      select="uuid:randomUUID()"/>
-                                    </xsl:if>
+                                 <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">
-                                                <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                             </xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -22438,11 +19115,6 @@
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
-                                          </xsl:if>
-                                          <xsl:if test="$including-optional or false() (: required: no :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="uuid"
-                                                            select="uuid:randomUUID()"/>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <remarks>
@@ -22468,15 +19140,12 @@
                                     <xsl:if test="$including-optional">
                                        <responsible-party role-id="token">
                                           <party-uuid>
-                                             <xsl:text use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:text>
-                                             <xsl:text use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:text>
+                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -22487,11 +19156,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -22531,9 +19195,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">
-                                                      <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                   </xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -22544,11 +19206,6 @@
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:if test="$including-optional or false() (: required: no :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="uuid"
-                                                                  select="uuid:randomUUID()"/>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <remarks>
@@ -22573,21 +19230,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                   <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                  name="subject-uuid"
-                                                                  select="uuid:randomUUID()"/>
-                                                </xsl:if>
+                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                              type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">
-                                                            <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                         </xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -22598,11 +19249,6 @@
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
-                                                      </xsl:if>
-                                                      <xsl:if test="$including-optional or false() (: required: no :)">
-                                                         <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                        name="uuid"
-                                                                        select="uuid:randomUUID()"/>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <remarks>
@@ -22640,12 +19286,7 @@
                                        </subject>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
-                                       <identified-subject subject-placeholder-uuid="00000000-0000-4000-8000-000000000000">
-                                          <xsl:if test="$including-optional or true() (: required: yes :)">
-                                             <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                            name="subject-placeholder-uuid"
-                                                            select="uuid:randomUUID()"/>
-                                          </xsl:if>
+                                       <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
                                           <subject type="token">
                                              <xsl:if test="$including-optional">
                                                 <description>
@@ -22655,9 +19296,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">
-                                                         <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                      </xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -22668,11 +19307,6 @@
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
-                                                   </xsl:if>
-                                                   <xsl:if test="$including-optional or false() (: required: no :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="uuid"
-                                                                     select="uuid:randomUUID()"/>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <remarks>
@@ -22697,21 +19331,15 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment>
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token"/&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
-                                                <exclude-subject subject-uuid="00000000-0000-4000-8000-000000000000" type="token">
-                                                   <xsl:if test="$including-optional or true() (: required: yes :)">
-                                                      <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                     name="subject-uuid"
-                                                                     select="uuid:randomUUID()"/>
-                                                   </xsl:if>
+                                                <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                                 type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                            <xsl:attribute name="uuid">
-                                                               <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                                            </xsl:attribute>
+                                                            <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                             <xsl:attribute name="ns">
@@ -22722,11 +19350,6 @@
                                                             <xsl:attribute name="class">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
-                                                         </xsl:if>
-                                                         <xsl:if test="$including-optional or false() (: required: no :)">
-                                                            <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                                           name="uuid"
-                                                                           select="uuid:randomUUID()"/>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional">
                                                             <remarks>
@@ -22787,26 +19410,13 @@
                   </risk-log>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <related-observation observation-uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="observation-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
-                  </related-observation>
+                  <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5057a1065', document-uri( document('') )) ) ) }"/>
                </xsl:if>
             </risk>
          </xsl:if>
          <poam-item>
             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-               <xsl:attribute name="uuid">
-                  <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-               </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$including-optional or false() (: required: no :)">
-               <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                              name="uuid"
-                              select="uuid:randomUUID()"/>
+               <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5958a1065', document-uri( document('') )) ) ) }</xsl:attribute>
             </xsl:if>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -22817,9 +19427,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">
-                        <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                     </xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -22830,11 +19438,6 @@
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                  </xsl:if>
-                  <xsl:if test="$including-optional or false() (: required: no :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="uuid"
-                                    select="uuid:randomUUID()"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -22859,23 +19462,17 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <origin>
-                  <actor type="token" actor-uuid="00000000-0000-4000-8000-000000000000">
+                  <actor type="token"
+                         actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="role-id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="actor-uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -22886,11 +19483,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -22917,22 +19509,10 @@
                </origin>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <related-observation observation-uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="observation-uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
-               </related-observation>
+               <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5986a1065', document-uri( document('') )) ) ) }"/>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <associated-risk risk-uuid="00000000-0000-4000-8000-000000000000">
-                  <xsl:if test="$including-optional or true() (: required: yes :)">
-                     <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                    name="risk-uuid"
-                                    select="uuid:randomUUID()"/>
-                  </xsl:if>
-               </associated-risk>
+               <associated-risk risk-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5993a1065', document-uri( document('') )) ) ) }"/>
             </xsl:if>
             <xsl:if test="$including-optional">
                <remarks>
@@ -22943,12 +19523,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="00000000-0000-4000-8000-000000000000">
-                     <xsl:if test="$including-optional or true() (: required: yes :)">
-                        <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                       name="uuid"
-                                       select="uuid:randomUUID()"/>
-                     </xsl:if>
+                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -22962,9 +19537,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">
-                                 <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                              </xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -22975,11 +19548,6 @@
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                           </xsl:if>
-                           <xsl:if test="$including-optional or false() (: required: no :)">
-                              <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                             name="uuid"
-                                             select="uuid:randomUUID()"/>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <remarks>
@@ -23006,9 +19574,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">
-                                       <xsl:text>00000000-0000-4000-8000-000000000000</xsl:text>
-                                    </xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -23019,11 +19585,6 @@
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
-                                 </xsl:if>
-                                 <xsl:if test="$including-optional or false() (: required: no :)">
-                                    <xsl:attribute use-when="function-available('uuid:randomUUID')"
-                                                   name="uuid"
-                                                   select="uuid:randomUUID()"/>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <remarks>
