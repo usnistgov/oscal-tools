@@ -16,7 +16,7 @@
    <!-- - make=assessment-plan -->
    <!-- - make=assessment-results -->
    <!-- - make=plan-of-action-and-milestones -->
-   <!-- Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more lightweight: for example `xslt3 -xsl:generate-oscal.sef -it:make-catalog` for SaxonJS.-->
+   <!-- Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more lightweight: for example `xslt3 -xsl:generate-oscal.xsl -it:make-catalog` for SaxonJS under node JS.-->
    <!-- When applied to an OSCAL document (as source), this XSLT ignores runtime parameters produces a copy of the input with new timestamp (in OSCAL metadata) and top-level @uuid.-->
    <!-- Limitations: -->
    <!-- - When a model permits a choice, only the first defined or referenced of the permitted elements is included. Delete this element to permit alternate members of the choice. As indicators, other available alternatives are included in comments. -->

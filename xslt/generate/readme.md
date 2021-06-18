@@ -16,6 +16,8 @@ It has been tested in Saxon (Java) and SaxonJS (nodeJS). The latter delivers res
 
 Other variants of this logic (tbd) might:
 
+* Test under latest SaxonHE does it work?
+* Use Javascript in SaxonJS instead of r:make-uuid()?
 * Drop the UUID functionality and make 'blank' UUIDs
   - `generate-oscal-blank.xsl`
   - in XSLT 1.0 for legacy processors
@@ -64,7 +66,15 @@ Produces a (blank) Plan of Action and Milestones (template).
 
 Delivers the same result, except optional elements and attributes are included.
 
-### Refresher utility
+#### Saxon CL call
+
+For SaxonHE, EE and PE (requires Saxon 10):
+
+>  $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:make-catalog
+    
+etc. Use `include=all` for optional contents as above.
+
+### OSCAL "refresher" utility
 
 Applied to any OSCAL document, this XSLT will produce a copy with fresh top-level UUID and metadata timestamp.
 

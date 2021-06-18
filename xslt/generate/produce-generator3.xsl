@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    
     xmlns:r="http://csrc.nist.gov/ns/random"
     xmlns:XSLT="http://csrc.nist.gov/ns/oscal/metaschema/xslt-alias"
     xpath-default-namespace="http://csrc.nist.gov/ns/oscal/metaschema/1.0"
@@ -176,7 +175,7 @@
     </xsl:template>
     
     <xsl:template priority="5" match="@as-type[.='uuid']" mode="typed-value">
-        <xsl:text expand-text="true">{{ r:make-uuid( string-join( (current-time(),'{ generate-id()}', document-uri( document('') )) ) ) }}</xsl:text>
+        <xsl:text expand-text="true">{{ r:scrub('{ generate-id() }') ! r:make-uuid(.) }}</xsl:text>
     </xsl:template>
     
     <!--<xsl:template match="@as-type[.='uuid']" mode="typed-value">
@@ -243,7 +242,7 @@
         <xsl:for-each select="/METASCHEMA/define-assembly/root-name">
             <xsl:comment expand-text="true"> - make={ . } </xsl:comment>    
         </xsl:for-each>
-        <xsl:comment> Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more lightweight: for example `xslt3 -xsl:generate-oscal.sef -it:make-catalog` for SaxonJS.</xsl:comment>
+        <xsl:comment> Alternatively, the same results can be produced without stated inputs or parameters, by invoking the appropriate template by name "make-catalog" (etc.), as initial template. This syntax can be more lightweight: for example `xslt3 -xsl:generate-oscal.xsl -it:make-catalog` for SaxonJS under node JS.</xsl:comment>
         <xsl:comment> When applied to an OSCAL document (as source), this XSLT ignores runtime parameters produces a copy of the input with new timestamp (in OSCAL metadata) and top-level @uuid.</xsl:comment>
         <xsl:comment> Limitations: </xsl:comment>
         <xsl:comment> - When a model permits a choice, only the first defined or referenced of the permitted elements is included. Delete this element to permit alternate members of the choice. As indicators, other available alternatives are included in comments. </xsl:comment>
@@ -251,7 +250,7 @@
 
         <XSLT:param name="make" as="xs:string">none</XSLT:param>
         <XSLT:param name="include" as="xs:string">required-only</XSLT:param>
-        <XSLT:variable name="including-optional" select="$include='all'"/>
+        <XSLT:variable name="including-optional" as="xs:boolean" select="$include='all'"/>
 
         <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
           <xsl:copy-of select="document('uuid-util.xsl')/*/(xsl:template | xsl:variable | xsl:function)"/>

@@ -49,12 +49,18 @@ v4 UUID
         </randomness>
     </xsl:template>-->
 
+    <xsl:function name="r:scrub" as="xs:string*">
+        <xsl:param name="seed" as="xs:string"/>
+        <xsl:param name="length" as="xs:integer"/>
+        <xsl:sequence select="string-join( (current-time(),$seed,document-uri(document(''))) )"/>
+    </xsl:function>
+    
     <xsl:function name="r:make-uuid-sequence" as="xs:string*">
         <xsl:param name="seed" as="item()"/>
         <xsl:param name="length" as="xs:integer"/>
         <xsl:sequence select="r:produce-uuid-sequence($length,random-number-generator($seed))"/>
     </xsl:function>
-
+    
     <xsl:function name="r:produce-uuid-sequence" as="xs:string*">
         <xsl:param name="length" as="xs:integer"/>
         <xsl:param name="PRNG" as="map(xs:string, item())"/>
