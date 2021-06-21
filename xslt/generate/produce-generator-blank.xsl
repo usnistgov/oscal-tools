@@ -13,6 +13,10 @@
 <!-- Variant: This version produces all 'uuid' values with '00000000-0000-4000-8000-000000000000' -->
 <!-- Output:  An XSLT -->
 
+    <xsl:template name="customization-comment">
+        <xsl:comment> This XSLT was produced by 'produce-generator-blank.xsl`, a customization of the  transformation `produce-generator3.xsl`, providing result documents only with "blank" or dummy UUID values.</xsl:comment>
+    </xsl:template>
+    
     <xsl:strip-space elements="*"/>
     <xsl:preserve-space elements="p"/>
     

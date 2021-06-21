@@ -7,6 +7,7 @@
                 exclude-result-prefixes="#all">
    <xsl:output indent="true"/>
    <!-- Apply this XSLT to itself with a runtime parameter, e.g. 'make=catalog' to produce a blank (but nominally valid) OSCAL catalog XML instance.-->
+   <!-- This XSLT was produced by the base 'produce-generator3.xsl` transformation and uses XSLT 3.1 logic to produce 'random' UUIDs.-->
    <!-- The OSCAL produced can be either minimal - only required structures are given - or maximal. Use parameter 'include=all' to include optional contents, or leave the setting with default 'required-only' and the XSLT will produce only elements and attributes required in each model.-->
    <!-- All OSCAL formats supported: -->
    <!-- - make=catalog -->
@@ -137,15 +138,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -159,7 +160,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -181,7 +182,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -191,15 +192,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -213,7 +214,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -242,15 +243,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -264,7 +265,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -324,7 +325,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -339,15 +340,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -361,7 +362,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -399,15 +400,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -421,7 +422,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -440,7 +441,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -499,15 +500,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -521,7 +522,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -548,22 +549,22 @@
          </metadata>
          <xsl:if test="$including-optional">
             <param id="token" depends-on="token">
-               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+               <xsl:if test="$including-optional">
                   <xsl:attribute name="class">
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -577,7 +578,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -642,7 +643,7 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <control id="token">
-               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+               <xsl:if test="$including-optional">
                   <xsl:attribute name="class">
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
@@ -652,22 +653,22 @@
                </title>
                <xsl:if test="$including-optional">
                   <param id="token" depends-on="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -681,7 +682,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -746,15 +747,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -768,7 +769,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -782,17 +783,17 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <part name="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -804,15 +805,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -829,17 +830,17 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <part name="token">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -848,7 +849,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -864,7 +865,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <control id="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -878,12 +879,12 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <group>
-               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+               <xsl:if test="$including-optional">
                   <xsl:attribute name="id">
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                </xsl:if>
-               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+               <xsl:if test="$including-optional">
                   <xsl:attribute name="class">
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
@@ -893,22 +894,22 @@
                </title>
                <xsl:if test="$including-optional">
                   <param id="token" depends-on="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -922,7 +923,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -987,15 +988,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -1009,7 +1010,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -1023,17 +1024,17 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <part name="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -1045,15 +1046,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1070,17 +1071,17 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <part name="token">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1089,7 +1090,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1105,12 +1106,12 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <group>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -1144,15 +1145,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1166,7 +1167,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -1181,15 +1182,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -1203,7 +1204,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -1228,7 +1229,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>
@@ -1301,15 +1302,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1323,7 +1324,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1345,7 +1346,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -1355,15 +1356,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -1377,7 +1378,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -1406,15 +1407,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1428,7 +1429,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1488,7 +1489,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -1503,15 +1504,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1525,7 +1526,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1563,15 +1564,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1585,7 +1586,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1604,7 +1605,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -1663,15 +1664,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1685,7 +1686,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -1747,22 +1748,22 @@
             <modify>
                <xsl:if test="$including-optional">
                   <set-parameter param-id="token" depends-on="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1776,7 +1777,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1838,27 +1839,27 @@
                   <alter control-id="token">
                      <xsl:if test="$including-optional">
                         <remove>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="by-name">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="by-class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="by-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="by-item-name">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="by-ns">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1867,12 +1868,12 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <add>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="position">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="by-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -1884,22 +1885,22 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <param id="token" depends-on="token">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -1913,7 +1914,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -1978,15 +1979,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -2000,7 +2001,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -2014,17 +2015,17 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <part name="token">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="id">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -2036,15 +2037,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -2061,17 +2062,17 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <part name="token">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="id">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -2080,7 +2081,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -2116,15 +2117,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2138,7 +2139,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -2153,15 +2154,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -2175,7 +2176,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -2200,7 +2201,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>
@@ -2273,15 +2274,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2295,7 +2296,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2317,7 +2318,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -2327,15 +2328,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -2349,7 +2350,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -2378,15 +2379,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2400,7 +2401,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2460,7 +2461,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -2475,15 +2476,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2497,7 +2498,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2535,15 +2536,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2557,7 +2558,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2576,7 +2577,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -2635,15 +2636,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2657,7 +2658,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -2700,15 +2701,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -2722,7 +2723,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -2738,15 +2739,15 @@
                   <responsible-role role-id="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2760,7 +2761,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2786,7 +2787,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <protocol name="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -2796,17 +2797,17 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <port-range>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="start">
                                  <xsl:text>0</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="end">
                                  <xsl:text>0</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="transport">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2823,15 +2824,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2845,7 +2846,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -2875,15 +2876,15 @@
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -2897,7 +2898,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -2925,15 +2926,15 @@
                            <responsible-role role-id="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -2947,7 +2948,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -2979,15 +2980,15 @@
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -3001,7 +3002,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -3017,15 +3018,15 @@
                                  <responsible-role role-id="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -3039,7 +3040,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -3092,15 +3093,15 @@
                </description>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -3114,7 +3115,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -3141,15 +3142,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -3163,7 +3164,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -3193,15 +3194,15 @@
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -3215,7 +3216,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -3243,15 +3244,15 @@
                            <responsible-role role-id="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -3265,7 +3266,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -3297,15 +3298,15 @@
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -3319,7 +3320,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -3335,15 +3336,15 @@
                                  <responsible-role role-id="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -3357,7 +3358,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -3419,15 +3420,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -3441,7 +3442,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -3456,15 +3457,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -3478,7 +3479,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -3503,7 +3504,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>
@@ -3576,15 +3577,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -3598,7 +3599,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -3620,7 +3621,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -3630,15 +3631,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -3652,7 +3653,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -3681,15 +3682,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3703,7 +3704,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3763,7 +3764,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -3778,15 +3779,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3800,7 +3801,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3838,15 +3839,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3860,7 +3861,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3879,7 +3880,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -3938,15 +3939,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3960,7 +3961,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -3994,7 +3995,7 @@
          </import-profile>
          <system-characteristics>
             <system-id>
-               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+               <xsl:if test="$including-optional">
                   <xsl:attribute name="identifier-type">
                      <xsl:text>protocol:uri</xsl:text>
                   </xsl:attribute>
@@ -4014,15 +4015,15 @@
             </description>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -4036,7 +4037,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -4059,15 +4060,15 @@
             <system-information>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4081,7 +4082,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4094,7 +4095,7 @@
                   </link>
                </xsl:if>
                <information-type>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e3204a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <title>
@@ -4114,15 +4115,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4136,7 +4137,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4151,15 +4152,15 @@
                   <confidentiality-impact>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4173,7 +4174,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4202,15 +4203,15 @@
                   <integrity-impact>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4224,7 +4225,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4253,15 +4254,15 @@
                   <availability-impact>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4275,7 +4276,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4327,15 +4328,15 @@
                </description>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4349,7 +4350,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4370,15 +4371,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4392,7 +4393,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4429,15 +4430,15 @@
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4451,7 +4452,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4472,15 +4473,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -4494,7 +4495,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -4532,15 +4533,15 @@
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4554,7 +4555,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4575,15 +4576,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -4597,7 +4598,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -4635,15 +4636,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4657,7 +4658,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4685,15 +4686,15 @@
          <system-implementation>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -4707,7 +4708,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -4726,15 +4727,15 @@
                   </title>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4748,7 +4749,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -4791,15 +4792,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4813,7 +4814,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4865,15 +4866,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4887,7 +4888,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -4910,15 +4911,15 @@
                   <responsible-role role-id="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4932,7 +4933,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -4958,7 +4959,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <protocol name="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -4968,17 +4969,17 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <port-range>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="start">
                                  <xsl:text>0</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="end">
                                  <xsl:text>0</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="transport">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -5000,15 +5001,15 @@
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -5022,7 +5023,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -5041,15 +5042,15 @@
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -5063,7 +5064,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -5086,15 +5087,15 @@
                      <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -5108,7 +5109,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -5127,15 +5128,15 @@
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -5149,7 +5150,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -5207,15 +5208,15 @@
             <implemented-requirement uuid="{ r:dress('d1e3602a1065') ! r:make-uuid(.) }" control-id="token">
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -5229,7 +5230,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -5257,15 +5258,15 @@
                   <responsible-role role-id="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -5279,7 +5280,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -5308,15 +5309,15 @@
                              uuid="{ r:dress('d1e3702a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -5330,7 +5331,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -5346,15 +5347,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -5368,7 +5369,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -5400,15 +5401,15 @@
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -5422,7 +5423,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -5464,15 +5465,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5486,7 +5487,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5505,15 +5506,15 @@
                                        </description>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5527,7 +5528,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5543,15 +5544,15 @@
                                           <responsible-role role-id="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -5565,7 +5566,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -5604,15 +5605,15 @@
                                        </description>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5626,7 +5627,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5642,15 +5643,15 @@
                                           <responsible-role role-id="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -5664,7 +5665,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -5710,15 +5711,15 @@
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5732,7 +5733,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5748,15 +5749,15 @@
                                     <responsible-role role-id="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5770,7 +5771,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5804,15 +5805,15 @@
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5826,7 +5827,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5842,15 +5843,15 @@
                                     <responsible-role role-id="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5864,7 +5865,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -5899,15 +5900,15 @@
                               <responsible-role role-id="token">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5921,7 +5922,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -5967,15 +5968,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -5989,7 +5990,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -6031,15 +6032,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6053,7 +6054,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6072,15 +6073,15 @@
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6094,7 +6095,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6110,15 +6111,15 @@
                                     <responsible-role role-id="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -6132,7 +6133,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -6171,15 +6172,15 @@
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6193,7 +6194,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6209,15 +6210,15 @@
                                     <responsible-role role-id="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -6231,7 +6232,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -6277,15 +6278,15 @@
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6299,7 +6300,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6315,15 +6316,15 @@
                               <responsible-role role-id="token">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6337,7 +6338,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6371,15 +6372,15 @@
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6393,7 +6394,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6409,15 +6410,15 @@
                               <responsible-role role-id="token">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6431,7 +6432,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -6466,15 +6467,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6488,7 +6489,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6542,15 +6543,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -6564,7 +6565,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -6579,15 +6580,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6601,7 +6602,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -6626,7 +6627,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>
@@ -6699,15 +6700,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -6721,7 +6722,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -6743,7 +6744,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -6753,15 +6754,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -6775,7 +6776,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -6804,15 +6805,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -6826,7 +6827,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -6886,7 +6887,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -6901,15 +6902,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -6923,7 +6924,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -6961,15 +6962,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -6983,7 +6984,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -7002,7 +7003,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -7061,15 +7062,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -7083,7 +7084,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -7132,15 +7133,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7154,7 +7155,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7177,15 +7178,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7199,7 +7200,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7225,7 +7226,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <protocol name="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -7235,17 +7236,17 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <port-range>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="start">
                                        <xsl:text>0</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="end">
                                        <xsl:text>0</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="transport">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7268,15 +7269,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7290,7 +7291,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7309,15 +7310,15 @@
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7331,7 +7332,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7354,15 +7355,15 @@
                         <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7376,7 +7377,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7395,15 +7396,15 @@
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -7417,7 +7418,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -7469,15 +7470,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7491,7 +7492,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7539,15 +7540,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7561,7 +7562,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7574,17 +7575,17 @@
                         </link>
                      </xsl:if>
                      <part name="token">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="id">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -7596,15 +7597,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -7621,17 +7622,17 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <part name="token">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -7640,7 +7641,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -7672,15 +7673,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7694,7 +7695,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -7718,15 +7719,15 @@
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7740,7 +7741,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -7761,15 +7762,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -7783,7 +7784,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -7803,15 +7804,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -7825,7 +7826,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -7865,15 +7866,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -7887,7 +7888,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -7924,15 +7925,15 @@
                               <responsible-role role-id="token">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -7946,7 +7947,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -7986,15 +7987,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8008,7 +8009,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8028,15 +8029,15 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -8050,7 +8051,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -8090,15 +8091,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -8112,7 +8113,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -8149,15 +8150,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8171,7 +8172,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8213,15 +8214,15 @@
             <terms-and-conditions>
                <xsl:if test="$including-optional">
                   <part name="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8233,15 +8234,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8258,15 +8259,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <part name="token">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8275,7 +8276,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8299,15 +8300,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -8321,7 +8322,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -8341,15 +8342,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8363,7 +8364,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8403,15 +8404,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -8425,7 +8426,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -8466,15 +8467,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8488,7 +8489,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8509,15 +8510,15 @@
                                    type="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8531,7 +8532,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8574,15 +8575,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8596,7 +8597,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8619,15 +8620,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8641,7 +8642,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8667,7 +8668,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <protocol name="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -8677,17 +8678,17 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <port-range>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="start">
                                        <xsl:text>0</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="end">
                                        <xsl:text>0</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="transport">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8711,15 +8712,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -8733,7 +8734,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -8749,15 +8750,15 @@
                      <uses-component component-uuid="{ r:dress('d1e4604a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -8771,7 +8772,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -8790,15 +8791,15 @@
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -8812,7 +8813,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -8858,15 +8859,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8880,7 +8881,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -8923,15 +8924,15 @@
                   <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8945,7 +8946,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -8961,15 +8962,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -8983,7 +8984,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -9015,15 +9016,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -9037,7 +9038,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -9058,15 +9059,15 @@
                                             type="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -9080,7 +9081,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -9121,15 +9122,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9143,7 +9144,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9164,15 +9165,15 @@
                                          type="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -9186,7 +9187,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -9216,15 +9217,15 @@
                   <responsible-role role-id="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9238,7 +9239,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9285,15 +9286,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9307,7 +9308,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -9322,15 +9323,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -9344,7 +9345,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -9369,7 +9370,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>
@@ -9442,15 +9443,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9464,7 +9465,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9486,7 +9487,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -9496,15 +9497,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -9518,7 +9519,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -9547,15 +9548,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9569,7 +9570,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9629,7 +9630,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -9644,15 +9645,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9666,7 +9667,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9704,15 +9705,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9726,7 +9727,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9745,7 +9746,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -9804,15 +9805,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9826,7 +9827,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9869,15 +9870,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9891,7 +9892,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -9904,17 +9905,17 @@
                         </link>
                      </xsl:if>
                      <part name="token">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="id">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -9926,15 +9927,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -9951,17 +9952,17 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <part name="token">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -9970,7 +9971,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -10002,15 +10003,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -10024,7 +10025,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -10048,15 +10049,15 @@
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -10070,7 +10071,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -10091,15 +10092,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -10113,7 +10114,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -10133,15 +10134,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -10155,7 +10156,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -10195,15 +10196,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -10217,7 +10218,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -10254,15 +10255,15 @@
                               <responsible-role role-id="token">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -10276,7 +10277,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -10316,15 +10317,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -10338,7 +10339,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -10358,15 +10359,15 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10380,7 +10381,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10420,15 +10421,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -10442,7 +10443,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -10479,15 +10480,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -10501,7 +10502,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -10556,15 +10557,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -10578,7 +10579,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -10607,15 +10608,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -10629,7 +10630,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -10652,15 +10653,15 @@
                            <responsible-role role-id="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10674,7 +10675,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10700,7 +10701,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <protocol name="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -10710,17 +10711,17 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <port-range>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="start">
                                           <xsl:text>0</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="end">
                                           <xsl:text>0</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="transport">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10743,15 +10744,15 @@
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -10765,7 +10766,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -10784,15 +10785,15 @@
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10806,7 +10807,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10829,15 +10830,15 @@
                            <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10851,7 +10852,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -10870,15 +10871,15 @@
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -10892,7 +10893,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -10944,15 +10945,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -10966,7 +10967,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -11022,15 +11023,15 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11044,7 +11045,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11067,15 +11068,15 @@
                                  <responsible-role role-id="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11089,7 +11090,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11115,7 +11116,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <protocol name="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -11125,17 +11126,17 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <port-range>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="start">
                                                 <xsl:text>0</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="end">
                                                 <xsl:text>0</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="transport">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11159,15 +11160,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -11181,7 +11182,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -11197,15 +11198,15 @@
                               <uses-component component-uuid="{ r:dress('d1e4604a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -11219,7 +11220,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -11238,15 +11239,15 @@
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -11260,7 +11261,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -11306,15 +11307,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -11328,7 +11329,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -11371,15 +11372,15 @@
                            <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11393,7 +11394,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11409,15 +11410,15 @@
                                  <responsible-role role-id="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11431,7 +11432,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11463,15 +11464,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -11485,7 +11486,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -11506,15 +11507,15 @@
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -11528,7 +11529,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -11569,15 +11570,15 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11591,7 +11592,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11612,15 +11613,15 @@
                                                   type="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11634,7 +11635,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -11664,15 +11665,15 @@
                            <responsible-role role-id="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11686,7 +11687,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -11727,15 +11728,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -11749,7 +11750,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -11769,15 +11770,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -11791,7 +11792,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -11831,15 +11832,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -11853,7 +11854,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -11894,15 +11895,15 @@
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -11916,7 +11917,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -11936,15 +11937,15 @@
                      </responsible-party>
                   </xsl:if>
                   <part name="token">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -11956,15 +11957,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -11981,15 +11982,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <part name="token">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -11998,7 +11999,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -12036,15 +12037,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -12058,7 +12059,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -12072,7 +12073,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <logged-by party-uuid="{ r:dress('d1e5074a1065') ! r:make-uuid(.) }">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -12083,15 +12084,15 @@
                         <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -12105,7 +12106,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -12124,15 +12125,15 @@
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -12146,7 +12147,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -12174,15 +12175,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -12196,7 +12197,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -12217,15 +12218,15 @@
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -12239,7 +12240,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -12275,15 +12276,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -12297,7 +12298,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -12318,15 +12319,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -12340,7 +12341,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -12394,15 +12395,15 @@
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -12416,7 +12417,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -12439,22 +12440,22 @@
                   <xsl:if test="$including-optional">
                      <origin>
                         <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -12468,7 +12469,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -12485,15 +12486,15 @@
                            <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -12507,7 +12508,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -12526,15 +12527,15 @@
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -12548,7 +12549,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -12576,15 +12577,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -12598,7 +12599,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -12619,15 +12620,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -12641,7 +12642,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -12677,15 +12678,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -12699,7 +12700,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -12720,15 +12721,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -12742,7 +12743,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -12788,15 +12789,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -12810,7 +12811,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -12831,7 +12832,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <relevant-evidence>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="href">
                               <xsl:text>uri-reference</xsl:text>
                            </xsl:attribute>
@@ -12841,15 +12842,15 @@
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -12863,7 +12864,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -12910,15 +12911,15 @@
                   </statement>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -12932,7 +12933,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -12950,22 +12951,22 @@
                   <xsl:if test="$including-optional">
                      <origin>
                         <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -12979,7 +12980,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -12996,15 +12997,15 @@
                            <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -13018,7 +13019,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -13037,15 +13038,15 @@
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -13059,7 +13060,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -13087,15 +13088,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -13109,7 +13110,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -13130,15 +13131,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -13152,7 +13153,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -13188,15 +13189,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -13210,7 +13211,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -13231,15 +13232,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -13253,7 +13254,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -13291,7 +13292,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <threat-id system="protocol:uri">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="href">
                               <xsl:text>uri-reference</xsl:text>
                            </xsl:attribute>
@@ -13303,15 +13304,15 @@
                      <characterization>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -13325,7 +13326,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -13339,22 +13340,22 @@
                         </xsl:if>
                         <origin>
                            <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -13368,7 +13369,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -13385,15 +13386,15 @@
                               <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -13407,7 +13408,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -13426,15 +13427,15 @@
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -13448,7 +13449,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -13476,15 +13477,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -13498,7 +13499,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -13519,15 +13520,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -13541,7 +13542,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -13577,15 +13578,15 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -13599,7 +13600,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -13620,15 +13621,15 @@
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="ns">
                                                             <xsl:text>protocol:uri</xsl:text>
                                                          </xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -13642,7 +13643,7 @@
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <link href="uri-reference" media-type="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="rel">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -13680,15 +13681,15 @@
                         <facet name="token" system="protocol:uri" value="string">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -13702,7 +13703,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -13724,7 +13725,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <mitigating-factor uuid="{ r:dress('d1e4951a1065') ! r:make-uuid(.) }">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="implementation-uuid">{ r:dress('d1e4954a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <description>
@@ -13732,15 +13733,15 @@
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -13754,7 +13755,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -13776,15 +13777,15 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -13798,7 +13799,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -13834,15 +13835,15 @@
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -13856,7 +13857,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -13871,22 +13872,22 @@
                         <xsl:if test="$including-optional">
                            <origin>
                               <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="role-id">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -13900,7 +13901,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -13917,15 +13918,15 @@
                                  <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -13939,7 +13940,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -13958,15 +13959,15 @@
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -13980,7 +13981,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14008,15 +14009,15 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14030,7 +14031,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14051,15 +14052,15 @@
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="ns">
                                                             <xsl:text>protocol:uri</xsl:text>
                                                          </xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -14073,7 +14074,7 @@
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <link href="uri-reference" media-type="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="rel">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -14109,15 +14110,15 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14131,7 +14132,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14152,15 +14153,15 @@
                                                                  type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                          </xsl:if>
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="ns">
                                                                <xsl:text>protocol:uri</xsl:text>
                                                             </xsl:attribute>
                                                          </xsl:if>
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="class">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
@@ -14174,7 +14175,7 @@
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <link href="uri-reference" media-type="string">
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="rel">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
@@ -14222,15 +14223,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14244,7 +14245,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14273,15 +14274,15 @@
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -14295,7 +14296,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -14326,15 +14327,15 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -14348,7 +14349,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -14391,15 +14392,15 @@
                                  <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14413,7 +14414,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14429,15 +14430,15 @@
                                        <responsible-role role-id="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14451,7 +14452,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14483,15 +14484,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -14505,7 +14506,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -14526,15 +14527,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14548,7 +14549,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14589,15 +14590,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14611,7 +14612,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14632,15 +14633,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14654,7 +14655,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -14684,15 +14685,15 @@
                                  <responsible-role role-id="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14706,7 +14707,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -14767,15 +14768,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -14789,7 +14790,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -14803,7 +14804,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <logged-by party-uuid="{ r:dress('d1e5074a1065') ! r:make-uuid(.) }">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="role-id">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -14819,15 +14820,15 @@
                               <related-response response-uuid="{ r:dress('d1e5014a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -14841,7 +14842,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -14857,15 +14858,15 @@
                                     <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -14879,7 +14880,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -14898,15 +14899,15 @@
                                              </party-uuid>
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14920,7 +14921,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14948,15 +14949,15 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14970,7 +14971,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -14991,15 +14992,15 @@
                                                                  type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                          </xsl:if>
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="ns">
                                                                <xsl:text>protocol:uri</xsl:text>
                                                             </xsl:attribute>
                                                          </xsl:if>
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="class">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
@@ -15013,7 +15014,7 @@
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <link href="uri-reference" media-type="string">
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="rel">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
@@ -15049,15 +15050,15 @@
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="ns">
                                                             <xsl:text>protocol:uri</xsl:text>
                                                          </xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -15071,7 +15072,7 @@
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <link href="uri-reference" media-type="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="rel">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -15092,15 +15093,15 @@
                                                                     type="token">
                                                       <xsl:if test="$including-optional">
                                                          <prop name="token" value="string">
-                                                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                            <xsl:if test="$including-optional">
                                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                             </xsl:if>
-                                                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                            <xsl:if test="$including-optional">
                                                                <xsl:attribute name="ns">
                                                                   <xsl:text>protocol:uri</xsl:text>
                                                                </xsl:attribute>
                                                             </xsl:if>
-                                                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                            <xsl:if test="$including-optional">
                                                                <xsl:attribute name="class">
                                                                   <xsl:text>token</xsl:text>
                                                                </xsl:attribute>
@@ -15114,7 +15115,7 @@
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <link href="uri-reference" media-type="string">
-                                                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                            <xsl:if test="$including-optional">
                                                                <xsl:attribute name="rel">
                                                                   <xsl:text>token</xsl:text>
                                                                </xsl:attribute>
@@ -15178,15 +15179,15 @@
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -15200,7 +15201,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -15215,22 +15216,22 @@
                   <xsl:if test="$including-optional">
                      <origin>
                         <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -15244,7 +15245,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -15261,15 +15262,15 @@
                            <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -15283,7 +15284,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -15302,15 +15303,15 @@
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -15324,7 +15325,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -15352,15 +15353,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -15374,7 +15375,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -15395,15 +15396,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -15417,7 +15418,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -15453,15 +15454,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -15475,7 +15476,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -15496,15 +15497,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -15518,7 +15519,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -15567,15 +15568,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -15589,7 +15590,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -15602,7 +15603,7 @@
                         </link>
                      </xsl:if>
                      <status state="token">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="reason">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -15668,15 +15669,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -15690,7 +15691,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -15705,15 +15706,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -15727,7 +15728,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -15752,7 +15753,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>
@@ -15825,15 +15826,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -15847,7 +15848,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -15869,7 +15870,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <document-id>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="scheme">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
@@ -15879,15 +15880,15 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -15901,7 +15902,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -15930,15 +15931,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -15952,7 +15953,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16012,7 +16013,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -16027,15 +16028,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16049,7 +16050,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16087,15 +16088,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16109,7 +16110,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16128,7 +16129,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <telephone-number>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="type">
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
@@ -16187,15 +16188,15 @@
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="ns">
                               <xsl:text>protocol:uri</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="class">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16209,7 +16210,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <link href="uri-reference" media-type="string">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="rel">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -16245,7 +16246,7 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <system-id>
-               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+               <xsl:if test="$including-optional">
                   <xsl:attribute name="identifier-type">
                      <xsl:text>protocol:uri</xsl:text>
                   </xsl:attribute>
@@ -16270,15 +16271,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -16292,7 +16293,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -16315,15 +16316,15 @@
                         <responsible-role role-id="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16337,7 +16338,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16363,7 +16364,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <protocol name="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -16373,17 +16374,17 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <port-range>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="start">
                                        <xsl:text>0</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="end">
                                        <xsl:text>0</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="transport">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16406,15 +16407,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -16428,7 +16429,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -16447,15 +16448,15 @@
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16469,7 +16470,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16492,15 +16493,15 @@
                         <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16514,7 +16515,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16533,15 +16534,15 @@
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16555,7 +16556,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16607,15 +16608,15 @@
                </description>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -16629,7 +16630,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -16652,22 +16653,22 @@
                <xsl:if test="$including-optional">
                   <origin>
                      <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="role-id">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -16681,7 +16682,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -16698,15 +16699,15 @@
                         <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16720,7 +16721,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -16739,15 +16740,15 @@
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16761,7 +16762,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16789,15 +16790,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16811,7 +16812,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16832,15 +16833,15 @@
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -16854,7 +16855,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -16890,15 +16891,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -16912,7 +16913,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -16933,15 +16934,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -16955,7 +16956,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -17001,15 +17002,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17023,7 +17024,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17044,7 +17045,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <relevant-evidence>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="href">
                            <xsl:text>uri-reference</xsl:text>
                         </xsl:attribute>
@@ -17054,15 +17055,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17076,7 +17077,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17123,15 +17124,15 @@
                </statement>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="ns">
                            <xsl:text>protocol:uri</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="class">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -17145,7 +17146,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <link href="uri-reference" media-type="string">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="rel">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -17163,22 +17164,22 @@
                <xsl:if test="$including-optional">
                   <origin>
                      <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                        <xsl:if test="$including-optional">
                            <xsl:attribute name="role-id">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -17192,7 +17193,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -17209,15 +17210,15 @@
                         <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -17231,7 +17232,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -17250,15 +17251,15 @@
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -17272,7 +17273,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -17300,15 +17301,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -17322,7 +17323,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -17343,15 +17344,15 @@
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -17365,7 +17366,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -17401,15 +17402,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -17423,7 +17424,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -17444,15 +17445,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -17466,7 +17467,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -17504,7 +17505,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <threat-id system="protocol:uri">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="href">
                            <xsl:text>uri-reference</xsl:text>
                         </xsl:attribute>
@@ -17516,15 +17517,15 @@
                   <characterization>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17538,7 +17539,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17552,22 +17553,22 @@
                      </xsl:if>
                      <origin>
                         <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -17581,7 +17582,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -17598,15 +17599,15 @@
                            <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -17620,7 +17621,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -17639,15 +17640,15 @@
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -17661,7 +17662,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -17689,15 +17690,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -17711,7 +17712,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -17732,15 +17733,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -17754,7 +17755,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -17790,15 +17791,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -17812,7 +17813,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -17833,15 +17834,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -17855,7 +17856,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -17893,15 +17894,15 @@
                      <facet name="token" system="protocol:uri" value="string">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -17915,7 +17916,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -17937,7 +17938,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <mitigating-factor uuid="{ r:dress('d1e4951a1065') ! r:make-uuid(.) }">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="implementation-uuid">{ r:dress('d1e4954a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <description>
@@ -17945,15 +17946,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17967,7 +17968,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17989,15 +17990,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18011,7 +18012,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18047,15 +18048,15 @@
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -18069,7 +18070,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -18084,22 +18085,22 @@
                      <xsl:if test="$including-optional">
                         <origin>
                            <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -18113,7 +18114,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -18130,15 +18131,15 @@
                               <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18152,7 +18153,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18171,15 +18172,15 @@
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18193,7 +18194,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18221,15 +18222,15 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18243,7 +18244,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18264,15 +18265,15 @@
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -18286,7 +18287,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -18322,15 +18323,15 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -18344,7 +18345,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -18365,15 +18366,15 @@
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="ns">
                                                             <xsl:text>protocol:uri</xsl:text>
                                                          </xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -18387,7 +18388,7 @@
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <link href="uri-reference" media-type="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="rel">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -18435,15 +18436,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18457,7 +18458,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18486,15 +18487,15 @@
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18508,7 +18509,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18539,15 +18540,15 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18561,7 +18562,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18604,15 +18605,15 @@
                               <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18626,7 +18627,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18642,15 +18643,15 @@
                                     <responsible-role role-id="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18664,7 +18665,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18696,15 +18697,15 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -18718,7 +18719,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -18739,15 +18740,15 @@
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -18761,7 +18762,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -18802,15 +18803,15 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18824,7 +18825,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18845,15 +18846,15 @@
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="ns">
                                                    <xsl:text>protocol:uri</xsl:text>
                                                 </xsl:attribute>
                                              </xsl:if>
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="class">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18867,7 +18868,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <link href="uri-reference" media-type="string">
-                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                             <xsl:if test="$including-optional">
                                                 <xsl:attribute name="rel">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -18897,15 +18898,15 @@
                               <responsible-role role-id="token">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="ns">
                                              <xsl:text>protocol:uri</xsl:text>
                                           </xsl:attribute>
                                        </xsl:if>
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="class">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18919,7 +18920,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <link href="uri-reference" media-type="string">
-                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                       <xsl:if test="$including-optional">
                                           <xsl:attribute name="rel">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18980,15 +18981,15 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="ns">
                                     <xsl:text>protocol:uri</xsl:text>
                                  </xsl:attribute>
                               </xsl:if>
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="class">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -19002,7 +19003,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <link href="uri-reference" media-type="string">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="rel">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -19016,7 +19017,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <logged-by party-uuid="{ r:dress('d1e5074a1065') ! r:make-uuid(.) }">
-                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                              <xsl:if test="$including-optional">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -19032,15 +19033,15 @@
                            <related-response response-uuid="{ r:dress('d1e5014a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="ns">
                                           <xsl:text>protocol:uri</xsl:text>
                                        </xsl:attribute>
                                     </xsl:if>
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="class">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -19054,7 +19055,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <link href="uri-reference" media-type="string">
-                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                    <xsl:if test="$including-optional">
                                        <xsl:attribute name="rel">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -19070,15 +19071,15 @@
                                  <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="ns">
                                                 <xsl:text>protocol:uri</xsl:text>
                                              </xsl:attribute>
                                           </xsl:if>
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="class">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -19092,7 +19093,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <link href="uri-reference" media-type="string">
-                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                          <xsl:if test="$including-optional">
                                              <xsl:attribute name="rel">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -19111,15 +19112,15 @@
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -19133,7 +19134,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -19161,15 +19162,15 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="ns">
                                                       <xsl:text>protocol:uri</xsl:text>
                                                    </xsl:attribute>
                                                 </xsl:if>
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="class">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -19183,7 +19184,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <link href="uri-reference" media-type="string">
-                                                <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                <xsl:if test="$including-optional">
                                                    <xsl:attribute name="rel">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -19204,15 +19205,15 @@
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="ns">
                                                             <xsl:text>protocol:uri</xsl:text>
                                                          </xsl:attribute>
                                                       </xsl:if>
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="class">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -19226,7 +19227,7 @@
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <link href="uri-reference" media-type="string">
-                                                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                      <xsl:if test="$including-optional">
                                                          <xsl:attribute name="rel">
                                                             <xsl:text>token</xsl:text>
                                                          </xsl:attribute>
@@ -19262,15 +19263,15 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="ns">
                                                          <xsl:text>protocol:uri</xsl:text>
                                                       </xsl:attribute>
                                                    </xsl:if>
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="class">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -19284,7 +19285,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <link href="uri-reference" media-type="string">
-                                                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                   <xsl:if test="$including-optional">
                                                       <xsl:attribute name="rel">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -19305,15 +19306,15 @@
                                                                  type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                          </xsl:if>
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="ns">
                                                                <xsl:text>protocol:uri</xsl:text>
                                                             </xsl:attribute>
                                                          </xsl:if>
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="class">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
@@ -19327,7 +19328,7 @@
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <link href="uri-reference" media-type="string">
-                                                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                                         <xsl:if test="$including-optional">
                                                             <xsl:attribute name="rel">
                                                                <xsl:text>token</xsl:text>
                                                             </xsl:attribute>
@@ -19382,7 +19383,7 @@
             </risk>
          </xsl:if>
          <poam-item>
-            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+            <xsl:if test="$including-optional">
                <xsl:attribute name="uuid">{ r:dress('d1e5958a1065') ! r:make-uuid(.) }</xsl:attribute>
             </xsl:if>
             <title>
@@ -19393,15 +19394,15 @@
             </description>
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="ns">
                         <xsl:text>protocol:uri</xsl:text>
                      </xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="class">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -19415,7 +19416,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <link href="uri-reference" media-type="string">
-                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                  <xsl:if test="$including-optional">
                      <xsl:attribute name="rel">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -19430,22 +19431,22 @@
             <xsl:if test="$including-optional">
                <origin>
                   <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
-                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                     <xsl:if test="$including-optional">
                         <xsl:attribute name="role-id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -19459,7 +19460,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <link href="uri-reference" media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="rel">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -19502,15 +19503,15 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="ns">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
                            </xsl:if>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="class">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -19524,7 +19525,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <document-id>
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="scheme">
                                  <xsl:text>protocol:uri</xsl:text>
                               </xsl:attribute>
@@ -19539,15 +19540,15 @@
                            </text>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="ns">
                                        <xsl:text>protocol:uri</xsl:text>
                                     </xsl:attribute>
                                  </xsl:if>
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="class">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -19561,7 +19562,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <link href="uri-reference" media-type="string">
-                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                                 <xsl:if test="$including-optional">
                                     <xsl:attribute name="rel">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -19586,7 +19587,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <base64 media-type="string">
-                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
+                           <xsl:if test="$including-optional">
                               <xsl:attribute name="filename">
                                  <xsl:text>uri-reference</xsl:text>
                               </xsl:attribute>

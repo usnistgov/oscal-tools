@@ -70,6 +70,8 @@ Delivers the same result, except optional elements and attributes are included.
 
 If fresh UUIDs are not wanted, use `generate-oscal-blank.xsl` with the same syntax.
 
+If the XSLT processor supports reflexive calls to Java (such as SaxonPE or SaxonEE), another variant, `generate-oscal-jvm.xsl` will call the JVM to produce UUIDs.
+
 ### SaxonJS CL
 
 With the XSLT available.
@@ -98,9 +100,11 @@ A browser-based version of this utility is also contemplated.
 
 ## Runtime configuration
 
+The same runtime configuration is used with any of the variants `generate-oscal.xsl`, `generate-oscal-blank.xsl` or `generate-oscal-jvm.xsl`.
+
 ### Initial template
 
-Either XSLT can be invoked with an initial template (without a source document) for any of the supported formats (`-it` is `--initial-template` using Saxon CL syntax):
+Any XSLT can be invoked with an initial template (without a source document) for any of the supported formats (`-it` is `--initial-template` using Saxon CL syntax):
 
 - `-it make-catalog` 
 - `-it make-profile` 
@@ -130,7 +134,9 @@ Leaving the parameter unset or setting it to an unrecognized value will produce 
 
 ### OSCAL "refresher" utility
 
-Applied to any OSCAL document, `generate-oscal.xsl` will produce a copy with fresh top-level UUID and metadata timestamp.
+Applied to any OSCAL document, `generate-oscal.xsl` or `generate-oscal-jvm.xsl` will produce a copy with fresh top-level UUID and metadata timestamp.
+
+`generate-oscal-blank.xsl` will results in a clean copy of an OSCAL (or other XML) document source.
 
 ## Folder contents
 

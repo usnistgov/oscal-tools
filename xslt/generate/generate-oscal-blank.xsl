@@ -7,6 +7,7 @@
                 exclude-result-prefixes="#all">
    <xsl:output indent="true"/>
    <!-- Apply this XSLT to itself with a runtime parameter, e.g. 'make=catalog' to produce a blank (but nominally valid) OSCAL catalog XML instance.-->
+   <!-- This XSLT was produced by 'produce-generator-blank.xsl`, a customization of the  transformation `produce-generator3.xsl`, providing result documents only with "blank" or dummy UUID values.-->
    <!-- The OSCAL produced can be either minimal - only required structures are given - or maximal. Use parameter 'include=all' to include optional contents, or leave the setting with default 'required-only' and the XSLT will produce only elements and attributes required in each model.-->
    <!-- All OSCAL formats supported: -->
    <!-- - make=catalog -->

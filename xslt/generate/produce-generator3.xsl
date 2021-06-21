@@ -238,6 +238,7 @@
         <XSLT:output indent="true"/>
 
         <xsl:comment> Apply this XSLT to itself with a runtime parameter, e.g. 'make=catalog' to produce a blank (but nominally valid) OSCAL catalog XML instance.</xsl:comment>
+        <xsl:call-template name="customization-comment"/>
         <xsl:comment> The OSCAL produced can be either minimal - only required structures are given - or maximal. Use parameter 'include=all' to include optional contents, or leave the setting with default 'required-only' and the XSLT will produce only elements and attributes required in each model.</xsl:comment>
         <xsl:comment> All OSCAL formats supported: </xsl:comment>
         <xsl:for-each select="/METASCHEMA/define-assembly/root-name">
@@ -271,6 +272,10 @@
             </XSLT:message>
         </XSLT:template>
         <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
+    </xsl:template>
+    
+    <xsl:template name="customization-comment">
+        <xsl:comment> This XSLT was produced by the base 'produce-generator3.xsl` transformation and uses XSLT 3.1 logic to produce 'random' UUIDs.</xsl:comment>
     </xsl:template>
     
     <xsl:template name="handle-document-uuid">
