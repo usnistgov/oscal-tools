@@ -50,7 +50,7 @@ Potentially this logic could be provided by Javascript natively. There is an XSL
 
 ## How to run
 
-The industry-leading Saxon processor[https://www.saxonica.com/products/products.xml](https://www.saxonica.com/products/products.xml) has been relied on for development and testing.
+The industry-leading [Saxon processor](https://www.saxonica.com/products/products.xml) has been relied on for development and testing.
 
 The codebase should function to produce the same outputs in any conformant XSLT engine supporting the necessary functions (as described below). Since Saxon is [readily available](https://sourceforge.net/projects/saxon/files/Saxon-HE/10/Java/), Saxon syntax is given below for convenience.
 
@@ -62,7 +62,7 @@ For SaxonHE, EE and PE (requires Saxon 10):
     
 Produces a catalog. Adjust the `-it` (initial template) setting as needed.
 
-This will run in versions of Saxon before 10, but support for the `random-number-generator()`[https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
+This will run in versions of Saxon before 10, but support for the [`random-number-generator()`](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
 
 >  $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog* **include=all**
     
