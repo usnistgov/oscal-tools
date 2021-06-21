@@ -46,8 +46,12 @@
                 <XSLT:sequence xmlns:uuid="java:java.util.UUID">00000000-0000-4000-8000-000000000000</XSLT:sequence>    
             </xsl:when>
             <xsl:otherwise>
-                <XSLT:sequence xmlns:uuid="java:java.util.UUID" use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</XSLT:sequence>
-        <XSLT:sequence xmlns:uuid="java:java.util.UUID" use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</XSLT:sequence>
+                <XSLT:sequence xmlns:uuid="java:java.util.UUID"
+                    use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID()
+                    }</XSLT:sequence>
+                <XSLT:sequence xmlns:uuid="java:java.util.UUID"
+                    use-when="not(function-available('uuid:randomUUID'))"
+                    >00000000-0000-4000-8000-000000000000</XSLT:sequence>
             </xsl:otherwise>
         </xsl:choose>
         
@@ -60,12 +64,27 @@
     
     <xsl:template mode="required-flags" match="define-flag">
         <xsl:param name="with-name" select="()"/>
+        <xsl:param name="using-name" select="($with-name, use-name, @name) => head()"/>
+        <XSLT:attribute name="{ $using-name }">
+            <xsl:apply-templates mode="typed-value" select="@as-type"/>
+        </XSLT:attribute><!--
+        <xsl:comment expand-text="true"> done { $using-name }</xsl:comment>-->
+    </xsl:template>
+    
+    <xsl:template priority="5" mode="required-flags" match="define-flag[@as-type='uuid']">
+        <xsl:param name="with-name" select="()"/>
         <xsl:param name="reference" select="()"/>
         <xsl:param name="using-name" select="($with-name, use-name, @name) => head()"/>
-        <xsl:variable name="minoccurs" select="(.|$reference)/@min-occurs"/>
-        <XSLT:attribute name="{ $using-name }" xmlns:uuid="java:java.util.UUID">
-            <xsl:apply-templates mode="typed-value" select="@as-type"/>
-        </XSLT:attribute>
+        <xsl:param name="blank" tunnel="true" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$blank">
+                <XSLT:attribute>00000000-0000-4000-8000-000000000000</XSLT:attribute>    
+            </xsl:when>
+            <xsl:otherwise>
+                <XSLT:attribute name="{ $using-name }"  xmlns:uuid="java:java.util.UUID" use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</XSLT:attribute>
+                <XSLT:attribute name="{ $using-name }"  xmlns:uuid="java:java.util.UUID" use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</XSLT:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     
