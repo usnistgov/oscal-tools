@@ -257,10 +257,7 @@
         
         <XSLT:mode on-no-match="shallow-copy"/>
 
-        <XSLT:template match="/*/@uuid">
-            <XSLT:attribute name="uuid"
-                select="r:make-uuid(current-time())"/>
-        </XSLT:template>
+        <xsl:call-template name="handle-document-uuid"/>
 
         <XSLT:template match="last-modified" expand-text="true"
             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
@@ -274,6 +271,12 @@
             </XSLT:message>
         </XSLT:template>
         <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
+    </xsl:template>
+    
+    <xsl:template name="handle-document-uuid">
+        <XSLT:template match="/*/@uuid">
+            <XSLT:attribute name="uuid" select="r:make-uuid(current-time())"/>
+        </XSLT:template>
     </xsl:template>
     
     <xsl:template name="include-uuid-support">
