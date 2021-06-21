@@ -78,17 +78,17 @@ With the XSLT available.
 
 Produces an OSCAL catalog (template) document, with new UUIDs. YMMV on performance.
 
-> $ xslt3 -xsl:generate-oscal.xsl -it:make-plan-of-action-and-milestones include=all
+> $ xslt3 -xsl:generate-oscal.xsl -it:*component-definition* include=all
 
-As above, delivers the same result, except optional elements and attributes are included.
+As above, delivers the same result (time time a `component-definition` not a `catalog`), except optional elements and attributes are included.
 
 > $ xslt3 -xsl:generate-oscal-blank.xsl -it:*make-profile*
 
 Produces a (blank) OSCAL profile (template), except that UUID fields have a 'dummy' value.
 
-> $ xslt3 -xsl:generate-oscal-blank.sef -it:make-plan-of-action-and-milestones
+> $ xslt3 -xsl:generate-oscal-blank.sef -it:*assessment-plan*
 
-The same with the compiled SEF version (faster).
+The same -- this time an `assessment-plan` -- with the compiled SEF version (faster).
 
 ### In an IDE or from an application
 
@@ -98,9 +98,23 @@ A browser-based version of this utility is also contemplated.
 
 ## Runtime configuration
 
+### Initial template
+
+Either XSLT can be invoked with an initial template (without a source document) for any of the supported formats (`-it` is `--initial-template` using Saxon CL syntax):
+
+- `-it make-catalog` 
+- `-it make-profile` 
+- `-it make-component-definition` 
+- `-it make-system-security-plan` 
+- `-it make-assessment-plan` 
+- `-it make-assessment-results` 
+- `-it make-plan-of-action-and-milestones` 
+
+This is a useful way to produce outputs from a calling stylesheet or application hard-coded to produce the desired format.
+
 ### Runtime parameter
 
-The XSLT will produce a fresh 'unused' OSCAL document when invoked on itself (or any XSLT stylesheet) with one of the following parameter settings:
+Alternatively, the XSLT will produce a fresh 'unused' OSCAL document when invoked with itself (or any XSLT stylesheet) as nominal source document, with one of the following parameter settings:
 
 - `make=catalog` 
 - `make=profile` 
@@ -114,21 +128,7 @@ This is a convenient way to set up for calls to be configured at runtime, if an 
 
 Leaving the parameter unset or setting it to an unrecognized value will produce a message along with an empty document.
 
-### Alternatively: calling an initial template
-
-Alternatively, invoke by calling an initial template for any of the supported formats (`-it` is `--initial-template` using Saxon CL syntax):
-
-- `-it make-catalog` 
-- `-it make-profile` 
-- `-it make-component-definition` 
-- `-it make-system-security-plan` 
-- `-it make-assessment-plan` 
-- `-it make-assessment-results` 
-- `-it make-plan-of-action-and-milestones` 
-
-This is a useful way to produce outputs from a calling stylesheet or application hard-coded to produce the desired format.
-
-## OSCAL "refresher" utility
+### OSCAL "refresher" utility
 
 Applied to any OSCAL document, `generate-oscal.xsl` will produce a copy with fresh top-level UUID and metadata timestamp.
 
