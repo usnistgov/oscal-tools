@@ -20,19 +20,23 @@ Where data values are required, a valid placeholder value is supplied for formal
 
 Either of these are standalone XSLTs that will function in an XSLT 3.1 processor without further dependencies.
 
-### Blank mode
+### Blank XSLT
 
-In this mode, nominal UUID values are provided with the blank UUID `00000000-0000-4000-8000-000000000000`.
+Using this XSLT, documents are created in which nominal UUID values are provided with the blank UUID `00000000-0000-4000-8000-000000000000`.
 
 Operational requirements -- or validity rules -- that require UUIDs to be distinct, will *not* be honored.
 
 This XSLT runs on any XSLT 3.1 processor. It is available as both XSLT and SEF (Saxon compiled format), which runs significantly faster under SaxonJS.
 
-### UUID mode
+### With UUIDs in native XSLT
 
 This XSLT requires XSLT 3.1 as it uses pseudo-random-number generation provided by XPath 3.1 as well as other advanced XSLT features.
 
-It has been tested in Saxon (Java) and SaxonJS (nodeJS). Performance in Java is comparable. The latter delivers results when the XSLT is called directly, but slowly; also a compiled (SEF) version returns a runtime error. These issues are being looked into.
+It has been tested in Saxon (Java) and SaxonJS (nodeJS). Performance in Java is comparable to the 'blank' XSLT. The latter delivers results when the XSLT is called directly, but slowly; also a compiled (SEF) version returns a runtime error. These issues are being looked into.
+
+### With UUIDs in Java
+
+Processors supporting reflexive calls to Java functions can use the XSLT `generate-oscal-jvm.xsl` to provide UUIDs based on Java functionality. This XSLT should work on versions of Saxon before v10. Processors that cannot call Java (such as SaxonHE) will deliver 'blank' UUIDs.
 
 ### To come?
 

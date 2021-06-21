@@ -27,7 +27,12 @@
    <xsl:variable name="including-optional" as="xs:boolean" select="$include='all'"/>
    <xsl:mode on-no-match="shallow-copy"/>
    <xsl:template match="/*/@uuid">
-      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+      <xsl:attribute xmlns:uuid="java:java.util.UUID"
+                     use-when="function-available('uuid:randomUUID')"
+                     name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+      <xsl:attribute xmlns:uuid="java:java.util.UUID"
+                     name="uuid"
+                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:attribute>
    </xsl:template>
    <xsl:template xmlns="http://csrc.nist.gov/ns/oscal/1.0"
                  match="last-modified"
@@ -43,7 +48,10 @@
                  match="/xsl:stylesheet[$make='catalog']"
                  name="make-catalog">
       <catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -99,7 +107,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -165,7 +176,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -231,7 +245,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -279,7 +296,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -344,7 +364,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -392,7 +415,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -423,7 +449,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -514,7 +543,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -530,7 +562,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -541,7 +576,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -615,7 +653,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -740,7 +781,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -839,7 +883,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -912,7 +959,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1032,7 +1082,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1131,7 +1184,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1204,7 +1260,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1299,7 +1358,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -1319,7 +1381,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1362,7 +1427,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1450,7 +1518,10 @@
                  match="/xsl:stylesheet[$make='profile']"
                  name="make-profile">
       <profile xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -1506,7 +1577,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1572,7 +1646,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1638,7 +1715,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1686,7 +1766,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -1751,7 +1834,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1799,7 +1885,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -1830,7 +1919,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -1921,7 +2013,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -1937,7 +2032,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -1948,7 +2046,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2071,7 +2172,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2229,7 +2333,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2328,7 +2435,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2401,7 +2511,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2477,7 +2590,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -2497,7 +2613,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2540,7 +2659,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2628,7 +2750,10 @@
                  match="/xsl:stylesheet[$make='component-definition']"
                  name="make-component-definition">
       <component-definition xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -2684,7 +2809,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2750,7 +2878,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2816,7 +2947,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2864,7 +2998,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -2929,7 +3066,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -2977,7 +3117,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -3008,7 +3151,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3099,7 +3245,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -3115,7 +3264,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -3126,7 +3278,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3187,7 +3342,10 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <component>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                   <xsl:text>string</xsl:text>
                </xsl:attribute>
@@ -3211,7 +3369,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3264,7 +3425,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3305,7 +3469,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -3321,7 +3488,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
@@ -3351,7 +3521,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <control-implementation>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="source">
                         <xsl:text>uri-reference</xsl:text>
                      </xsl:attribute>
@@ -3367,7 +3540,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3422,7 +3598,10 @@
                         </set-parameter>
                      </xsl:if>
                      <implemented-requirement>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="control-id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -3438,7 +3617,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3506,7 +3688,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3547,7 +3732,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -3562,7 +3750,10 @@
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="statement-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <description>
                                  <p>Paragraphs and (block-level) markup contents.</p>
                               </description>
@@ -3575,7 +3766,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3628,7 +3822,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3669,7 +3866,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -3703,7 +3903,10 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <capability>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
                   <xsl:text>string</xsl:text>
                </xsl:attribute>
@@ -3719,7 +3922,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3760,7 +3966,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <incorporates-component>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
@@ -3768,7 +3977,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <control-implementation>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="source">
                         <xsl:text>uri-reference</xsl:text>
                      </xsl:attribute>
@@ -3784,7 +3996,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3839,7 +4054,10 @@
                         </set-parameter>
                      </xsl:if>
                      <implemented-requirement>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="control-id">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -3855,7 +4073,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3923,7 +4144,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -3964,7 +4188,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -3979,7 +4206,10 @@
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="statement-id">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <description>
                                  <p>Paragraphs and (block-level) markup contents.</p>
                               </description>
@@ -3992,7 +4222,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4045,7 +4278,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4086,7 +4322,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -4122,7 +4361,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -4142,7 +4384,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4185,7 +4430,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4273,7 +4521,10 @@
                  match="/xsl:stylesheet[$make='system-security-plan']"
                  name="make-system-security-plan">
       <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -4329,7 +4580,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4395,7 +4649,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4461,7 +4718,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4509,7 +4769,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -4574,7 +4837,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4622,7 +4888,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -4653,7 +4922,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4744,7 +5016,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -4760,7 +5035,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -4771,7 +5049,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4862,7 +5143,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4919,7 +5203,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -4960,7 +5247,10 @@
                </xsl:if>
                <information-type>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -4989,7 +5279,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5038,7 +5331,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5101,7 +5397,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5164,7 +5463,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5253,7 +5555,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5294,7 +5599,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <diagram>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -5309,7 +5617,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5380,7 +5691,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5421,7 +5735,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <diagram>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
@@ -5436,7 +5753,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5508,7 +5828,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5549,7 +5872,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <diagram>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
@@ -5564,7 +5890,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5628,7 +5957,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -5639,7 +5971,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5701,7 +6036,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5742,7 +6080,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <leveraged-authorization>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -5755,7 +6096,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5795,7 +6139,10 @@
                      </link>
                   </xsl:if>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <date-authorized>
                      <xsl:text>{ current-date() }</xsl:text>
@@ -5808,7 +6155,10 @@
                </leveraged-authorization>
             </xsl:if>
             <user>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:if test="$including-optional">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -5833,7 +6183,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5899,7 +6252,10 @@
                </xsl:if>
             </user>
             <component>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                   <xsl:text>string</xsl:text>
                </xsl:attribute>
@@ -5923,7 +6279,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -5986,7 +6345,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6027,7 +6389,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -6043,7 +6408,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
@@ -6079,7 +6447,10 @@
             </component>
             <xsl:if test="$including-optional">
                <inventory-item>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <description>
                      <p>Paragraphs and (block-level) markup contents.</p>
                   </description>
@@ -6092,7 +6463,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6137,7 +6511,10 @@
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                         <party-uuid>
-                           <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop>
@@ -6148,7 +6525,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6196,7 +6576,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <implemented-component>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <prop>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -6206,7 +6589,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6251,7 +6637,10 @@
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop>
@@ -6262,7 +6651,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6348,7 +6740,10 @@
                </set-parameter>
             </xsl:if>
             <implemented-requirement>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="control-id">
                   <xsl:text>token</xsl:text>
                </xsl:attribute>
@@ -6361,7 +6756,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6429,7 +6827,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6470,7 +6871,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -6485,7 +6889,10 @@
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="statement-id">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <prop>
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -6495,7 +6902,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6548,7 +6958,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6589,7 +7002,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -6601,8 +7017,14 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <by-component>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
@@ -6615,7 +7037,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6697,7 +7122,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6738,7 +7166,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <provided>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <description>
                                           <p>Paragraphs and (block-level) markup contents.</p>
                                        </description>
@@ -6751,7 +7182,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6804,7 +7238,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6845,7 +7282,10 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <party-uuid>
-                                                   <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                                   <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                                 use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                                 use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                                 </party-uuid>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
@@ -6864,8 +7304,14 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <responsibility>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <description>
                                           <p>Paragraphs and (block-level) markup contents.</p>
                                        </description>
@@ -6878,7 +7324,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6931,7 +7380,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -6972,7 +7424,10 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <party-uuid>
-                                                   <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                                   <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                                 use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                                 use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                                 </party-uuid>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
@@ -6998,8 +7453,14 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <inherited>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
@@ -7012,7 +7473,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7065,7 +7529,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7106,7 +7573,10 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -7120,8 +7590,14 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <satisfied>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="responsibility-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="responsibility-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
@@ -7134,7 +7610,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7187,7 +7666,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7228,7 +7710,10 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -7259,7 +7744,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7300,7 +7788,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -7326,8 +7817,14 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <by-component>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
@@ -7340,7 +7837,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7422,7 +7922,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7463,7 +7966,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <provided>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
@@ -7476,7 +7982,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7529,7 +8038,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7570,7 +8082,10 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -7589,8 +8104,14 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <responsibility>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
@@ -7603,7 +8124,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7656,7 +8180,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7697,7 +8224,10 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -7723,8 +8253,14 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <inherited>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="provided-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
@@ -7737,7 +8273,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7790,7 +8329,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7831,7 +8373,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -7845,8 +8390,14 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <satisfied>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="responsibility-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="responsibility-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
@@ -7859,7 +8410,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7912,7 +8466,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -7953,7 +8510,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -7984,7 +8544,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8025,7 +8588,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -8053,7 +8619,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -8073,7 +8642,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8116,7 +8688,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8204,7 +8779,10 @@
                  match="/xsl:stylesheet[$make='assessment-plan']"
                  name="make-assessment-plan">
       <assessment-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -8260,7 +8838,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8326,7 +8907,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8392,7 +8976,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8440,7 +9027,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -8505,7 +9095,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8553,7 +9146,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -8584,7 +9180,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8675,7 +9274,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -8691,7 +9293,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -8702,7 +9307,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8768,7 +9376,10 @@
             <local-definitions>
                <xsl:if test="$including-optional">
                   <component>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
@@ -8792,7 +9403,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8855,7 +9469,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -8896,7 +9513,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -8912,7 +9532,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -8949,7 +9572,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <inventory-item>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
@@ -8962,7 +9588,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9007,7 +9636,10 @@
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                            <party-uuid>
-                              <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                              <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                            use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                            use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop>
@@ -9018,7 +9650,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9066,7 +9701,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <implemented-component>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <prop>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -9076,7 +9714,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9121,7 +9762,10 @@
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop>
@@ -9132,7 +9776,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9194,7 +9841,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <user>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -9219,7 +9869,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9304,7 +9957,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9376,7 +10032,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9450,7 +10109,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <activity>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -9468,7 +10130,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9509,7 +10174,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <step>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -9527,7 +10195,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9582,7 +10253,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9636,7 +10310,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9713,7 +10390,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9791,7 +10471,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9832,7 +10515,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -9865,7 +10551,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9919,7 +10608,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -9996,7 +10688,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10074,7 +10769,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10115,7 +10813,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -10147,7 +10848,10 @@
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10173,7 +10877,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10201,7 +10908,10 @@
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10254,7 +10964,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10308,7 +11021,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10385,7 +11101,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10467,7 +11186,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10508,11 +11230,14 @@
                </xsl:if>
                <include-all/>
                <xsl:comment xmlns:uuid="java:java.util.UUID">
-                  <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                  <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                </xsl:comment>
                <xsl:if test="$including-optional">
                   <exclude-subject>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -10525,7 +11250,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10582,7 +11310,10 @@
             <assessment-assets>
                <xsl:if test="$including-optional">
                   <component>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
@@ -10606,7 +11337,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10669,7 +11403,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10710,7 +11447,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -10726,7 +11466,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -10762,7 +11505,10 @@
                   </component>
                </xsl:if>
                <assessment-platform>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -10777,7 +11523,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10818,7 +11567,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <uses-component>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <prop>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -10828,7 +11580,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10873,7 +11628,10 @@
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop>
@@ -10884,7 +11642,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -10947,7 +11708,10 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <task>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                   <xsl:text>token</xsl:text>
                </xsl:attribute>
@@ -10968,7 +11732,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11024,7 +11791,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <dependency>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <remarks>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -11034,7 +11804,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <task>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -11045,7 +11818,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <associated-activity>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <prop>
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -11055,7 +11831,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11108,7 +11887,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11149,7 +11931,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -11177,7 +11962,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11218,11 +12006,14 @@
                         </xsl:if>
                         <include-all/>
                         <xsl:comment xmlns:uuid="java:java.util.UUID">
-                           <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                           <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                         </xsl:comment>
                         <xsl:if test="$including-optional">
                            <exclude-subject>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -11235,7 +12026,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11313,7 +12107,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11354,11 +12151,14 @@
                      </xsl:if>
                      <include-all/>
                      <xsl:comment xmlns:uuid="java:java.util.UUID">
-                        <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                        <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                      </xsl:comment>
                      <xsl:if test="$including-optional">
                         <exclude-subject>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -11371,7 +12171,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11438,7 +12241,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11479,7 +12285,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -11500,7 +12309,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -11520,7 +12332,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11563,7 +12378,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11651,7 +12469,10 @@
                  match="/xsl:stylesheet[$make='assessment-results']"
                  name="make-assessment-results">
       <assessment-results xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -11707,7 +12528,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11773,7 +12597,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11839,7 +12666,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -11887,7 +12717,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -11952,7 +12785,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12000,7 +12836,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -12031,7 +12870,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12122,7 +12964,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -12138,7 +12983,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -12149,7 +12997,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12232,7 +13083,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12304,7 +13158,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12378,7 +13235,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <activity>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -12396,7 +13256,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12437,7 +13300,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <step>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -12455,7 +13321,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12510,7 +13379,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12564,7 +13436,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12641,7 +13516,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12719,7 +13597,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12760,7 +13641,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -12793,7 +13677,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12847,7 +13734,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -12924,7 +13814,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13002,7 +13895,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13043,7 +13939,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -13068,7 +13967,10 @@
             </local-definitions>
          </xsl:if>
          <result>
-            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+               <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+               <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+            </xsl:attribute>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
             </title>
@@ -13092,7 +13994,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13135,7 +14040,10 @@
                <local-definitions>
                   <xsl:if test="$including-optional">
                      <component>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
@@ -13159,7 +14067,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13222,7 +14133,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13263,7 +14177,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -13279,7 +14196,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <title>
@@ -13316,7 +14236,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <inventory-item>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
@@ -13329,7 +14252,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13374,7 +14300,10 @@
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop>
@@ -13385,7 +14314,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13433,7 +14365,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <implemented-component>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -13443,7 +14378,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13488,7 +14426,10 @@
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop>
@@ -13499,7 +14440,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13561,7 +14505,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <user>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -13586,7 +14533,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13656,7 +14606,10 @@
                      <assessment-assets>
                         <xsl:if test="$including-optional">
                            <component>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
@@ -13680,7 +14633,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13743,7 +14699,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13784,7 +14743,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -13800,7 +14762,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <title>
@@ -13836,7 +14801,10 @@
                            </component>
                         </xsl:if>
                         <assessment-platform>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -13851,7 +14819,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13892,7 +14863,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <uses-component>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <prop>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -13902,7 +14876,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -13947,7 +14924,10 @@
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop>
@@ -13958,7 +14938,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14021,7 +15004,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <assessment-task>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -14042,7 +15028,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14098,7 +15087,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <dependency>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <remarks>
                                     <p>Paragraphs and (block-level) markup contents.</p>
@@ -14108,7 +15100,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <task>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -14119,7 +15114,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <associated-activity>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -14129,7 +15127,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14182,7 +15183,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14223,7 +15227,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -14251,7 +15258,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14292,11 +15302,14 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
                                     <exclude-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -14309,7 +15322,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14387,7 +15403,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14428,11 +15447,14 @@
                               </xsl:if>
                               <include-all/>
                               <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                 <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                 <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                               </xsl:comment>
                               <xsl:if test="$including-optional">
                                  <exclude-subject>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -14445,7 +15467,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14512,7 +15537,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14553,7 +15581,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -14587,7 +15618,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14641,7 +15675,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14718,7 +15755,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14789,7 +15829,10 @@
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
                         <party-uuid>
-                           <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                         use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop>
@@ -14800,7 +15843,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14851,7 +15897,10 @@
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14877,7 +15926,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14905,7 +15957,10 @@
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -14945,7 +16000,10 @@
             <xsl:if test="$including-optional">
                <assessment-log>
                   <entry>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -14973,7 +16031,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15014,7 +16075,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <logged-by>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="party-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="party-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -15024,7 +16088,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <related-task>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <prop>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -15034,7 +16101,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15079,7 +16149,10 @@
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop>
@@ -15090,7 +16163,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15155,7 +16231,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15196,11 +16275,14 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
                                     <exclude-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -15213,7 +16295,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15268,7 +16353,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <identified-subject>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <subject>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                        <xsl:text>token</xsl:text>
@@ -15287,7 +16375,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15328,11 +16419,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -15345,7 +16439,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15416,7 +16513,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <observation>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -15434,7 +16534,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15487,7 +16590,10 @@
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -15502,7 +16608,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15544,7 +16653,10 @@
                         </actor>
                         <xsl:if test="$including-optional">
                            <related-task>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -15554,7 +16666,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15599,7 +16714,10 @@
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop>
@@ -15610,7 +16728,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15675,7 +16796,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15716,11 +16840,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -15733,7 +16860,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15788,7 +16918,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <identified-subject>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <subject>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
@@ -15807,7 +16940,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15848,11 +16984,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -15865,7 +17004,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -15930,7 +17072,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <subject>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -15948,7 +17093,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16013,7 +17161,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16076,7 +17227,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <risk>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -16095,7 +17249,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16143,7 +17300,10 @@
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -16158,7 +17318,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16200,7 +17363,10 @@
                         </actor>
                         <xsl:if test="$including-optional">
                            <related-task>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -16210,7 +17376,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16255,7 +17424,10 @@
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop>
@@ -16266,7 +17438,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16331,7 +17506,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16372,11 +17550,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -16389,7 +17570,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16444,7 +17628,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <identified-subject>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <subject>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
@@ -16463,7 +17650,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16504,11 +17694,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -16521,7 +17714,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16608,7 +17804,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16652,7 +17851,10 @@
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                     <xsl:text>token</xsl:text>
@@ -16667,7 +17869,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16709,7 +17914,10 @@
                            </actor>
                            <xsl:if test="$including-optional">
                               <related-task>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <prop>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -16719,7 +17927,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16764,7 +17975,10 @@
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop>
@@ -16775,7 +17989,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16840,7 +18057,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16881,11 +18101,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -16898,7 +18121,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -16953,7 +18179,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <identified-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <subject>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
@@ -16972,7 +18201,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17013,11 +18245,14 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
                                              <exclude-subject>
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -17030,7 +18265,10 @@
                                                          <xsl:text>string</xsl:text>
                                                       </xsl:attribute>
                                                       <xsl:if test="$including-optional">
-                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                         </xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17111,7 +18349,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17160,9 +18401,15 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <mitigating-factor>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="implementation-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="implementation-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -17176,7 +18423,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17217,7 +18467,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <subject>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17235,7 +18488,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17290,7 +18546,10 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <response>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="lifecycle">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
@@ -17309,7 +18568,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17354,7 +18616,10 @@
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                        <xsl:text>token</xsl:text>
@@ -17369,7 +18634,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17411,7 +18679,10 @@
                               </actor>
                               <xsl:if test="$including-optional">
                                  <related-task>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:if test="$including-optional">
                                        <prop>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -17421,7 +18692,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17466,7 +18740,10 @@
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop>
@@ -17477,7 +18754,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17542,7 +18822,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17583,11 +18866,14 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
                                              <exclude-subject>
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -17600,7 +18886,10 @@
                                                          <xsl:text>string</xsl:text>
                                                       </xsl:attribute>
                                                       <xsl:if test="$including-optional">
-                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                         </xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17655,7 +18944,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <identified-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <subject>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
@@ -17674,7 +18966,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17715,11 +19010,14 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
                                                 <exclude-subject>
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -17732,7 +19030,10 @@
                                                             <xsl:text>string</xsl:text>
                                                          </xsl:attribute>
                                                          <xsl:if test="$including-optional">
-                                                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                               <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                               <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                            </xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional">
                                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17797,10 +19098,16 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <required-asset>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <subject>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -17818,7 +19125,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17881,7 +19191,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -17929,7 +19242,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <task>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
@@ -17950,7 +19266,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18006,7 +19325,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <dependency>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:if test="$including-optional">
                                        <remarks>
                                           <p>Paragraphs and (block-level) markup contents.</p>
@@ -18016,7 +19338,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <task>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
@@ -18027,7 +19352,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <associated-activity>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:if test="$including-optional">
                                        <prop>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -18037,7 +19365,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18090,7 +19421,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18131,7 +19465,10 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <party-uuid>
-                                                <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                                <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                              use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                              use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                              </party-uuid>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
@@ -18159,7 +19496,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18200,11 +19540,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -18217,7 +19560,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18295,7 +19641,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18336,11 +19685,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -18353,7 +19705,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18420,7 +19775,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18461,7 +19819,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -18488,7 +19849,10 @@
                   <xsl:if test="$including-optional">
                      <risk-log>
                         <entry>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -18516,7 +19880,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18557,7 +19924,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <logged-by>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="party-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="party-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                        <xsl:text>token</xsl:text>
@@ -18572,7 +19942,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <related-response>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="response-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="response-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <prop>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -18582,7 +19955,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18623,7 +19999,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <related-task>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <xsl:if test="$including-optional">
                                           <prop>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -18633,7 +20012,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18678,7 +20060,10 @@
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
                                              <party-uuid>
-                                                <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                                <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                              use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                              use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                              </party-uuid>
                                              <xsl:if test="$including-optional">
                                                 <prop>
@@ -18689,7 +20074,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18754,7 +20142,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18795,11 +20186,14 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
                                                 <exclude-subject>
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -18812,7 +20206,10 @@
                                                             <xsl:text>string</xsl:text>
                                                          </xsl:attribute>
                                                          <xsl:if test="$including-optional">
-                                                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                               <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                               <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                            </xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional">
                                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18867,7 +20264,10 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <identified-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <subject>
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                    <xsl:text>token</xsl:text>
@@ -18886,7 +20286,10 @@
                                                          <xsl:text>string</xsl:text>
                                                       </xsl:attribute>
                                                       <xsl:if test="$including-optional">
-                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                         </xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -18927,11 +20330,14 @@
                                                 </xsl:if>
                                                 <include-all/>
                                                 <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                                   <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                                   <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                                 </xsl:comment>
                                                 <xsl:if test="$including-optional">
                                                    <exclude-subject>
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                          <xsl:text>token</xsl:text>
                                                       </xsl:attribute>
@@ -18944,7 +20350,10 @@
                                                                <xsl:text>string</xsl:text>
                                                             </xsl:attribute>
                                                             <xsl:if test="$including-optional">
-                                                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                               </xsl:attribute>
                                                             </xsl:if>
                                                             <xsl:if test="$including-optional">
                                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19022,14 +20431,20 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <related-observation>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </related-observation>
                   </xsl:if>
                </risk>
             </xsl:if>
             <xsl:if test="$including-optional">
                <finding>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -19045,7 +20460,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19090,7 +20508,10 @@
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -19105,7 +20526,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19147,7 +20571,10 @@
                         </actor>
                         <xsl:if test="$including-optional">
                            <related-task>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -19157,7 +20584,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19202,7 +20632,10 @@
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop>
@@ -19213,7 +20646,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19278,7 +20714,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19319,11 +20758,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -19336,7 +20778,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19391,7 +20836,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <identified-subject>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <subject>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
@@ -19410,7 +20858,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19451,11 +20902,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -19468,7 +20922,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19557,7 +21014,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19631,17 +21091,26 @@
                   </target>
                   <xsl:if test="$including-optional">
                      <implementation-statement-uuid>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </implementation-statement-uuid>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <related-observation>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </related-observation>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <associated-risk>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="risk-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="risk-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </associated-risk>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -19661,7 +21130,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -19681,7 +21153,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19724,7 +21199,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19812,7 +21290,10 @@
                  match="/xsl:stylesheet[$make='plan-of-action-and-milestones']"
                  name="make-plan-of-action-and-milestones">
       <plan-of-action-and-milestones xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+         </xsl:attribute>
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -19868,7 +21349,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -19934,7 +21418,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20000,7 +21487,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20048,7 +21538,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <location>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -20113,7 +21606,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20161,7 +21657,10 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <party>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
@@ -20192,7 +21691,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20283,7 +21785,10 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                      use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -20299,7 +21804,10 @@
                      <xsl:text>token</xsl:text>
                   </xsl:attribute>
                   <party-uuid>
-                     <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                   use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop>
@@ -20310,7 +21818,10 @@
                            <xsl:text>string</xsl:text>
                         </xsl:attribute>
                         <xsl:if test="$including-optional">
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20388,7 +21899,10 @@
             <local-definitions>
                <xsl:if test="$including-optional">
                   <component>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
@@ -20412,7 +21926,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20475,7 +21992,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20516,7 +22036,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                               use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -20532,7 +22055,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -20569,7 +22095,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <inventory-item>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
@@ -20582,7 +22111,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20627,7 +22159,10 @@
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
                            <party-uuid>
-                              <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                              <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                            use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                            use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop>
@@ -20638,7 +22173,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20686,7 +22224,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <implemented-component>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="component-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <prop>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -20696,7 +22237,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20741,7 +22285,10 @@
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop>
@@ -20752,7 +22299,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20821,7 +22371,10 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <observation>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <xsl:if test="$including-optional">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -20839,7 +22392,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20892,7 +22448,10 @@
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                               <xsl:text>token</xsl:text>
@@ -20907,7 +22466,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -20949,7 +22511,10 @@
                      </actor>
                      <xsl:if test="$including-optional">
                         <related-task>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <prop>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -20959,7 +22524,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21004,7 +22572,10 @@
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop>
@@ -21015,7 +22586,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21080,7 +22654,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21121,11 +22698,14 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
                                     <exclude-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -21138,7 +22718,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21193,7 +22776,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <identified-subject>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <subject>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                        <xsl:text>token</xsl:text>
@@ -21212,7 +22798,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21253,11 +22842,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -21270,7 +22862,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21335,7 +22930,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <subject>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -21353,7 +22951,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21418,7 +23019,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21481,7 +23085,10 @@
          </xsl:if>
          <xsl:if test="$including-optional">
             <risk>
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -21500,7 +23107,10 @@
                         <xsl:text>string</xsl:text>
                      </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21548,7 +23158,10 @@
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                            <xsl:text>token</xsl:text>
                         </xsl:attribute>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                               <xsl:text>token</xsl:text>
@@ -21563,7 +23176,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21605,7 +23221,10 @@
                      </actor>
                      <xsl:if test="$including-optional">
                         <related-task>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <prop>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -21615,7 +23234,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21660,7 +23282,10 @@
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
                                  <party-uuid>
-                                    <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                  use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop>
@@ -21671,7 +23296,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21736,7 +23364,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21777,11 +23408,14 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
                                     <exclude-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -21794,7 +23428,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21849,7 +23486,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <identified-subject>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <subject>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                        <xsl:text>token</xsl:text>
@@ -21868,7 +23508,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -21909,11 +23552,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -21926,7 +23572,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22013,7 +23662,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22057,7 +23709,10 @@
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -22072,7 +23727,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22114,7 +23772,10 @@
                         </actor>
                         <xsl:if test="$including-optional">
                            <related-task>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -22124,7 +23785,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22169,7 +23833,10 @@
                                        <xsl:text>token</xsl:text>
                                     </xsl:attribute>
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop>
@@ -22180,7 +23847,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22245,7 +23915,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22286,11 +23959,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -22303,7 +23979,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22358,7 +24037,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <identified-subject>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <subject>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
@@ -22377,7 +24059,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22418,11 +24103,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -22435,7 +24123,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22516,7 +24207,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22565,9 +24259,15 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <mitigating-factor>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="implementation-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="implementation-uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                      </xsl:if>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
@@ -22581,7 +24281,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22622,7 +24325,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <subject>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -22640,7 +24346,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22695,7 +24404,10 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <response>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="lifecycle">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
@@ -22714,7 +24426,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22759,7 +24474,10 @@
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                  <xsl:text>token</xsl:text>
                               </xsl:attribute>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                     <xsl:text>token</xsl:text>
@@ -22774,7 +24492,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22816,7 +24537,10 @@
                            </actor>
                            <xsl:if test="$including-optional">
                               <related-task>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <prop>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -22826,7 +24550,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22871,7 +24598,10 @@
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
                                        <party-uuid>
-                                          <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                        use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop>
@@ -22882,7 +24612,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22947,7 +24680,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -22988,11 +24724,14 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
                                           <exclude-subject>
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
                                              </xsl:attribute>
@@ -23005,7 +24744,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23060,7 +24802,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <identified-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <subject>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
@@ -23079,7 +24824,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23120,11 +24868,14 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
                                              <exclude-subject>
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -23137,7 +24888,10 @@
                                                          <xsl:text>string</xsl:text>
                                                       </xsl:attribute>
                                                       <xsl:if test="$including-optional">
-                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                         </xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23202,10 +24956,16 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <required-asset>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:if test="$including-optional">
                               <subject>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -23223,7 +24983,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23286,7 +25049,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23334,7 +25100,10 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <task>
-                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                              <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                              <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                           </xsl:attribute>
                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                               <xsl:text>token</xsl:text>
                            </xsl:attribute>
@@ -23355,7 +25124,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23411,7 +25183,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <dependency>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <remarks>
                                        <p>Paragraphs and (block-level) markup contents.</p>
@@ -23421,7 +25196,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <task>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                     <xsl:text>token</xsl:text>
                                  </xsl:attribute>
@@ -23432,7 +25210,10 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <associated-activity>
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="activity-uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                                  <xsl:if test="$including-optional">
                                     <prop>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -23442,7 +25223,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23495,7 +25279,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23536,7 +25323,10 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -23564,7 +25354,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23605,11 +25398,14 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
                                        <exclude-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
@@ -23622,7 +25418,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23700,7 +25499,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23741,11 +25543,14 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
                                     <exclude-subject>
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                           <xsl:text>token</xsl:text>
                                        </xsl:attribute>
@@ -23758,7 +25563,10 @@
                                                 <xsl:text>string</xsl:text>
                                              </xsl:attribute>
                                              <xsl:if test="$including-optional">
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23825,7 +25633,10 @@
                                           <xsl:text>string</xsl:text>
                                        </xsl:attribute>
                                        <xsl:if test="$including-optional">
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23866,7 +25677,10 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                     use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -23893,7 +25707,10 @@
                <xsl:if test="$including-optional">
                   <risk-log>
                      <entry>
-                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                           <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                           <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                        </xsl:attribute>
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -23921,7 +25738,10 @@
                                  <xsl:text>string</xsl:text>
                               </xsl:attribute>
                               <xsl:if test="$including-optional">
-                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                    <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                    <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                 </xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -23962,7 +25782,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <logged-by>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="party-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="party-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                                     <xsl:text>token</xsl:text>
@@ -23977,7 +25800,10 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <related-response>
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="response-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="response-uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                               <xsl:if test="$including-optional">
                                  <prop>
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -23987,7 +25813,10 @@
                                        <xsl:text>string</xsl:text>
                                     </xsl:attribute>
                                     <xsl:if test="$including-optional">
-                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                          <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                          <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                       </xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24028,7 +25857,10 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <related-task>
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="task-uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                     <xsl:if test="$including-optional">
                                        <prop>
                                           <xsl:attribute xmlns:uuid="java:java.util.UUID" name="name">
@@ -24038,7 +25870,10 @@
                                              <xsl:text>string</xsl:text>
                                           </xsl:attribute>
                                           <xsl:if test="$including-optional">
-                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                             </xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24083,7 +25918,10 @@
                                              <xsl:text>token</xsl:text>
                                           </xsl:attribute>
                                           <party-uuid>
-                                             <xsl:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</xsl:text>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence xmlns:uuid="java:java.util.UUID"
+                                                           use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop>
@@ -24094,7 +25932,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24159,7 +26000,10 @@
                                                    <xsl:text>string</xsl:text>
                                                 </xsl:attribute>
                                                 <xsl:if test="$including-optional">
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional">
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24200,11 +26044,14 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
                                              <exclude-subject>
-                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                   <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                   <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                </xsl:attribute>
                                                 <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                    <xsl:text>token</xsl:text>
                                                 </xsl:attribute>
@@ -24217,7 +26064,10 @@
                                                          <xsl:text>string</xsl:text>
                                                       </xsl:attribute>
                                                       <xsl:if test="$including-optional">
-                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                            <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                            <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                         </xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional">
                                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24272,7 +26122,10 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <identified-subject>
-                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                          <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-placeholder-uuid">
+                                             <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                             <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                          </xsl:attribute>
                                           <subject>
                                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                 <xsl:text>token</xsl:text>
@@ -24291,7 +26144,10 @@
                                                       <xsl:text>string</xsl:text>
                                                    </xsl:attribute>
                                                    <xsl:if test="$including-optional">
-                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                         <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                         <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                      </xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional">
                                                       <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24332,11 +26188,14 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment xmlns:uuid="java:java.util.UUID">
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;{ uuid:randomUUID() }&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="subject-uuid"&gt;&lt;xsl:sequence&gt;00000000-0000-4000-8000-000000000000&lt;/xsl:sequence&gt;&lt;/xsl:attribute&gt;&lt;xsl:attribute xmlns:uuid="java:java.util.UUID" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="type"&gt;&lt;xsl:text xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:r="http://csrc.nist.gov/ns/random"&gt;token&lt;/xsl:text&gt;&lt;/xsl:attribute&gt;&lt;/include-subject&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
                                                 <exclude-subject>
-                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                   <xsl:attribute xmlns:uuid="java:java.util.UUID" name="subject-uuid">
+                                                      <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                      <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                   </xsl:attribute>
                                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                                                       <xsl:text>token</xsl:text>
                                                    </xsl:attribute>
@@ -24349,7 +26208,10 @@
                                                             <xsl:text>string</xsl:text>
                                                          </xsl:attribute>
                                                          <xsl:if test="$including-optional">
-                                                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                                            <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                                               <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                                               <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                                            </xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional">
                                                             <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24427,14 +26289,20 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <related-observation>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </related-observation>
                </xsl:if>
             </risk>
          </xsl:if>
          <poam-item>
             <xsl:if test="$including-optional">
-               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                  <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                  <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+               </xsl:attribute>
             </xsl:if>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -24451,7 +26319,10 @@
                      <xsl:text>string</xsl:text>
                   </xsl:attribute>
                   <xsl:if test="$including-optional">
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24496,7 +26367,10 @@
                      <xsl:attribute xmlns:uuid="java:java.util.UUID" name="type">
                         <xsl:text>token</xsl:text>
                      </xsl:attribute>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="actor-uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <xsl:attribute xmlns:uuid="java:java.util.UUID" name="role-id">
                            <xsl:text>token</xsl:text>
@@ -24511,7 +26385,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24555,12 +26432,18 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <related-observation>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="observation-uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                </related-observation>
             </xsl:if>
             <xsl:if test="$including-optional">
                <associated-risk>
-                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="risk-uuid">{ uuid:randomUUID() }</xsl:attribute>
+                  <xsl:attribute xmlns:uuid="java:java.util.UUID" name="risk-uuid">
+                     <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                     <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                  </xsl:attribute>
                </associated-risk>
             </xsl:if>
             <xsl:if test="$including-optional">
@@ -24573,7 +26456,10 @@
             <back-matter>
                <xsl:if test="$including-optional">
                   <resource>
-                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                        <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                        <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                     </xsl:attribute>
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -24593,7 +26479,10 @@
                               <xsl:text>string</xsl:text>
                            </xsl:attribute>
                            <xsl:if test="$including-optional">
-                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                              <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                 <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                 <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                              </xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">
@@ -24636,7 +26525,10 @@
                                     <xsl:text>string</xsl:text>
                                  </xsl:attribute>
                                  <xsl:if test="$including-optional">
-                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">{ uuid:randomUUID() }</xsl:attribute>
+                                    <xsl:attribute xmlns:uuid="java:java.util.UUID" name="uuid">
+                                       <xsl:sequence use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</xsl:sequence>
+                                       <xsl:sequence use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</xsl:sequence>
+                                    </xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <xsl:attribute xmlns:uuid="java:java.util.UUID" name="ns">

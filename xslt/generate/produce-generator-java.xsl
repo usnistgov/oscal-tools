@@ -35,14 +35,23 @@
         <xsl:comment expand-text="true"> done { $using-name }</xsl:comment>-\->
     </xsl:template>-->
     
-    <xsl:template priority="20" match="define-field/@as-type[.='uuid']" mode="typed-value">
+    <!--<xsl:template priority="20" match="define-field/@as-type[.='uuid']" mode="typed-value">
         <XSLT:text xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</XSLT:text>
-    </xsl:template>
+    </xsl:template>-->
     
     <xsl:template priority="10" match="@as-type[.='uuid']" mode="typed-value">
-        <!--<XSLT:text xmlns:uuid="java:java.util.UUID" use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</XSLT:text>
-        <XSLT:text xmlns:uuid="java:java.util.UUID" use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</XSLT:text>-->
-        <xsl:text>{ uuid:randomUUID() }</xsl:text>
+        <xsl:param name="blank" tunnel="true" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$blank">
+                <XSLT:sequence xmlns:uuid="java:java.util.UUID">00000000-0000-4000-8000-000000000000</XSLT:sequence>    
+            </xsl:when>
+            <xsl:otherwise>
+                <XSLT:sequence xmlns:uuid="java:java.util.UUID" use-when="function-available('uuid:randomUUID')">{ uuid:randomUUID() }</XSLT:sequence>
+        <XSLT:sequence xmlns:uuid="java:java.util.UUID" use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</XSLT:sequence>
+            </xsl:otherwise>
+        </xsl:choose>
+        
+        <!--<xsl:text>{ uuid:randomUUID() }</xsl:text>-->
     </xsl:template>
     
 <!-- OverrideS provide uuid namespace   -->
@@ -82,7 +91,9 @@
         
         <xsl:variable name="result">
             <xsl:element name="{ $using-name }" inherit-namespaces="false"   >
-                <xsl:apply-templates mode="required-flags" select="$definition/(flag | define-flag)"/>
+                <xsl:apply-templates mode="required-flags" select="$definition/(flag | define-flag)">
+                    <xsl:with-param name="blank" tunnel="true" select="true()"/>
+                </xsl:apply-templates>
             </xsl:element>
         </xsl:variable>
         
@@ -100,11 +111,9 @@
     <xsl:template name="include-uuid-support"/>
     
     <xsl:template name="handle-document-uuid">
-        <xsl:variable name="proxy" as="element()">
-            <proxy as-type='uuid'/>
-        </xsl:variable>
         <XSLT:template match="/*/@uuid">
-            <XSLT:attribute name="uuid" xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</XSLT:attribute>
+            <XSLT:attribute use-when="function-available('uuid:randomUUID')" name="uuid" xmlns:uuid="java:java.util.UUID">{ uuid:randomUUID() }</XSLT:attribute>
+            <XSLT:attribute xmlns:uuid="java:java.util.UUID" name="uuid" use-when="not(function-available('uuid:randomUUID'))">00000000-0000-4000-8000-000000000000</XSLT:attribute>
         </XSLT:template>
     </xsl:template>
     
