@@ -163,7 +163,8 @@
         <xsl:param name="reference" select="()"/>
         <xsl:param name="using-name" select="($with-name, use-name, @name) => head()"/>
         <xsl:variable name="minoccurs" select="(.|$reference)/@min-occurs"/>
-        <XSLT:if test="$including-optional or { not($minoccurs='0') }() (: @min-occurs { $minoccurs } :)">
+        <XSLT:if test="$including-optional">
+        <!--<XSLT:if test="$including-optional or { not($minoccurs='0') }() (: @min-occurs { $minoccurs } :)">-->
             <XSLT:attribute name="{ $using-name }">
                 <xsl:apply-templates mode="typed-value" select="@as-type"/>
             </XSLT:attribute>
@@ -175,7 +176,7 @@
     </xsl:template>
     
     <xsl:template priority="5" match="@as-type[.='uuid']" mode="typed-value">
-        <xsl:text expand-text="true">{{ r:scrub('{ generate-id() }') ! r:make-uuid(.) }}</xsl:text>
+        <xsl:text expand-text="true">{{ r:dress('{ generate-id() }') ! r:make-uuid(.) }}</xsl:text>
     </xsl:template>
     
     <!--<xsl:template match="@as-type[.='uuid']" mode="typed-value">
@@ -252,10 +253,7 @@
         <XSLT:param name="include" as="xs:string">required-only</XSLT:param>
         <XSLT:variable name="including-optional" as="xs:boolean" select="$include='all'"/>
 
-        <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
-          <xsl:copy-of select="document('uuid-util.xsl')/*/(xsl:template | xsl:variable | xsl:function)"/>
-        <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
-        <!--<XSLT:import href="uuid-util.xsl"/>-->
+        <xsl:call-template name="include-uuid-support"/>
         
         <XSLT:mode on-no-match="shallow-copy"/>
 
@@ -276,6 +274,14 @@
             </XSLT:message>
         </XSLT:template>
         <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
+    </xsl:template>
+    
+    <xsl:template name="include-uuid-support">
+        <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
+        <xsl:copy-of
+            select="document('uuid-util.xsl')/*/(xsl:template | xsl:variable | xsl:function)"/>
+        <xsl:comment> - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = </xsl:comment>
+        <!--<XSLT:import href="uuid-util.xsl"/>-->
     </xsl:template>
     
 </xsl:stylesheet>

@@ -49,9 +49,9 @@ v4 UUID
         </randomness>
     </xsl:template>-->
 
-    <xsl:function name="r:scrub" as="xs:string*">
+    <!-- dresses up a string with prefix and suffix to be dependent on (dynamic) side effects -->
+    <xsl:function name="r:dress" as="xs:string*">
         <xsl:param name="seed" as="xs:string"/>
-        <xsl:param name="length" as="xs:integer"/>
         <xsl:sequence select="string-join( (current-time(),$seed,document-uri(document(''))) )"/>
     </xsl:function>
     

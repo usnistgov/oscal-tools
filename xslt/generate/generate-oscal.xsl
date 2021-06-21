@@ -23,8 +23,12 @@
    <!-- - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = -->
    <xsl:param name="make" as="xs:string">none</xsl:param>
    <xsl:param name="include" as="xs:string">required-only</xsl:param>
-   <xsl:variable name="including-optional" select="$include='all'"/>
+   <xsl:variable name="including-optional" as="xs:boolean" select="$include='all'"/>
    <!-- - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = - = + = - = # = -->
+   <xsl:function name="r:dress" as="xs:string*">
+      <xsl:param name="seed" as="xs:string"/>
+      <xsl:sequence select="string-join( (current-time(),$seed,document-uri(document(''))) )"/>
+   </xsl:function>
    <xsl:function name="r:make-uuid-sequence" as="xs:string*">
       <xsl:param name="seed" as="item()"/>
       <xsl:param name="length" as="xs:integer"/>
@@ -84,7 +88,7 @@
                  match="/xsl:stylesheet[$make='catalog']"
                  name="make-catalog">
       <catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-               uuid="{ r:make-uuid( string-join( (current-time(),'d1e13a1065', document-uri( document('') )) ) ) }">
+               uuid="{ r:dress('d1e13a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -134,7 +138,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -188,7 +192,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -239,7 +243,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -280,7 +284,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -336,7 +340,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -377,8 +381,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -397,7 +400,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -479,7 +482,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -492,12 +495,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -553,7 +556,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -657,7 +660,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -744,7 +747,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -802,7 +805,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -898,7 +901,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -985,7 +988,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -1043,7 +1046,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1128,7 +1131,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -1142,7 +1145,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1179,7 +1182,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -1249,7 +1252,7 @@
                  match="/xsl:stylesheet[$make='profile']"
                  name="make-profile">
       <profile xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-               uuid="{ r:make-uuid( string-join( (current-time(),'d1e1409a1065', document-uri( document('') )) ) ) }">
+               uuid="{ r:dress('d1e1409a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -1299,7 +1302,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1353,7 +1356,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -1404,7 +1407,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1445,7 +1448,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -1501,7 +1504,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1542,8 +1545,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -1562,7 +1564,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1644,7 +1646,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -1657,12 +1659,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -1753,7 +1755,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -1890,7 +1892,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -1977,7 +1979,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -2035,7 +2037,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -2101,7 +2103,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -2115,7 +2117,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -2152,7 +2154,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -2222,7 +2224,7 @@
                  match="/xsl:stylesheet[$make='component-definition']"
                  name="make-component-definition">
       <component-definition xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                            uuid="{ r:make-uuid( string-join( (current-time(),'d1e1868a1065', document-uri( document('') )) ) ) }">
+                            uuid="{ r:dress('d1e1868a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -2272,7 +2274,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -2326,7 +2328,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -2377,7 +2379,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2418,7 +2420,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -2474,7 +2476,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2515,8 +2517,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -2535,7 +2536,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2617,7 +2618,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -2630,12 +2631,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -2685,8 +2686,7 @@
             <import-component-definition href="uri-reference"/>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e1909a1065', document-uri( document('') )) ) ) }"
-                       type="string">
+            <component uuid="{ r:dress('d1e1909a1065') ! r:make-uuid(.) }" type="string">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -2701,7 +2701,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -2739,7 +2739,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -2774,7 +2774,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                           <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -2787,7 +2787,7 @@
                <xsl:if test="$including-optional">
                   <protocol name="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
@@ -2816,7 +2816,7 @@
                   </protocol>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <control-implementation uuid="{ r:make-uuid( string-join( (current-time(),'d1e2168a1065', document-uri( document('') )) ) ) }"
+                  <control-implementation uuid="{ r:dress('d1e2168a1065') ! r:make-uuid(.) }"
                                           source="uri-reference">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
@@ -2824,7 +2824,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -2869,15 +2869,14 @@
                            </xsl:if>
                         </set-parameter>
                      </xsl:if>
-                     <implemented-requirement uuid="{ r:make-uuid( string-join( (current-time(),'d1e2206a1065', document-uri( document('') )) ) ) }"
-                                              control-id="token">
+                     <implemented-requirement uuid="{ r:dress('d1e2206a1065') ! r:make-uuid(.) }" control-id="token">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -2927,7 +2926,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -2962,7 +2961,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -2974,14 +2973,14 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <statement statement-id="token"
-                                      uuid="{ r:make-uuid( string-join( (current-time(),'d1e2257a1065', document-uri( document('') )) ) ) }">
+                                      uuid="{ r:dress('d1e2257a1065') ! r:make-uuid(.) }">
                               <description>
                                  <p>Paragraphs and (block-level) markup contents.</p>
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3019,7 +3018,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -3054,7 +3053,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -3087,15 +3086,14 @@
             </component>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <capability uuid="{ r:make-uuid( string-join( (current-time(),'d1e2125a1065', document-uri( document('') )) ) ) }"
-                        name="string">
+            <capability uuid="{ r:dress('d1e2125a1065') ! r:make-uuid(.) }" name="string">
                <description>
                   <p>Paragraphs and (block-level) markup contents.</p>
                </description>
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -3129,14 +3127,14 @@
                   </link>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <incorporates-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2158a1065', document-uri( document('') )) ) ) }">
+                  <incorporates-component component-uuid="{ r:dress('d1e2158a1065') ! r:make-uuid(.) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                   </incorporates-component>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <control-implementation uuid="{ r:make-uuid( string-join( (current-time(),'d1e2168a1065', document-uri( document('') )) ) ) }"
+                  <control-implementation uuid="{ r:dress('d1e2168a1065') ! r:make-uuid(.) }"
                                           source="uri-reference">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
@@ -3144,7 +3142,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3189,15 +3187,14 @@
                            </xsl:if>
                         </set-parameter>
                      </xsl:if>
-                     <implemented-requirement uuid="{ r:make-uuid( string-join( (current-time(),'d1e2206a1065', document-uri( document('') )) ) ) }"
-                                              control-id="token">
+                     <implemented-requirement uuid="{ r:dress('d1e2206a1065') ! r:make-uuid(.) }" control-id="token">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -3247,7 +3244,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3282,7 +3279,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -3294,14 +3291,14 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <statement statement-id="token"
-                                      uuid="{ r:make-uuid( string-join( (current-time(),'d1e2257a1065', document-uri( document('') )) ) ) }">
+                                      uuid="{ r:dress('d1e2257a1065') ! r:make-uuid(.) }">
                               <description>
                                  <p>Paragraphs and (block-level) markup contents.</p>
                               </description>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -3339,7 +3336,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -3374,7 +3371,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -3409,7 +3406,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -3423,7 +3420,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3460,7 +3457,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -3530,7 +3527,7 @@
                  match="/xsl:stylesheet[$make='system-security-plan']"
                  name="make-system-security-plan">
       <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                            uuid="{ r:make-uuid( string-join( (current-time(),'d1e2995a1065', document-uri( document('') )) ) ) }">
+                            uuid="{ r:dress('d1e2995a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -3580,7 +3577,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -3634,7 +3631,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -3685,7 +3682,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -3726,7 +3723,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -3782,7 +3779,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -3823,8 +3820,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -3843,7 +3839,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -3925,7 +3921,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -3938,12 +3934,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4019,7 +4015,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -4064,7 +4060,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -4099,7 +4095,7 @@
                </xsl:if>
                <information-type>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e3204a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e3204a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -4119,7 +4115,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4156,7 +4152,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4207,7 +4203,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4258,7 +4254,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4332,7 +4328,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -4366,7 +4362,7 @@
                   </link>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <diagram uuid="{ r:make-uuid( string-join( (current-time(),'d1e3388a1065', document-uri( document('') )) ) ) }">
+                  <diagram uuid="{ r:dress('d1e3388a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -4375,7 +4371,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4434,7 +4430,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4468,7 +4464,7 @@
                      </link>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <diagram uuid="{ r:make-uuid( string-join( (current-time(),'d1e3388a1065', document-uri( document('') )) ) ) }">
+                     <diagram uuid="{ r:dress('d1e3388a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
@@ -4477,7 +4473,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -4537,7 +4533,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4571,7 +4567,7 @@
                      </link>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <diagram uuid="{ r:make-uuid( string-join( (current-time(),'d1e3388a1065', document-uri( document('') )) ) ) }">
+                     <diagram uuid="{ r:dress('d1e3388a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
@@ -4580,7 +4576,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -4635,12 +4631,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4690,7 +4686,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -4724,14 +4720,14 @@
                </link>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <leveraged-authorization uuid="{ r:make-uuid( string-join( (current-time(),'d1e3496a1065', document-uri( document('') )) ) ) }">
+               <leveraged-authorization uuid="{ r:dress('d1e3496a1065') ! r:make-uuid(.) }">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -4765,7 +4761,7 @@
                      </link>
                   </xsl:if>
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e3507a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e3507a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <date-authorized>
                      <xsl:text>{ current-date() }</xsl:text>
@@ -4777,7 +4773,7 @@
                   </xsl:if>
                </leveraged-authorization>
             </xsl:if>
-            <user uuid="{ r:make-uuid( string-join( (current-time(),'d1e2646a1065', document-uri( document('') )) ) ) }">
+            <user uuid="{ r:dress('d1e2646a1065') ! r:make-uuid(.) }">
                <xsl:if test="$including-optional">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -4796,7 +4792,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -4855,8 +4851,7 @@
                   </remarks>
                </xsl:if>
             </user>
-            <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
-                       type="string">
+            <component uuid="{ r:dress('d1e2286a1065') ! r:make-uuid(.) }" type="string">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -4871,7 +4866,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -4916,7 +4911,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -4951,7 +4946,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                           <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -4964,7 +4959,7 @@
                <xsl:if test="$including-optional">
                   <protocol name="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <title>
@@ -4999,14 +4994,14 @@
                </xsl:if>
             </component>
             <xsl:if test="$including-optional">
-               <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
+               <inventory-item uuid="{ r:dress('d1e2724a1065') ! r:make-uuid(.) }">
                   <description>
                      <p>Paragraphs and (block-level) markup contents.</p>
                   </description>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -5042,12 +5037,12 @@
                   <xsl:if test="$including-optional">
                      <responsible-party role-id="token">
                         <party-uuid>
-                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                           <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -5088,11 +5083,11 @@
                      </responsible-party>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
+                     <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -5128,12 +5123,12 @@
                         <xsl:if test="$including-optional">
                            <responsible-party role-id="token">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -5209,12 +5204,11 @@
                   </xsl:if>
                </set-parameter>
             </xsl:if>
-            <implemented-requirement uuid="{ r:make-uuid( string-join( (current-time(),'d1e3602a1065', document-uri( document('') )) ) ) }"
-                                     control-id="token">
+            <implemented-requirement uuid="{ r:dress('d1e3602a1065') ! r:make-uuid(.) }" control-id="token">
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -5264,7 +5258,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -5299,7 +5293,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                           <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -5311,11 +5305,11 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <statement statement-id="token"
-                             uuid="{ r:make-uuid( string-join( (current-time(),'d1e3702a1065', document-uri( document('') )) ) ) }">
+                             uuid="{ r:dress('d1e3702a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -5353,7 +5347,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -5388,7 +5382,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -5399,15 +5393,15 @@
                         </responsible-role>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <by-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3756a1065', document-uri( document('') )) ) ) }"
-                                      uuid="{ r:make-uuid( string-join( (current-time(),'d1e3759a1065', document-uri( document('') )) ) ) }">
+                        <by-component component-uuid="{ r:dress('d1e3756a1065') ! r:make-uuid(.) }"
+                                      uuid="{ r:dress('d1e3759a1065') ! r:make-uuid(.) }">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -5471,7 +5465,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -5505,14 +5499,14 @@
                                     </link>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <provided uuid="{ r:make-uuid( string-join( (current-time(),'d1e3795a1065', document-uri( document('') )) ) ) }">
+                                    <provided uuid="{ r:dress('d1e3795a1065') ! r:make-uuid(.) }">
                                        <description>
                                           <p>Paragraphs and (block-level) markup contents.</p>
                                        </description>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -5550,7 +5544,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -5585,7 +5579,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <party-uuid>
-                                                   <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                                   <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                                 </party-uuid>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
@@ -5603,15 +5597,15 @@
                                     </provided>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <responsibility uuid="{ r:make-uuid( string-join( (current-time(),'d1e3825a1065', document-uri( document('') )) ) ) }"
-                                                    provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
+                                    <responsibility uuid="{ r:dress('d1e3825a1065') ! r:make-uuid(.) }"
+                                                    provided-uuid="{ r:dress('d1e3952a1065') ! r:make-uuid(.) }">
                                        <description>
                                           <p>Paragraphs and (block-level) markup contents.</p>
                                        </description>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -5649,7 +5643,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -5684,7 +5678,7 @@
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
                                                 <party-uuid>
-                                                   <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                                   <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                                 </party-uuid>
                                              </xsl:if>
                                              <xsl:if test="$including-optional">
@@ -5709,15 +5703,15 @@
                               </export>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <inherited uuid="{ r:make-uuid( string-join( (current-time(),'d1e3865a1065', document-uri( document('') )) ) ) }"
-                                         provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
+                              <inherited uuid="{ r:dress('d1e3865a1065') ! r:make-uuid(.) }"
+                                         provided-uuid="{ r:dress('d1e3952a1065') ! r:make-uuid(.) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -5755,7 +5749,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -5790,7 +5784,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -5803,15 +5797,15 @@
                               </inherited>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <satisfied uuid="{ r:make-uuid( string-join( (current-time(),'d1e3895a1065', document-uri( document('') )) ) ) }"
-                                         responsibility-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3955a1065', document-uri( document('') )) ) ) }">
+                              <satisfied uuid="{ r:dress('d1e3895a1065') ! r:make-uuid(.) }"
+                                         responsibility-uuid="{ r:dress('d1e3955a1065') ! r:make-uuid(.) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -5849,7 +5843,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -5884,7 +5878,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -5906,7 +5900,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -5941,7 +5935,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -5966,15 +5960,15 @@
                   </statement>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <by-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3756a1065', document-uri( document('') )) ) ) }"
-                                uuid="{ r:make-uuid( string-join( (current-time(),'d1e3759a1065', document-uri( document('') )) ) ) }">
+                  <by-component component-uuid="{ r:dress('d1e3756a1065') ! r:make-uuid(.) }"
+                                uuid="{ r:dress('d1e3759a1065') ! r:make-uuid(.) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -6038,7 +6032,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6072,14 +6066,14 @@
                               </link>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <provided uuid="{ r:make-uuid( string-join( (current-time(),'d1e3795a1065', document-uri( document('') )) ) ) }">
+                              <provided uuid="{ r:dress('d1e3795a1065') ! r:make-uuid(.) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6117,7 +6111,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -6152,7 +6146,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -6170,15 +6164,15 @@
                               </provided>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <responsibility uuid="{ r:make-uuid( string-join( (current-time(),'d1e3825a1065', document-uri( document('') )) ) ) }"
-                                              provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
+                              <responsibility uuid="{ r:dress('d1e3825a1065') ! r:make-uuid(.) }"
+                                              provided-uuid="{ r:dress('d1e3952a1065') ! r:make-uuid(.) }">
                                  <description>
                                     <p>Paragraphs and (block-level) markup contents.</p>
                                  </description>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6216,7 +6210,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -6251,7 +6245,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -6276,15 +6270,15 @@
                         </export>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <inherited uuid="{ r:make-uuid( string-join( (current-time(),'d1e3865a1065', document-uri( document('') )) ) ) }"
-                                   provided-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3952a1065', document-uri( document('') )) ) ) }">
+                        <inherited uuid="{ r:dress('d1e3865a1065') ! r:make-uuid(.) }"
+                                   provided-uuid="{ r:dress('d1e3952a1065') ! r:make-uuid(.) }">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6322,7 +6316,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6357,7 +6351,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -6370,15 +6364,15 @@
                         </inherited>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <satisfied uuid="{ r:make-uuid( string-join( (current-time(),'d1e3895a1065', document-uri( document('') )) ) ) }"
-                                   responsibility-uuid="{ r:make-uuid( string-join( (current-time(),'d1e3955a1065', document-uri( document('') )) ) ) }">
+                        <satisfied uuid="{ r:dress('d1e3895a1065') ! r:make-uuid(.) }"
+                                   responsibility-uuid="{ r:dress('d1e3955a1065') ! r:make-uuid(.) }">
                            <description>
                               <p>Paragraphs and (block-level) markup contents.</p>
                            </description>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6416,7 +6410,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -6451,7 +6445,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -6473,7 +6467,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6508,7 +6502,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -6535,7 +6529,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -6549,7 +6543,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -6586,7 +6580,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -6656,7 +6650,7 @@
                  match="/xsl:stylesheet[$make='assessment-plan']"
                  name="make-assessment-plan">
       <assessment-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                       uuid="{ r:make-uuid( string-join( (current-time(),'d1e3962a1065', document-uri( document('') )) ) ) }">
+                       uuid="{ r:dress('d1e3962a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -6706,7 +6700,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -6760,7 +6754,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -6811,7 +6805,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -6852,7 +6846,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -6908,7 +6902,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -6949,8 +6943,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -6969,7 +6962,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -7051,7 +7044,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -7064,12 +7057,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -7125,8 +7118,7 @@
          <xsl:if test="$including-optional">
             <local-definitions>
                <xsl:if test="$including-optional">
-                  <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
-                             type="string">
+                  <component uuid="{ r:dress('d1e2286a1065') ! r:make-uuid(.) }" type="string">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -7141,7 +7133,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -7186,7 +7178,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7221,7 +7213,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -7234,7 +7226,7 @@
                      <xsl:if test="$including-optional">
                         <protocol name="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -7270,14 +7262,14 @@
                   </component>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
+                  <inventory-item uuid="{ r:dress('d1e2724a1065') ! r:make-uuid(.) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -7313,12 +7305,12 @@
                      <xsl:if test="$including-optional">
                         <responsible-party role-id="token">
                            <party-uuid>
-                              <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                              <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7359,11 +7351,11 @@
                         </responsible-party>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
+                        <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7399,12 +7391,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -7459,7 +7451,7 @@
                   </inventory-item>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <user uuid="{ r:make-uuid( string-join( (current-time(),'d1e2646a1065', document-uri( document('') )) ) ) }">
+                  <user uuid="{ r:dress('d1e2646a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -7478,7 +7470,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -7548,7 +7540,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -7605,7 +7597,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -7669,7 +7661,7 @@
                   </objectives-and-methods>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <activity uuid="{ r:make-uuid( string-join( (current-time(),'d1e4119a1065', document-uri( document('') )) ) ) }">
+                  <activity uuid="{ r:dress('d1e4119a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -7681,7 +7673,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -7715,7 +7707,7 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <step uuid="{ r:make-uuid( string-join( (current-time(),'d1e4137a1065', document-uri( document('') )) ) ) }">
+                        <step uuid="{ r:dress('d1e4137a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -7727,7 +7719,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -7770,7 +7762,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -7812,7 +7804,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -7874,7 +7866,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -7933,7 +7925,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -7968,7 +7960,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -7995,7 +7987,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8037,7 +8029,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -8099,7 +8091,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -8158,7 +8150,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8193,7 +8185,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -8222,7 +8214,7 @@
                <xsl:if test="$including-optional">
                   <part name="token">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -8242,7 +8234,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8267,7 +8259,7 @@
                      <xsl:if test="$including-optional">
                         <part name="token">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8308,7 +8300,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -8350,7 +8342,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -8412,7 +8404,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -8475,7 +8467,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -8510,15 +8502,15 @@
                </xsl:if>
                <include-all/>
                <xsl:comment>
-                  <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                  <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                </xsl:comment>
                <xsl:if test="$including-optional">
-                  <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                  <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                    type="token">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8568,8 +8560,7 @@
          <xsl:if test="$including-optional">
             <assessment-assets>
                <xsl:if test="$including-optional">
-                  <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
-                             type="string">
+                  <component uuid="{ r:dress('d1e2286a1065') ! r:make-uuid(.) }" type="string">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -8584,7 +8575,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8629,7 +8620,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -8664,7 +8655,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -8677,7 +8668,7 @@
                      <xsl:if test="$including-optional">
                         <protocol name="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -8712,7 +8703,7 @@
                      </xsl:if>
                   </component>
                </xsl:if>
-               <assessment-platform uuid="{ r:make-uuid( string-join( (current-time(),'d1e4589a1065', document-uri( document('') )) ) ) }">
+               <assessment-platform uuid="{ r:dress('d1e4589a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -8721,7 +8712,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -8755,11 +8746,11 @@
                      </link>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <uses-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4604a1065', document-uri( document('') )) ) ) }">
+                     <uses-component component-uuid="{ r:dress('d1e4604a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -8795,12 +8786,12 @@
                         <xsl:if test="$including-optional">
                            <responsible-party role-id="token">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -8856,8 +8847,7 @@
             </assessment-assets>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                  type="token">
+            <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -8869,7 +8859,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -8914,7 +8904,7 @@
                   </timing>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
+                  <dependency task-uuid="{ r:dress('d1e4280a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <remarks>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -8923,19 +8913,18 @@
                   </dependency>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                        type="token">
+                  <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
                   </task>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
+                  <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -8973,7 +8962,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -9008,7 +8997,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -9027,7 +9016,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -9062,15 +9051,15 @@
                         </xsl:if>
                         <include-all/>
                         <xsl:comment>
-                           <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                           <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                         </xsl:comment>
                         <xsl:if test="$including-optional">
-                           <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                           <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                             type="token">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -9133,7 +9122,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9168,15 +9157,15 @@
                      </xsl:if>
                      <include-all/>
                      <xsl:comment>
-                        <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                        <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                      </xsl:comment>
                      <xsl:if test="$including-optional">
-                        <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                        <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                          type="token">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -9228,7 +9217,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9263,7 +9252,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <party-uuid>
-                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                           <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                         </party-uuid>
                      </xsl:if>
                      <xsl:if test="$including-optional">
@@ -9283,7 +9272,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -9297,7 +9286,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9334,7 +9323,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -9404,7 +9393,7 @@
                  match="/xsl:stylesheet[$make='assessment-results']"
                  name="make-assessment-results">
       <assessment-results xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                          uuid="{ r:make-uuid( string-join( (current-time(),'d1e5670a1065', document-uri( document('') )) ) ) }">
+                          uuid="{ r:dress('d1e5670a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -9454,7 +9443,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9508,7 +9497,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -9559,7 +9548,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -9600,7 +9589,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -9656,7 +9645,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -9697,8 +9686,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -9717,7 +9705,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -9799,7 +9787,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -9812,12 +9800,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -9882,7 +9870,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -9939,7 +9927,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -10003,7 +9991,7 @@
                   </objectives-and-methods>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <activity uuid="{ r:make-uuid( string-join( (current-time(),'d1e4119a1065', document-uri( document('') )) ) ) }">
+                  <activity uuid="{ r:dress('d1e4119a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -10015,7 +10003,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -10049,7 +10037,7 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <step uuid="{ r:make-uuid( string-join( (current-time(),'d1e4137a1065', document-uri( document('') )) ) ) }">
+                        <step uuid="{ r:dress('d1e4137a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -10061,7 +10049,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -10104,7 +10092,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -10146,7 +10134,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -10208,7 +10196,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -10267,7 +10255,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -10302,7 +10290,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -10329,7 +10317,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -10371,7 +10359,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -10433,7 +10421,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -10492,7 +10480,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -10527,7 +10515,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -10551,7 +10539,7 @@
                </xsl:if>
             </local-definitions>
          </xsl:if>
-         <result uuid="{ r:make-uuid( string-join( (current-time(),'d1e5696a1065', document-uri( document('') )) ) ) }">
+         <result uuid="{ r:dress('d1e5696a1065') ! r:make-uuid(.) }">
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
             </title>
@@ -10569,7 +10557,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -10605,8 +10593,7 @@
             <xsl:if test="$including-optional">
                <local-definitions>
                   <xsl:if test="$including-optional">
-                     <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
-                                type="string">
+                     <component uuid="{ r:dress('d1e2286a1065') ! r:make-uuid(.) }" type="string">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
                         </title>
@@ -10621,7 +10608,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -10666,7 +10653,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -10701,7 +10688,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -10714,7 +10701,7 @@
                         <xsl:if test="$including-optional">
                            <protocol name="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <title>
@@ -10750,14 +10737,14 @@
                      </component>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
+                     <inventory-item uuid="{ r:dress('d1e2724a1065') ! r:make-uuid(.) }">
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
                         </description>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -10793,12 +10780,12 @@
                         <xsl:if test="$including-optional">
                            <responsible-party role-id="token">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -10839,11 +10826,11 @@
                            </responsible-party>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
+                           <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -10879,12 +10866,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -10939,7 +10926,7 @@
                      </inventory-item>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <user uuid="{ r:make-uuid( string-join( (current-time(),'d1e2646a1065', document-uri( document('') )) ) ) }">
+                     <user uuid="{ r:dress('d1e2646a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -10958,7 +10945,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -11021,8 +11008,7 @@
                   <xsl:if test="$including-optional">
                      <assessment-assets>
                         <xsl:if test="$including-optional">
-                           <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
-                                      type="string">
+                           <component uuid="{ r:dress('d1e2286a1065') ! r:make-uuid(.) }" type="string">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
                               </title>
@@ -11037,7 +11023,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -11082,7 +11068,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -11117,7 +11103,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -11130,7 +11116,7 @@
                               <xsl:if test="$including-optional">
                                  <protocol name="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <title>
@@ -11165,7 +11151,7 @@
                               </xsl:if>
                            </component>
                         </xsl:if>
-                        <assessment-platform uuid="{ r:make-uuid( string-join( (current-time(),'d1e4589a1065', document-uri( document('') )) ) ) }">
+                        <assessment-platform uuid="{ r:dress('d1e4589a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -11174,7 +11160,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -11208,11 +11194,11 @@
                               </link>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <uses-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4604a1065', document-uri( document('') )) ) ) }">
+                              <uses-component component-uuid="{ r:dress('d1e4604a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -11248,12 +11234,12 @@
                                  <xsl:if test="$including-optional">
                                     <responsible-party role-id="token">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -11309,8 +11295,7 @@
                      </assessment-assets>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <assessment-task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                                      type="token">
+                     <assessment-task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
                         </title>
@@ -11322,7 +11307,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -11367,7 +11352,7 @@
                            </timing>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
+                           <dependency task-uuid="{ r:dress('d1e4280a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <remarks>
                                     <p>Paragraphs and (block-level) markup contents.</p>
@@ -11376,19 +11361,18 @@
                            </dependency>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                                 type="token">
+                           <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
                               </title>
                            </task>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
+                           <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -11426,7 +11410,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -11461,7 +11445,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -11480,7 +11464,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -11515,15 +11499,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                    <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -11586,7 +11570,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -11621,15 +11605,15 @@
                               </xsl:if>
                               <include-all/>
                               <xsl:comment>
-                                 <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                 <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                               </xsl:comment>
                               <xsl:if test="$including-optional">
-                                 <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                 <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                   type="token">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -11681,7 +11665,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -11716,7 +11700,7 @@
                               </xsl:if>
                               <xsl:if test="$including-optional">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                               </xsl:if>
                               <xsl:if test="$including-optional">
@@ -11744,7 +11728,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -11786,7 +11770,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -11848,7 +11832,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -11906,12 +11890,12 @@
                   <xsl:if test="$including-optional">
                      <responsible-party role-id="token">
                         <party-uuid>
-                           <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                           <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                         </party-uuid>
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -11953,7 +11937,7 @@
                   </xsl:if>
                   <part name="token">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -11973,7 +11957,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -11998,7 +11982,7 @@
                      <xsl:if test="$including-optional">
                         <part name="token">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5532a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e5532a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -12031,7 +12015,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <assessment-log>
-                  <entry uuid="{ r:make-uuid( string-join( (current-time(),'d1e5807a1065', document-uri( document('') )) ) ) }">
+                  <entry uuid="{ r:dress('d1e5807a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -12053,7 +12037,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -12087,7 +12071,7 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <logged-by party-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5074a1065', document-uri( document('') )) ) ) }">
+                        <logged-by party-uuid="{ r:dress('d1e5074a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -12096,11 +12080,11 @@
                         </logged-by>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                        <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -12136,12 +12120,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -12191,7 +12175,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -12226,15 +12210,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                    <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -12282,7 +12266,7 @@
                               </subject>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                              <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                  <subject type="token">
                                     <xsl:if test="$including-optional">
                                        <description>
@@ -12292,7 +12276,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -12327,15 +12311,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -12399,7 +12383,7 @@
                </assessment-log>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <observation uuid="{ r:make-uuid( string-join( (current-time(),'d1e4709a1065', document-uri( document('') )) ) ) }">
+               <observation uuid="{ r:dress('d1e4709a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -12411,7 +12395,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -12454,8 +12438,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <origin>
-                        <actor type="token"
-                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                        <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -12464,7 +12447,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -12499,11 +12482,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                           <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -12539,12 +12522,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -12594,7 +12577,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -12629,15 +12612,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -12685,7 +12668,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                 <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -12695,7 +12678,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -12730,15 +12713,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -12796,7 +12779,7 @@
                      </origin>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                     <subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                               type="token">
                         <xsl:if test="$including-optional">
                            <title>
@@ -12806,7 +12789,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -12859,7 +12842,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -12915,7 +12898,7 @@
                </observation>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <risk uuid="{ r:make-uuid( string-join( (current-time(),'d1e4905a1065', document-uri( document('') )) ) ) }">
+               <risk uuid="{ r:dress('d1e4905a1065') ! r:make-uuid(.) }">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -12928,7 +12911,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -12966,8 +12949,7 @@
                   </status>
                   <xsl:if test="$including-optional">
                      <origin>
-                        <actor type="token"
-                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                        <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -12976,7 +12958,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -13011,11 +12993,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                           <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -13051,12 +13033,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -13106,7 +13088,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -13141,15 +13123,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -13197,7 +13179,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                 <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -13207,7 +13189,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -13242,15 +13224,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -13322,7 +13304,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -13356,8 +13338,7 @@
                            </link>
                         </xsl:if>
                         <origin>
-                           <actor type="token"
-                                  actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                           <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
@@ -13366,7 +13347,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -13401,11 +13382,11 @@
                               </xsl:if>
                            </actor>
                            <xsl:if test="$including-optional">
-                              <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                              <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -13441,12 +13422,12 @@
                                  <xsl:if test="$including-optional">
                                     <responsible-party role-id="token">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -13496,7 +13477,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -13531,15 +13512,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -13587,7 +13568,7 @@
                                     </subject>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                    <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                        <subject type="token">
                                           <xsl:if test="$including-optional">
                                              <description>
@@ -13597,7 +13578,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -13632,15 +13613,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                             <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -13700,7 +13681,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -13742,9 +13723,9 @@
                      </characterization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <mitigating-factor uuid="{ r:make-uuid( string-join( (current-time(),'d1e4951a1065', document-uri( document('') )) ) ) }">
+                     <mitigating-factor uuid="{ r:dress('d1e4951a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="implementation-uuid">{ r:make-uuid( string-join( (current-time(),'d1e4954a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="implementation-uuid">{ r:dress('d1e4954a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <description>
                            <p>Paragraphs and (block-level) markup contents.</p>
@@ -13752,7 +13733,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -13786,7 +13767,7 @@
                            </link>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                           <subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                     type="token">
                               <xsl:if test="$including-optional">
                                  <title>
@@ -13796,7 +13777,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -13844,8 +13825,7 @@
                      </deadline>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <response uuid="{ r:make-uuid( string-join( (current-time(),'d1e5444a1065', document-uri( document('') )) ) ) }"
-                               lifecycle="token">
+                     <response uuid="{ r:dress('d1e5444a1065') ! r:make-uuid(.) }" lifecycle="token">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
                         </title>
@@ -13855,7 +13835,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -13890,8 +13870,7 @@
                         </xsl:if>
                         <xsl:if test="$including-optional">
                            <origin>
-                              <actor type="token"
-                                     actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                              <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="role-id">
                                        <xsl:text>token</xsl:text>
@@ -13900,7 +13879,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -13935,11 +13914,11 @@
                                  </xsl:if>
                               </actor>
                               <xsl:if test="$including-optional">
-                                 <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                                 <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -13975,12 +13954,12 @@
                                     <xsl:if test="$including-optional">
                                        <responsible-party role-id="token">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -14030,7 +14009,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -14065,15 +14044,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                             <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -14121,7 +14100,7 @@
                                        </subject>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
-                                       <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                       <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                           <subject type="token">
                                              <xsl:if test="$including-optional">
                                                 <description>
@@ -14131,7 +14110,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -14166,15 +14145,15 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment>
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
-                                                <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                                  type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                            <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                             <xsl:attribute name="ns">
@@ -14232,9 +14211,9 @@
                            </origin>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <required-asset uuid="{ r:make-uuid( string-join( (current-time(),'d1e5477a1065', document-uri( document('') )) ) ) }">
+                           <required-asset uuid="{ r:dress('d1e5477a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
-                                 <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                 <subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                           type="token">
                                     <xsl:if test="$including-optional">
                                        <title>
@@ -14244,7 +14223,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14295,7 +14274,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -14336,8 +14315,7 @@
                            </required-asset>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                                 type="token">
+                           <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
                               </title>
@@ -14349,7 +14327,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -14394,7 +14372,7 @@
                                  </timing>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
+                                 <dependency task-uuid="{ r:dress('d1e4280a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <remarks>
                                           <p>Paragraphs and (block-level) markup contents.</p>
@@ -14403,19 +14381,18 @@
                                  </dependency>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                                       type="token">
+                                 <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                                     <title>
                                        <xsl:text>Text and (inline) markup</xsl:text>
                                     </title>
                                  </task>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
+                                 <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14453,7 +14430,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -14488,7 +14465,7 @@
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
                                              <party-uuid>
-                                                <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                                <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                              </party-uuid>
                                           </xsl:if>
                                           <xsl:if test="$including-optional">
@@ -14507,7 +14484,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -14542,15 +14519,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -14613,7 +14590,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14648,15 +14625,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -14708,7 +14685,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -14743,7 +14720,7 @@
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
@@ -14769,7 +14746,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <risk-log>
-                        <entry uuid="{ r:make-uuid( string-join( (current-time(),'d1e4984a1065', document-uri( document('') )) ) ) }">
+                        <entry uuid="{ r:dress('d1e4984a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <title>
                                  <xsl:text>Text and (inline) markup</xsl:text>
@@ -14791,7 +14768,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -14825,7 +14802,7 @@
                               </link>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <logged-by party-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5074a1065', document-uri( document('') )) ) ) }">
+                              <logged-by party-uuid="{ r:dress('d1e5074a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="role-id">
                                        <xsl:text>token</xsl:text>
@@ -14839,11 +14816,11 @@
                               </status-change>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <related-response response-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5014a1065', document-uri( document('') )) ) ) }">
+                              <related-response response-uuid="{ r:dress('d1e5014a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -14877,11 +14854,11 @@
                                     </link>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                                    <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -14917,12 +14894,12 @@
                                        <xsl:if test="$including-optional">
                                           <responsible-party role-id="token">
                                              <party-uuid>
-                                                <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                                <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                              </party-uuid>
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -14972,7 +14949,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -15007,15 +14984,15 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment>
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
-                                                <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                                  type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                            <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                             <xsl:attribute name="ns">
@@ -15063,7 +15040,7 @@
                                           </subject>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
-                                          <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                          <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                              <subject type="token">
                                                 <xsl:if test="$including-optional">
                                                    <description>
@@ -15073,7 +15050,7 @@
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -15108,15 +15085,15 @@
                                                 </xsl:if>
                                                 <include-all/>
                                                 <xsl:comment>
-                                                   <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                                   <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                                 </xsl:comment>
                                                 <xsl:if test="$including-optional">
-                                                   <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                   <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                                     type="token">
                                                       <xsl:if test="$including-optional">
                                                          <prop name="token" value="string">
                                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                               <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                               <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                             </xsl:if>
                                                             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                                <xsl:attribute name="ns">
@@ -15187,12 +15164,12 @@
                      </risk-log>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5057a1065', document-uri( document('') )) ) ) }"/>
+                     <related-observation observation-uuid="{ r:dress('d1e5057a1065') ! r:make-uuid(.) }"/>
                   </xsl:if>
                </risk>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <finding uuid="{ r:make-uuid( string-join( (current-time(),'d1e5843a1065', document-uri( document('') )) ) ) }">
+               <finding uuid="{ r:dress('d1e5843a1065') ! r:make-uuid(.) }">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
                   </title>
@@ -15202,7 +15179,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -15237,8 +15214,7 @@
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <origin>
-                        <actor type="token"
-                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                        <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -15247,7 +15223,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -15282,11 +15258,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                           <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -15322,12 +15298,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -15377,7 +15353,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -15412,15 +15388,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -15468,7 +15444,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                 <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -15478,7 +15454,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -15513,15 +15489,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -15592,7 +15568,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -15654,14 +15630,14 @@
                   </target>
                   <xsl:if test="$including-optional">
                      <implementation-statement-uuid>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e5863a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e5863a1065') ! r:make-uuid(.) }</xsl:text>
                      </implementation-statement-uuid>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5870a1065', document-uri( document('') )) ) ) }"/>
+                     <related-observation observation-uuid="{ r:dress('d1e5870a1065') ! r:make-uuid(.) }"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
-                     <associated-risk risk-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5877a1065', document-uri( document('') )) ) ) }"/>
+                     <associated-risk risk-uuid="{ r:dress('d1e5877a1065') ! r:make-uuid(.) }"/>
                   </xsl:if>
                   <xsl:if test="$including-optional">
                      <remarks>
@@ -15679,7 +15655,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -15693,7 +15669,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -15730,7 +15706,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -15800,7 +15776,7 @@
                  match="/xsl:stylesheet[$make='plan-of-action-and-milestones']"
                  name="make-plan-of-action-and-milestones">
       <plan-of-action-and-milestones xmlns="http://csrc.nist.gov/ns/oscal/1.0"
-                                     uuid="{ r:make-uuid( string-join( (current-time(),'d1e5912a1065', document-uri( document('') )) ) ) }">
+                                     uuid="{ r:dress('d1e5912a1065') ! r:make-uuid(.) }">
          <metadata>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -15850,7 +15826,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -15904,7 +15880,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -15955,7 +15931,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -15996,7 +15972,7 @@
                </role>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <location uuid="{ r:make-uuid( string-join( (current-time(),'d1e613a1065', document-uri( document('') )) ) ) }">
+               <location uuid="{ r:dress('d1e613a1065') ! r:make-uuid(.) }">
                   <xsl:if test="$including-optional">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
@@ -16052,7 +16028,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -16093,8 +16069,7 @@
                </location>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <party uuid="{ r:make-uuid( string-join( (current-time(),'d1e680a1065', document-uri( document('') )) ) ) }"
-                      type="string">
+               <party uuid="{ r:dress('d1e680a1065') ! r:make-uuid(.) }" type="string">
                   <xsl:if test="$including-optional">
                      <name>
                         <xsl:text>string</xsl:text>
@@ -16113,7 +16088,7 @@
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -16195,7 +16170,7 @@
                   </xsl:comment>
                   <xsl:if test="$including-optional">
                      <member-of-organization>
-                        <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e728a1065', document-uri( document('') )) ) ) }</xsl:text>
+                        <xsl:text>{ r:dress('d1e728a1065') ! r:make-uuid(.) }</xsl:text>
                      </member-of-organization>
                   </xsl:if>
                   <xsl:if test="$including-optional">
@@ -16208,12 +16183,12 @@
             <xsl:if test="$including-optional">
                <responsible-party role-id="token">
                   <party-uuid>
-                     <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                     <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                   </party-uuid>
                   <xsl:if test="$including-optional">
                      <prop name="token" value="string">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                           <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                           <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="ns">
@@ -16281,8 +16256,7 @@
          <xsl:if test="$including-optional">
             <local-definitions>
                <xsl:if test="$including-optional">
-                  <component uuid="{ r:make-uuid( string-join( (current-time(),'d1e2286a1065', document-uri( document('') )) ) ) }"
-                             type="string">
+                  <component uuid="{ r:dress('d1e2286a1065') ! r:make-uuid(.) }" type="string">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -16297,7 +16271,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -16342,7 +16316,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -16377,7 +16351,7 @@
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <party-uuid>
-                                 <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                 <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                               </party-uuid>
                            </xsl:if>
                            <xsl:if test="$including-optional">
@@ -16390,7 +16364,7 @@
                      <xsl:if test="$including-optional">
                         <protocol name="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e2577a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e2577a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional">
                               <title>
@@ -16426,14 +16400,14 @@
                   </component>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <inventory-item uuid="{ r:make-uuid( string-join( (current-time(),'d1e2724a1065', document-uri( document('') )) ) ) }">
+                  <inventory-item uuid="{ r:dress('d1e2724a1065') ! r:make-uuid(.) }">
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
                      </description>
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -16469,12 +16443,12 @@
                      <xsl:if test="$including-optional">
                         <responsible-party role-id="token">
                            <party-uuid>
-                              <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                              <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                            </party-uuid>
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -16515,11 +16489,11 @@
                         </responsible-party>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <implemented-component component-uuid="{ r:make-uuid( string-join( (current-time(),'d1e2741a1065', document-uri( document('') )) ) ) }">
+                        <implemented-component component-uuid="{ r:dress('d1e2741a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -16555,12 +16529,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -16622,7 +16596,7 @@
             </local-definitions>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <observation uuid="{ r:make-uuid( string-join( (current-time(),'d1e4709a1065', document-uri( document('') )) ) ) }">
+            <observation uuid="{ r:dress('d1e4709a1065') ! r:make-uuid(.) }">
                <xsl:if test="$including-optional">
                   <title>
                      <xsl:text>Text and (inline) markup</xsl:text>
@@ -16634,7 +16608,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -16677,8 +16651,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <origin>
-                     <actor type="token"
-                            actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                     <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="role-id">
                               <xsl:text>token</xsl:text>
@@ -16687,7 +16660,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -16722,11 +16695,11 @@
                         </xsl:if>
                      </actor>
                      <xsl:if test="$including-optional">
-                        <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                        <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -16762,12 +16735,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -16817,7 +16790,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -16852,15 +16825,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                    <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -16908,7 +16881,7 @@
                               </subject>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                              <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                  <subject type="token">
                                     <xsl:if test="$including-optional">
                                        <description>
@@ -16918,7 +16891,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -16953,15 +16926,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -17019,7 +16992,7 @@
                   </origin>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                  <subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                            type="token">
                      <xsl:if test="$including-optional">
                         <title>
@@ -17029,7 +17002,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -17082,7 +17055,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -17138,7 +17111,7 @@
             </observation>
          </xsl:if>
          <xsl:if test="$including-optional">
-            <risk uuid="{ r:make-uuid( string-join( (current-time(),'d1e4905a1065', document-uri( document('') )) ) ) }">
+            <risk uuid="{ r:dress('d1e4905a1065') ! r:make-uuid(.) }">
                <title>
                   <xsl:text>Text and (inline) markup</xsl:text>
                </title>
@@ -17151,7 +17124,7 @@
                <xsl:if test="$including-optional">
                   <prop name="token" value="string">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="ns">
@@ -17189,8 +17162,7 @@
                </status>
                <xsl:if test="$including-optional">
                   <origin>
-                     <actor type="token"
-                            actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                     <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                            <xsl:attribute name="role-id">
                               <xsl:text>token</xsl:text>
@@ -17199,7 +17171,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -17234,11 +17206,11 @@
                         </xsl:if>
                      </actor>
                      <xsl:if test="$including-optional">
-                        <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                        <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -17274,12 +17246,12 @@
                            <xsl:if test="$including-optional">
                               <responsible-party role-id="token">
                                  <party-uuid>
-                                    <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                    <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                  </party-uuid>
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -17329,7 +17301,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -17364,15 +17336,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                    <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -17420,7 +17392,7 @@
                               </subject>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                              <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                  <subject type="token">
                                     <xsl:if test="$including-optional">
                                        <description>
@@ -17430,7 +17402,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17465,15 +17437,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -17545,7 +17517,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -17579,8 +17551,7 @@
                         </link>
                      </xsl:if>
                      <origin>
-                        <actor type="token"
-                               actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                        <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="role-id">
                                  <xsl:text>token</xsl:text>
@@ -17589,7 +17560,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -17624,11 +17595,11 @@
                            </xsl:if>
                         </actor>
                         <xsl:if test="$including-optional">
-                           <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                           <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -17664,12 +17635,12 @@
                               <xsl:if test="$including-optional">
                                  <responsible-party role-id="token">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17719,7 +17690,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -17754,15 +17725,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -17810,7 +17781,7 @@
                                  </subject>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                 <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                     <subject type="token">
                                        <xsl:if test="$including-optional">
                                           <description>
@@ -17820,7 +17791,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -17855,15 +17826,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -17923,7 +17894,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -17965,9 +17936,9 @@
                   </characterization>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <mitigating-factor uuid="{ r:make-uuid( string-join( (current-time(),'d1e4951a1065', document-uri( document('') )) ) ) }">
+                  <mitigating-factor uuid="{ r:dress('d1e4951a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                        <xsl:attribute name="implementation-uuid">{ r:make-uuid( string-join( (current-time(),'d1e4954a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                        <xsl:attribute name="implementation-uuid">{ r:dress('d1e4954a1065') ! r:make-uuid(.) }</xsl:attribute>
                      </xsl:if>
                      <description>
                         <p>Paragraphs and (block-level) markup contents.</p>
@@ -17975,7 +17946,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -18009,7 +17980,7 @@
                         </link>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                        <subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                  type="token">
                            <xsl:if test="$including-optional">
                               <title>
@@ -18019,7 +17990,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -18067,8 +18038,7 @@
                   </deadline>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <response uuid="{ r:make-uuid( string-join( (current-time(),'d1e5444a1065', document-uri( document('') )) ) ) }"
-                            lifecycle="token">
+                  <response uuid="{ r:dress('d1e5444a1065') ! r:make-uuid(.) }" lifecycle="token">
                      <title>
                         <xsl:text>Text and (inline) markup</xsl:text>
                      </title>
@@ -18078,7 +18048,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -18113,8 +18083,7 @@
                      </xsl:if>
                      <xsl:if test="$including-optional">
                         <origin>
-                           <actor type="token"
-                                  actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                           <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
@@ -18123,7 +18092,7 @@
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -18158,11 +18127,11 @@
                               </xsl:if>
                            </actor>
                            <xsl:if test="$including-optional">
-                              <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                              <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -18198,12 +18167,12 @@
                                  <xsl:if test="$including-optional">
                                     <responsible-party role-id="token">
                                        <party-uuid>
-                                          <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                          <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                        </party-uuid>
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -18253,7 +18222,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -18288,15 +18257,15 @@
                                        </xsl:if>
                                        <include-all/>
                                        <xsl:comment>
-                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                          <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                        </xsl:comment>
                                        <xsl:if test="$including-optional">
-                                          <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                          <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                            type="token">
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -18344,7 +18313,7 @@
                                     </subject>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
-                                    <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                    <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                        <subject type="token">
                                           <xsl:if test="$including-optional">
                                              <description>
@@ -18354,7 +18323,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -18389,15 +18358,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                             <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -18455,9 +18424,9 @@
                         </origin>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <required-asset uuid="{ r:make-uuid( string-join( (current-time(),'d1e5477a1065', document-uri( document('') )) ) ) }">
+                        <required-asset uuid="{ r:dress('d1e5477a1065') ! r:make-uuid(.) }">
                            <xsl:if test="$including-optional">
-                              <subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                              <subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                        type="token">
                                  <xsl:if test="$including-optional">
                                     <title>
@@ -18467,7 +18436,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -18518,7 +18487,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -18559,8 +18528,7 @@
                         </required-asset>
                      </xsl:if>
                      <xsl:if test="$including-optional">
-                        <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                              type="token">
+                        <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
                            </title>
@@ -18572,7 +18540,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
@@ -18617,7 +18585,7 @@
                               </timing>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <dependency task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4280a1065', document-uri( document('') )) ) ) }">
+                              <dependency task-uuid="{ r:dress('d1e4280a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <remarks>
                                        <p>Paragraphs and (block-level) markup contents.</p>
@@ -18626,19 +18594,18 @@
                               </dependency>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <task uuid="{ r:make-uuid( string-join( (current-time(),'d1e4210a1065', document-uri( document('') )) ) ) }"
-                                    type="token">
+                              <task uuid="{ r:dress('d1e4210a1065') ! r:make-uuid(.) }" type="token">
                                  <title>
                                     <xsl:text>Text and (inline) markup</xsl:text>
                                  </title>
                               </task>
                            </xsl:if>
                            <xsl:if test="$including-optional">
-                              <associated-activity activity-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4291a1065', document-uri( document('') )) ) ) }">
+                              <associated-activity activity-uuid="{ r:dress('d1e4291a1065') ! r:make-uuid(.) }">
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -18676,7 +18643,7 @@
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -18711,7 +18678,7 @@
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                        </xsl:if>
                                        <xsl:if test="$including-optional">
@@ -18730,7 +18697,7 @@
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -18765,15 +18732,15 @@
                                     </xsl:if>
                                     <include-all/>
                                     <xsl:comment>
-                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                       <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                     </xsl:comment>
                                     <xsl:if test="$including-optional">
-                                       <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                       <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                         type="token">
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -18836,7 +18803,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -18871,15 +18838,15 @@
                                  </xsl:if>
                                  <include-all/>
                                  <xsl:comment>
-                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                    <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                  </xsl:comment>
                                  <xsl:if test="$including-optional">
-                                    <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                    <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                      type="token">
                                        <xsl:if test="$including-optional">
                                           <prop name="token" value="string">
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                              </xsl:if>
                                              <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                 <xsl:attribute name="ns">
@@ -18931,7 +18898,7 @@
                                  <xsl:if test="$including-optional">
                                     <prop name="token" value="string">
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                          <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                          <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                        </xsl:if>
                                        <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                           <xsl:attribute name="ns">
@@ -18966,7 +18933,7 @@
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
                                     <party-uuid>
-                                       <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                       <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                     </party-uuid>
                                  </xsl:if>
                                  <xsl:if test="$including-optional">
@@ -18992,7 +18959,7 @@
                </xsl:if>
                <xsl:if test="$including-optional">
                   <risk-log>
-                     <entry uuid="{ r:make-uuid( string-join( (current-time(),'d1e4984a1065', document-uri( document('') )) ) ) }">
+                     <entry uuid="{ r:dress('d1e4984a1065') ! r:make-uuid(.) }">
                         <xsl:if test="$including-optional">
                            <title>
                               <xsl:text>Text and (inline) markup</xsl:text>
@@ -19014,7 +18981,7 @@
                         <xsl:if test="$including-optional">
                            <prop name="token" value="string">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                 <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                 <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                               </xsl:if>
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="ns">
@@ -19048,7 +19015,7 @@
                            </link>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <logged-by party-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5074a1065', document-uri( document('') )) ) ) }">
+                           <logged-by party-uuid="{ r:dress('d1e5074a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                  <xsl:attribute name="role-id">
                                     <xsl:text>token</xsl:text>
@@ -19062,11 +19029,11 @@
                            </status-change>
                         </xsl:if>
                         <xsl:if test="$including-optional">
-                           <related-response response-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5014a1065', document-uri( document('') )) ) ) }">
+                           <related-response response-uuid="{ r:dress('d1e5014a1065') ! r:make-uuid(.) }">
                               <xsl:if test="$including-optional">
                                  <prop name="token" value="string">
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                       <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                       <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                     </xsl:if>
                                     <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                        <xsl:attribute name="ns">
@@ -19100,11 +19067,11 @@
                                  </link>
                               </xsl:if>
                               <xsl:if test="$including-optional">
-                                 <related-task task-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4846a1065', document-uri( document('') )) ) ) }">
+                                 <related-task task-uuid="{ r:dress('d1e4846a1065') ! r:make-uuid(.) }">
                                     <xsl:if test="$including-optional">
                                        <prop name="token" value="string">
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                             <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                             <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                           </xsl:if>
                                           <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                              <xsl:attribute name="ns">
@@ -19140,12 +19107,12 @@
                                     <xsl:if test="$including-optional">
                                        <responsible-party role-id="token">
                                           <party-uuid>
-                                             <xsl:text>{ r:make-uuid( string-join( (current-time(),'d1e753a1065', document-uri( document('') )) ) ) }</xsl:text>
+                                             <xsl:text>{ r:dress('d1e753a1065') ! r:make-uuid(.) }</xsl:text>
                                           </party-uuid>
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -19195,7 +19162,7 @@
                                           <xsl:if test="$including-optional">
                                              <prop name="token" value="string">
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                   <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                   <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                 </xsl:if>
                                                 <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                    <xsl:attribute name="ns">
@@ -19230,15 +19197,15 @@
                                           </xsl:if>
                                           <include-all/>
                                           <xsl:comment>
-                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                             <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                           </xsl:comment>
                                           <xsl:if test="$including-optional">
-                                             <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                             <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                               type="token">
                                                 <xsl:if test="$including-optional">
                                                    <prop name="token" value="string">
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                         <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                         <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                       </xsl:if>
                                                       <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                          <xsl:attribute name="ns">
@@ -19286,7 +19253,7 @@
                                        </subject>
                                     </xsl:if>
                                     <xsl:if test="$including-optional">
-                                       <identified-subject subject-placeholder-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4866a1065', document-uri( document('') )) ) ) }">
+                                       <identified-subject subject-placeholder-uuid="{ r:dress('d1e4866a1065') ! r:make-uuid(.) }">
                                           <subject type="token">
                                              <xsl:if test="$including-optional">
                                                 <description>
@@ -19296,7 +19263,7 @@
                                              <xsl:if test="$including-optional">
                                                 <prop name="token" value="string">
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                      <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                      <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                    </xsl:if>
                                                    <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                       <xsl:attribute name="ns">
@@ -19331,15 +19298,15 @@
                                              </xsl:if>
                                              <include-all/>
                                              <xsl:comment>
-                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }" type="token"/&gt; </xsl:text>
+                                                <xsl:text disable-output-escaping="true"> &lt;include-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }" type="token"/&gt; </xsl:text>
                                              </xsl:comment>
                                              <xsl:if test="$including-optional">
-                                                <exclude-subject subject-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4534a1065', document-uri( document('') )) ) ) }"
+                                                <exclude-subject subject-uuid="{ r:dress('d1e4534a1065') ! r:make-uuid(.) }"
                                                                  type="token">
                                                    <xsl:if test="$including-optional">
                                                       <prop name="token" value="string">
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                                            <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                                            <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                                          </xsl:if>
                                                          <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                                             <xsl:attribute name="ns">
@@ -19410,13 +19377,13 @@
                   </risk-log>
                </xsl:if>
                <xsl:if test="$including-optional">
-                  <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5057a1065', document-uri( document('') )) ) ) }"/>
+                  <related-observation observation-uuid="{ r:dress('d1e5057a1065') ! r:make-uuid(.) }"/>
                </xsl:if>
             </risk>
          </xsl:if>
          <poam-item>
             <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-               <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e5958a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+               <xsl:attribute name="uuid">{ r:dress('d1e5958a1065') ! r:make-uuid(.) }</xsl:attribute>
             </xsl:if>
             <title>
                <xsl:text>Text and (inline) markup</xsl:text>
@@ -19427,7 +19394,7 @@
             <xsl:if test="$including-optional">
                <prop name="token" value="string">
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                     <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                     <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                      <xsl:attribute name="ns">
@@ -19462,8 +19429,7 @@
             </xsl:if>
             <xsl:if test="$including-optional">
                <origin>
-                  <actor type="token"
-                         actor-uuid="{ r:make-uuid( string-join( (current-time(),'d1e4832a1065', document-uri( document('') )) ) ) }">
+                  <actor type="token" actor-uuid="{ r:dress('d1e4832a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                         <xsl:attribute name="role-id">
                            <xsl:text>token</xsl:text>
@@ -19472,7 +19438,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -19509,10 +19475,10 @@
                </origin>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <related-observation observation-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5986a1065', document-uri( document('') )) ) ) }"/>
+               <related-observation observation-uuid="{ r:dress('d1e5986a1065') ! r:make-uuid(.) }"/>
             </xsl:if>
             <xsl:if test="$including-optional">
-               <associated-risk risk-uuid="{ r:make-uuid( string-join( (current-time(),'d1e5993a1065', document-uri( document('') )) ) ) }"/>
+               <associated-risk risk-uuid="{ r:dress('d1e5993a1065') ! r:make-uuid(.) }"/>
             </xsl:if>
             <xsl:if test="$including-optional">
                <remarks>
@@ -19523,7 +19489,7 @@
          <xsl:if test="$including-optional">
             <back-matter>
                <xsl:if test="$including-optional">
-                  <resource uuid="{ r:make-uuid( string-join( (current-time(),'d1e803a1065', document-uri( document('') )) ) ) }">
+                  <resource uuid="{ r:dress('d1e803a1065') ! r:make-uuid(.) }">
                      <xsl:if test="$including-optional">
                         <title>
                            <xsl:text>Text and (inline) markup</xsl:text>
@@ -19537,7 +19503,7 @@
                      <xsl:if test="$including-optional">
                         <prop name="token" value="string">
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                              <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                              <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                            </xsl:if>
                            <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                               <xsl:attribute name="ns">
@@ -19574,7 +19540,7 @@
                            <xsl:if test="$including-optional">
                               <prop name="token" value="string">
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
-                                    <xsl:attribute name="uuid">{ r:make-uuid( string-join( (current-time(),'d1e1027a1065', document-uri( document('') )) ) ) }</xsl:attribute>
+                                    <xsl:attribute name="uuid">{ r:dress('d1e1027a1065') ! r:make-uuid(.) }</xsl:attribute>
                                  </xsl:if>
                                  <xsl:if test="$including-optional or true() (: @min-occurs  :)">
                                     <xsl:attribute name="ns">
