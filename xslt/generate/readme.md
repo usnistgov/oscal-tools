@@ -10,7 +10,15 @@ Optional elements are not included by default, but can be added with a runtime p
 
 Where data values are required, a valid placeholder value is supplied for formal validity.
 
+[Jump to How to Run](#how-to-run) below.
+
 ## Dependencies
+
+`generate-oscal.xsl` is a single XSLT transformation, which produces "empty but valid" OSCAL documents.
+
+`generate-oscal-blank.xsl` is a variant of the same transformation (also standalone) which produces OSCAL except with "blank" UUID values (where UUIDs are expected).
+
+Either of these are standalone XSLTs that will function in an XSLT 3.1 processor without further dependencies.
 
 ### Blank mode
 
@@ -32,11 +40,11 @@ It has been tested in Saxon (Java) and SaxonJS (nodeJS). Performance in Java is 
 
 Would there be any use for an XSLT 1.0 version of this utility, which could run more widely on generic platforms (supporting XSLT 1.0)?
 
-Should it be blank or could/should it rely on Java or other extension functionality to provide UUIDs? (Please offer your feedback in an Issue[https://github.com/usnistgov/oscal-tools/issues](https://github.com/usnistgov/oscal-tools/issues).)
+Should it be "blank" or could/should it rely on Java or other extension functionality to provide UUIDs? (Please offer your feedback in an [Issue](https://github.com/usnistgov/oscal-tools/issues).)
 
-#### Pure JS
+#### UUIDs in SaxonJS
 
-Currently because higher-order functions are not supported in SaxonJS SEF, the UUID-generating utility fails. It works (albeit slowly) when called in XSLT. A main advantage of the SEF distribution is the runtime
+Currently because higher-order functions are not supported in SaxonJS SEF, the UUID-generating utility fails to compile. It works (albeit slowly) when called in XSLT.
 
 Potentially this logic could be provided by Javascript natively. There is an XSLT that stubs out such a variant.
 
@@ -44,15 +52,15 @@ Potentially this logic could be provided by Javascript natively. There is an XSL
 
 The industry-leading Saxon processor[https://www.saxonica.com/products/products.xml](https://www.saxonica.com/products/products.xml) has been relied on for development and testing.
 
-The codebase should function to produce the same outputs in any conformant XSLT engine supporting the necessary functions (as described below).
+The codebase should function to produce the same outputs in any conformant XSLT engine supporting the necessary functions (as described below). Since Saxon is [readily available](https://sourceforge.net/projects/saxon/files/Saxon-HE/10/Java/), Saxon syntax is given below for convenience.
 
-### tldr; Java Saxon CL
+### Java Saxon CL
 
 For SaxonHE, EE and PE (requires Saxon 10):
 
 >  $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog*
     
-Produces a catalog. Adjust the `-it` setting as needed.
+Produces a catalog. Adjust the `-it` (initial template) setting as needed.
 
 This will run in versions of Saxon before 10, but support for the `random-number-generator()`[https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
 
@@ -62,13 +70,13 @@ Delivers the same result, except optional elements and attributes are included.
 
 If fresh UUIDs are not wanted, use `generate-oscal-blank.xsl` with the same syntax.
 
-### tldr; SaxonJS CL
+### SaxonJS CL
 
 With the XSLT available.
 
 > $ xslt3 -xsl:generate-oscal.xsl -it:*make-catalog*
 
-Produces an OSCAL catalog (template) document, with new UUIDs. YYMV on performance.
+Produces an OSCAL catalog (template) document, with new UUIDs. YMMV on performance.
 
 > $ xslt3 -xsl:generate-oscal.xsl -it:make-plan-of-action-and-milestones include=all
 
