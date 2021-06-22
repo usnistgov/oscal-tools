@@ -16,7 +16,9 @@ Where data values are required, a valid placeholder value is supplied for formal
 
 Do the git thing or
 
-> wget https://github.com/usnist-gov/oscal-tools/raw/master/xslt/generate/generate-oscal.xsl
+```bash
+wget https://github.com/usnist-gov/oscal-tools/raw/master/xslt/generate/generate-oscal.xsl
+```
 
 Or equivalent. As described below, there are several files you might choose from. (Each will work on its own.)
 
@@ -58,20 +60,6 @@ Applied to any OSCAL document, `generate-oscal.xsl` or `generate-oscal-jvm.xsl` 
 
 `generate-oscal-blank.xsl`, when applied to OSCAL (or other XML) document source, results in a clean (reserialized) copy.
 
-### To come?
-
-#### XSLT 1.0
-
-Would there be any use for an XSLT 1.0 version of this utility, which could run more widely on generic platforms (supporting XSLT 1.0)?
-
-Should it be "blank" or could/should it rely on Java or other extension functionality to provide UUIDs? (Please offer your feedback in an [Issue](https://github.com/usnistgov/oscal-tools/issues).)
-
-#### UUIDs in SaxonJS
-
-As noted, currently because higher-order functions are not supported in SaxonJS SEF, the UUID-generating utility fails to compile. It works (albeit slowly) when called in XSLT.
-
-Potentially this logic could be provided by Javascript natively. An XSLT that stubs out such a variant is in progress.
-
 ## How to run
 
 The industry-leading [Saxon processor](https://www.saxonica.com/products/products.xml) has been relied on for development and testing.
@@ -82,13 +70,17 @@ The codebase should function to produce the same outputs in any conformant XSLT 
 
 For SaxonHE, EE and PE (requires Saxon 10):
 
-> $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog*
-   
+```bash
+$ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog*
+```
+
 Produces a catalog. Adjust the `-it` (initial template) setting as needed. (See [Runtime Configuration](#runtime-configuration)) below.)
 
 This will run in versions of Saxon before 10, but support for the [`random-number-generator()`](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
 
->  $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog* **include=all**
+```bash
+$ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog* **include=all**
+```
     
 Delivers the same result, except optional elements and attributes are included.
 
@@ -100,19 +92,27 @@ If the XSLT processor (such as SaxonPE or SaxonEE) supports reflexive calls to J
 
 With the XSLT available.
 
-> $ xslt3 -xsl:generate-oscal.xsl -it:*make-catalog*
+```bash
+$ xslt3 -xsl:generate-oscal.xsl -it:*make-catalog*
+```
 
 Produces an OSCAL catalog (template) document, with new UUIDs. YMMV on performance.
 
-> $ xslt3 -xsl:generate-oscal.xsl -it:*component-definition* include=all
+```bash
+$ xslt3 -xsl:generate-oscal.xsl -it:*component-definition* include=all
+```
 
 As above, delivers the same result (time time a `component-definition` not a `catalog`), except optional elements and attributes are included.
 
-> $ xslt3 -xsl:generate-oscal-blank.xsl -it:*make-profile*
+```bash
+$ xslt3 -xsl:generate-oscal-blank.xsl -it:*make-profile*
+```
 
 Produces a (blank) OSCAL profile (template), except that UUID fields have a 'dummy' value.
 
-> $ xslt3 -xsl:generate-oscal-blank.sef -it:*assessment-plan*
+```bash
+$ xslt3 -xsl:generate-oscal-blank.sef -it:*assessment-plan*
+```
 
 The same -- this time an `assessment-plan` -- with the compiled SEF version (faster).
 
@@ -128,7 +128,7 @@ The same runtime configuration is used with any of the variants `generate-oscal.
 
 ### Initial template
 
-Any XSLT can be invoked with an initial template (without a source document) for any of the supported formats (`-it` is `--initial-template` using Saxon CL syntax):
+To produce a fresh 'unused' OSCAL document, any XSLT can be invoked with an initial template (without a source document) for any of the supported formats (`-it` is `--initial-template` using Saxon CL syntax):
 
 - `-it make-catalog` 
 - `-it make-profile` 
@@ -142,7 +142,7 @@ This is a useful way to produce outputs from a calling stylesheet or application
 
 ### Runtime parameter
 
-Alternatively, the XSLT will produce a fresh 'unused' OSCAL document when invoked with itself (or any XSLT stylesheet) as nominal source document, with one of the following parameter settings:
+Alternatively, the XSLT will produce the same outputs when invoked with itself (or any XSLT stylesheet) as nominal source document, with one of the following parameter settings:
 
 - `make=catalog` 
 - `make=profile` 
@@ -156,7 +156,21 @@ This is a convenient way to set up for calls to be configured at runtime, if an 
 
 Leaving the parameter unset or setting it to an unrecognized value will produce a message along with an empty document.
 
+## To come?
+
+### XSLT 1.0
+
+Would there be any use for an XSLT 1.0 version of this utility, which could run more widely on generic platforms (supporting XSLT 1.0)?
+
+Should it be "blank" or could/should it rely on Java or other extension functionality to provide UUIDs? (Please offer your feedback in an [Issue](https://github.com/usnistgov/oscal-tools/issues).)
+
+### UUIDs in SaxonJS
+
+As noted, currently because higher-order functions are not supported in SaxonJS SEF, the UUID-generating utility fails to compile. It works (albeit slowly) when called in XSLT.
+
+Potentially this logic could be provided by Javascript natively. An XSLT that stubs out such a variant is in progress.
+
 ## Folder contents
 
-In addition to `generate-oscal.xsl`, this folder contains an XSLT used to produce it (from a composed OSCAL metaschema source) as well as other development artifacts.
+In addition to the transformations described here, this folder contains XSLT used to produce the respective variants (from a composed OSCAL metaschema source), as well as other development artifacts.
 
