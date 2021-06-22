@@ -12,7 +12,17 @@ Where data values are required, a valid placeholder value is supplied for formal
 
 [Jump to How to Run](#how-to-run) below.
 
+## Get the stylesheet
+
+Do the git thing or
+
+> wget https://github.com/usnist-gov/oscal-tools/raw/master/xslt/generate/generate-oscal.xsl
+
+Or equivalent. As described below, there are several files you might choose from. (Each will work on its own.)
+
 ## Dependencies
+
+XSLT 3.1 - better than ever!
 
 `generate-oscal.xsl` is a single XSLT transformation, which produces "empty but valid" OSCAL documents.
 
@@ -20,9 +30,13 @@ Where data values are required, a valid placeholder value is supplied for formal
 
 Either of these are standalone XSLTs that will function in an XSLT 3.1 processor without further dependencies.
 
+`generate-oscal-jvm.xsl` relies on Java for UUID minting.
+
+## Features
+
 ### Blank XSLT
 
-Using this XSLT, documents are created in which nominal UUID values are provided with the blank UUID `00000000-0000-4000-8000-000000000000`.
+Using `generate-oscal-blank.xsl`, documents are created in which nominal UUID values are provided with the blank UUID `00000000-0000-4000-8000-000000000000`.
 
 Operational requirements -- or validity rules -- that require UUIDs to be distinct, will *not* be honored.
 
@@ -30,13 +44,19 @@ This XSLT runs on any XSLT 3.1 processor. It is available as both XSLT and SEF (
 
 ### With UUIDs in native XSLT
 
-This XSLT requires XSLT 3.1 as it uses pseudo-random-number generation provided by XPath 3.1 as well as other advanced XSLT features.
+`generate-oscal.xsl` uses pseudo-random-number generation provided by XPath 3.1 as well as other advanced XSLT features.
 
-It has been tested in Saxon (Java) and SaxonJS (nodeJS). Performance in Java is comparable to the 'blank' XSLT. The latter delivers results when the XSLT is called directly, but slowly; also a compiled (SEF) version returns a runtime error. These issues are being looked into.
+It has been tested in Saxon (Java) and SaxonJS (nodeJS). Performance in Java is comparable to the 'blank' XSLT. The latter delivers results when the XSLT is called directly, but slowly; also a compiled (SEF) version returns a runtime error. The `random-number-generator()` function, of course, is considered higher-order (because it delivers a function as part of its return set).
 
 ### With UUIDs in Java
 
 Processors supporting reflexive calls to Java functions can use the XSLT `generate-oscal-jvm.xsl` to provide UUIDs based on Java functionality. This XSLT should work on versions of Saxon before v10. Processors that cannot call Java (such as SaxonHE) will deliver 'blank' UUIDs.
+
+### OSCAL "refresher" utility
+
+Applied to any OSCAL document, `generate-oscal.xsl` or `generate-oscal-jvm.xsl` will produce a copy with fresh top-level UUID and metadata timestamp.
+
+`generate-oscal-blank.xsl`, when applied to OSCAL (or other XML) document source, results in a clean (reserialized) copy.
 
 ### To come?
 
@@ -48,9 +68,9 @@ Should it be "blank" or could/should it rely on Java or other extension function
 
 #### UUIDs in SaxonJS
 
-Currently because higher-order functions are not supported in SaxonJS SEF, the UUID-generating utility fails to compile. It works (albeit slowly) when called in XSLT.
+As noted, currently because higher-order functions are not supported in SaxonJS SEF, the UUID-generating utility fails to compile. It works (albeit slowly) when called in XSLT.
 
-Potentially this logic could be provided by Javascript natively. There is an XSLT that stubs out such a variant.
+Potentially this logic could be provided by Javascript natively. An XSLT that stubs out such a variant is in progress.
 
 ## How to run
 
@@ -62,9 +82,9 @@ The codebase should function to produce the same outputs in any conformant XSLT 
 
 For SaxonHE, EE and PE (requires Saxon 10):
 
->  $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog*
-    
-Produces a catalog. Adjust the `-it` (initial template) setting as needed.
+> $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog*
+   
+Produces a catalog. Adjust the `-it` (initial template) setting as needed. (See [Runtime Configuration](#runtime-configuration)) below.)
 
 This will run in versions of Saxon before 10, but support for the [`random-number-generator()`](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
 
@@ -74,7 +94,7 @@ Delivers the same result, except optional elements and attributes are included.
 
 If fresh UUIDs are not wanted, use `generate-oscal-blank.xsl` with the same syntax.
 
-If the XSLT processor supports reflexive calls to Java (such as SaxonPE or SaxonEE), another variant, `generate-oscal-jvm.xsl` will call the JVM to produce UUIDs.
+If the XSLT processor (such as SaxonPE or SaxonEE) supports reflexive calls to Java, another variant, `generate-oscal-jvm.xsl` will call a JVM to produce UUIDs.
 
 ### SaxonJS CL
 
@@ -135,12 +155,6 @@ Alternatively, the XSLT will produce a fresh 'unused' OSCAL document when invoke
 This is a convenient way to set up for calls to be configured at runtime, if an application can acquire an appropriate value for the `make` parameter from the user.
 
 Leaving the parameter unset or setting it to an unrecognized value will produce a message along with an empty document.
-
-### OSCAL "refresher" utility
-
-Applied to any OSCAL document, `generate-oscal.xsl` or `generate-oscal-jvm.xsl` will produce a copy with fresh top-level UUID and metadata timestamp.
-
-`generate-oscal-blank.xsl` will results in a clean copy of an OSCAL (or other XML) document source.
 
 ## Folder contents
 
