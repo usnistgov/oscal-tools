@@ -60,6 +60,7 @@ Applied to any OSCAL document, `generate-oscal.xsl` or `generate-oscal-jvm.xsl` 
 
 `generate-oscal-blank.xsl`, when applied to OSCAL (or other XML) document source, results in a clean (reserialized) copy.
 
+
 ## How to run
 
 The industry-leading [Saxon processor](https://www.saxonica.com/products/products.xml) has been relied on for development and testing.
@@ -71,7 +72,7 @@ The codebase should function to produce the same outputs in any conformant XSLT 
 For SaxonHE, EE and PE (requires Saxon 10):
 
 ```bash
-$ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog*
+$ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl -it:make-catalog
 ```
 
 Produces a catalog. Adjust the `-it` (initial template) setting as needed. (See [Runtime Configuration](#runtime-configuration)) below.)
@@ -79,10 +80,10 @@ Produces a catalog. Adjust the `-it` (initial template) setting as needed. (See 
 This will run in versions of Saxon before 10, but support for the [`random-number-generator()`](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
 
 ```bash
-$ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl make=system-security-plan -it:*make-catalog* **include=all**
+$ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl -it:make-profile include=all
 ```
     
-Delivers the same result, except optional elements and attributes are included.
+Delivers an OSCAL `profile`, with optional elements and attributes included.
 
 If fresh UUIDs are not wanted, use `generate-oscal-blank.xsl` with the same syntax.
 
@@ -93,25 +94,25 @@ If the XSLT processor (such as SaxonPE or SaxonEE) supports reflexive calls to J
 With the XSLT available.
 
 ```bash
-$ xslt3 -xsl:generate-oscal.xsl -it:*make-catalog*
+$ xslt3 -xsl:generate-oscal.xsl -it:make-catalog
 ```
 
 Produces an OSCAL catalog (template) document, with new UUIDs. YMMV on performance.
 
 ```bash
-$ xslt3 -xsl:generate-oscal.xsl -it:*component-definition* include=all
+$ xslt3 -xsl:generate-oscal.xsl -it:component-definition include=all
 ```
 
 As above, delivers the same result (time time a `component-definition` not a `catalog`), except optional elements and attributes are included.
 
 ```bash
-$ xslt3 -xsl:generate-oscal-blank.xsl -it:*make-profile*
+$ xslt3 -xsl:generate-oscal-blank.xsl -it:make-profile
 ```
 
 Produces a (blank) OSCAL profile (template), except that UUID fields have a 'dummy' value.
 
 ```bash
-$ xslt3 -xsl:generate-oscal-blank.sef -it:*assessment-plan*
+$ xslt3 -xsl:generate-oscal-blank.sef -it:assessment-plan
 ```
 
 The same -- this time an `assessment-plan` -- with the compiled SEF version (faster).
