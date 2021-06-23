@@ -10,6 +10,7 @@ Although at different stages of development, for the most part these resources h
 
 `conversion` - various conversion utilities and tools - includes prototypes or generic versions of tooling maintained elsewhere
 
+`generate` - generate incomplete-but-valid OSCAL "stub" documents suitable for testing or further work
 `lib` - miscelleneous tooling at different stages of maturity
 
 `publish` - publishing OSCAL in HTML and PDF formats
