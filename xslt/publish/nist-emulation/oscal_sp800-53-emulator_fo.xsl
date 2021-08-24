@@ -27,8 +27,6 @@
   <xsl:variable name="frame-font-family"   select="$use-font"/>
   <xsl:variable name="label-font-family"   select="$use-font"/>
   
-  <xsl:variable name="oscal-source-link">https://github.com/usnistgov/oscal-content/blob/master/nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_catalog.xml</xsl:variable>
-  
   <xsl:variable name="header-name">
     <xsl:apply-templates mode="get-metadata-value" select="/*/body/section[contains-token(@class,'metadata')]/descendant::p[contains-token(@class,'label')][1]"/>
   </xsl:variable>
@@ -45,9 +43,7 @@
   <xsl:variable name="document-header-code">NIST SP 800-53</xsl:variable>
   
   <xsl:template name="oscal-source-notice">
-    <fo:block font-style="italic" text-align="center">This document is produced from <fo:basic-link color="blue"
-        external-destination="{$oscal-source-link}">OSCAL source data</fo:basic-link></fo:block>
-      <!--<fo:block font-style="italic" text-align="center">This document is produced from OSCAL source data</fo:block>-->
+    <fo:block font-style="italic" text-align="center">This document is produced from OSCAL source data</fo:block>
   </xsl:template>
   
   <xsl:template match="/">
@@ -180,8 +176,6 @@
     </xsl:choose>
   </xsl:template>
   
-  
-  
   <xsl:template match="section[@class='ToC']">
     <fo:page-sequence master-reference="simple" format="i" font-family="{ $frame-font-family }" initial-page-number="1" force-page-count="no-force">
       
@@ -206,8 +200,7 @@
       <fo:block-container reference-orientation="-90">
         <fo:block color="#A0A0A0" text-align="center" padding-top="0.5em" font-size="{$small}"
           margin-left="1in" margin-right="1in" margin-bottom="8pt" border-width="0.5pt"
-          border-top-style="solid" border-top-color="#A0A0A0">
-          This publication is available free of charge from: <fo:basic-link external-destination="https://doi.org/10.6028/NIST.SP.800-53r5">https://doi.org/10.6028/NIST.SP.800-53r5</fo:basic-link></fo:block>
+          border-top-style="solid" border-top-color="#A0A0A0">PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW PREVIEW</fo:block>
       </fo:block-container>
     </fo:static-content>
   </xsl:template>
