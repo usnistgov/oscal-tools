@@ -608,12 +608,12 @@
       <xsl:apply-templates select="." mode="tailor-list-item"/>
       <fo:list-item-label end-indent="label-end()">
         <fo:block>
-          <xsl:apply-templates select="child::*[1]"/>
+          <xsl:apply-templates select="child::td[@class='citation']/../td[@class='title']"/>
         </fo:block>
       </fo:list-item-label>
       <fo:list-item-body start-indent="body-start()">
         <fo:block>
-          <xsl:apply-templates select="child::*[2]"/>
+          <xsl:apply-templates select="child::*[@class=('citation','title')] => head()"/>
         </fo:block>
       </fo:list-item-body>
     </fo:list-item>
