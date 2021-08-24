@@ -38,7 +38,7 @@
    </xsl:template>
    
    <xsl:template match="control">
-      <xsl:variable name="withdrawn" select="some $p in (prop[@name='status']/@value) satisfies matches($p,'Withdrawn','i')"/>
+      <xsl:variable name="withdrawn" select="some $p in (prop[@name='status']) satisfies matches($p/@value,'Withdrawn','i')"/>
       <div class="control{ $withdrawn[boolean(.)] ! ' withdrawn' }">
          <xsl:copy-of select="@id"/>
          <details>
@@ -175,7 +175,7 @@
    </xsl:template>
    
 <!-- Statements of withdrawn controls are picked up with the 'withdrawn' prop below. -->
-   <xsl:template  priority="5" match="control[matches(prop[@name='status'][1],'Withdrawn','i')]/part[@name='statement']"/>
+   <xsl:template  priority="5" match="control[matches(prop[@name='status'][1]/@value,'Withdrawn','i')]/part[@name='statement']"/>
    
    <xsl:template match="control/part[@name='statement']/p">
       <xsl:choose>
@@ -316,7 +316,7 @@
    
    <xsl:template match="part[@name='guidance']/link"/>
    
-   <xsl:template match="prop[@name='status'][matches(.,'Withdrawn','i')]">
+   <xsl:template match="prop[@name='status'][matches(@value,'Withdrawn','i')]">
       <p class="withdrawn-status">
          <xsl:text>[Withdrawn</xsl:text>
          <xsl:variable name="withdrawn-to" select="../link[@rel = ('moved-to', 'incorporated-into')]"/>
