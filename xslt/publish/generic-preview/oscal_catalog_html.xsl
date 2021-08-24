@@ -136,9 +136,9 @@
    </xsl:template>
    
    <xsl:template priority="2" match="control/control/prop[@name='label']" mode="toc-listing">
-      <xsl:variable name="parent-label" select="../parent::control/prop[@name='label']"/>
+      <xsl:variable name="parent-label" select="../parent::control/prop[@name='label']/@value"/>
       <span class="toc-label">
-         <xsl:value-of select="substring-after(.,$parent-label)"/>
+         <xsl:value-of select="substring-after(@value,$parent-label)"/>
       </span>
    </xsl:template>
    
@@ -453,14 +453,10 @@
    </xsl:template>
    
    <xsl:template match="control" mode="link-text">
-      <xsl:choose>
-         <xsl:when test="prop[@name='label']">
-            <xsl:for-each select="prop[@name='label']">
-               <xsl:apply-templates/>
-            </xsl:for-each>
-         </xsl:when>
-         <xsl:otherwise>[Error: no 'label' property on link target]</xsl:otherwise>
-      </xsl:choose>
+      <xsl:sequence>
+         <xsl:value-of select="prop[@name='label']/@value"/>
+         <xsl:on-empty>[Error: no 'label' property on link target]</xsl:on-empty>
+      </xsl:sequence>
    </xsl:template>
    
    <xsl:template match="*" mode="link-text">
