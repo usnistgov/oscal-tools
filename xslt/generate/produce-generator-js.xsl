@@ -21,7 +21,7 @@
     <xsl:import href="produce-generator3.xsl"/>
     
     <xsl:template priority="5" match="@as-type[.='uuid']" mode="typed-value">
-        <xsl:text expand-text="true">{{ ixsl:eval( ??? ) }}</xsl:text>
+        <xsl:text expand-text="true">{{ ixsl:eval( ?return fresh uuid? ) }}</xsl:text>
     </xsl:template>
     
 </xsl:stylesheet>

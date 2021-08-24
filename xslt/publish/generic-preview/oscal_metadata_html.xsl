@@ -106,17 +106,11 @@
       </p>
    </xsl:template>
    
-   <xsl:template match="party/name">
-      <p class="line party-name">
-         <xsl:apply-templates/>
-      </p>
-   </xsl:template>
-   
    <xsl:template priority="2" match="address">
       <xsl:apply-templates/>
    </xsl:template>
    
-   <xsl:template priority="3" match="email-address">
+   <xsl:template priority="3" match="email">
       <p class="line email">
          <span class="lbl2">email</span>
          <xsl:text> </xsl:text>
@@ -131,8 +125,9 @@
    <xsl:template match="prop">
       <p class="{ @ns ! (. || '_') || @name ! (. || ' ')}prop">
          <xsl:apply-templates select="." mode="decorate-inline"/>
-         <xsl:apply-templates/>
+         <xsl:value-of select="@value"/>
       </p>
+      <xsl:apply-templates select="remarks"/>
    </xsl:template>
    
    <!-- Any @id or @uuid is considered suitable to target via href -->
@@ -177,7 +172,7 @@
    </xsl:template>
    
    <xsl:template match="remarks">
-      <div class="remarks">
+      <div class="{ parent::prop/@name ! ( . || '-property ' ) }remarks">
          <xsl:apply-templates/>
       </div>
    </xsl:template>

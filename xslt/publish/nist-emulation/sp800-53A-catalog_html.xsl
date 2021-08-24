@@ -38,7 +38,7 @@
    </xsl:template>
    
    <xsl:template match="control">
-      <xsl:variable name="withdrawn" select="some $p in (prop[@name='status']) satisfies matches($p,'Withdrawn','i')"/>
+      <xsl:variable name="withdrawn" select="some $p in (prop[@name='status']/@value) satisfies matches($p,'Withdrawn','i')"/>
       <div class="control{ $withdrawn[boolean(.)] ! ' withdrawn' }">
          <xsl:copy-of select="@id"/>
          <details>
@@ -271,8 +271,12 @@
       <xsl:apply-templates mode="#current" select="prop[@name='label']"/>
    </xsl:template>
    
+   <xsl:template match="prop" mode="part-number">
+      <xsl:value-of select="@value"/>
+   </xsl:template>
+   
    <xsl:template priority="3" match="part[@name='objective']" mode="part-number">
-      <xsl:variable name="inherited-no" select="ancestor::*[prop/@name='label'][1]/prop[@name='label']"/>
+      <xsl:variable name="inherited-no" select="ancestor::*[prop/@name='label'][1]/prop[@name='label']/@value"/>
       <xsl:variable name="inherited-trimmed" select="translate($inherited-no,' ','')"/>
       <p class="part-number">
          <xsl:value-of select="substring-after(translate(prop[@name='label'],' ',''),$inherited-trimmed)"/>
@@ -393,12 +397,26 @@
    
    <xsl:key name="param-for-id" match="param" use="@id"/>
    
+   <xsl:key name="by-id" match="*" use="@id"/>
+   
    <xsl:template match="insert">
-      <xsl:variable name="best-param"
-         select="(key('param-for-id',@param-id) intersect ancestor-or-self::*/param)[last()]"/>
+      <xsl:variable name="target" select="key('by-id',@id-ref)[last()]"/>
+      <span class="insert">
+         <xsl:apply-templates select="$target" mode="inline-ref"/>
+      </span>
+   </xsl:template>
+   
+   <xsl:template match="*" mode="inline-ref">
+      <xsl:message expand-text="true">cross-reference fallback on { name() }</xsl:message>
+      <xsl:value-of select="(child::title,@id,name()) => head()"/>
+   </xsl:template>
+   
+   <xsl:template match="insert[@type='param']">
+      <xsl:variable name="param"
+         select="key('param-for-id',@id-ref)[last()]"/>
       <!-- Providing substitution via declaration not yet supported -->
       <span class="insert">
-         <xsl:apply-templates select="$best-param/(value, select , label)[1]"/>
+         <xsl:apply-templates select="$param/(value, select , label)[1]"/>
       </span>
    </xsl:template>
    
@@ -508,7 +526,7 @@
    
    <xsl:template match="control" mode="link">
       <a href="#{@id}">
-         <xsl:value-of select="prop[@name='label']"/>
+         <xsl:value-of select="prop[@name='label']/@value"/>
       </a>
    </xsl:template>
    

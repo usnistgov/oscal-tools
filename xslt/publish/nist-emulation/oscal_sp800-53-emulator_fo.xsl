@@ -6,18 +6,49 @@
   exclude-result-prefixes="#all">
 
   <xsl:param name="base-font-size" >10pt</xsl:param>
-  <xsl:param name="frame-font-size">9pt</xsl:param>
+  
   
   <xsl:variable name="small"      >9pt</xsl:variable>
-  <xsl:variable name="extra-small">8pt</xsl:variable>
+  <xsl:variable name="extra-small">7pt</xsl:variable>
   <xsl:variable name="smaller"    >80%</xsl:variable>
-  <xsl:variable name="big"        >11pt</xsl:variable>
+  <xsl:variable name="big"        >10pt</xsl:variable>
   <xsl:variable name="extra-big"  >14pt</xsl:variable>
   
-  <xsl:param name="body-font-family"  >Calibri</xsl:param>
-  <xsl:param name="header-font-family">Calibri</xsl:param>
-  <xsl:param name="frame-font-family" >Calibri</xsl:param>
-  <xsl:param name="label-font-family" >Calibri</xsl:param>
+  <!--<xsl:variable name="body-font-family"  >'Calibri'</xsl:variable>
+  <xsl:variable name="header-font-family">'Calibri'</xsl:variable>
+  <xsl:variable name="frame-font-family" >'Calibri'</xsl:variable>
+  <xsl:variable name="label-font-family" >'Calibri'</xsl:variable>-->
+  
+<!-- YMMV: try with and without quotes -->
+  <xsl:param name="use-font" as="xs:string">'Calibri'</xsl:param>
+  
+  <xsl:variable name="body-font-family"    select="$use-font"/>
+  <xsl:variable name="display-font-family" select="$use-font"/>
+  <xsl:variable name="frame-font-family"   select="$use-font"/>
+  <xsl:variable name="label-font-family"   select="$use-font"/>
+  
+  <xsl:variable name="oscal-source-link">https://github.com/usnistgov/oscal-content/blob/master/nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_catalog.xml</xsl:variable>
+  
+  <xsl:variable name="header-name">
+    <xsl:apply-templates mode="get-metadata-value" select="/*/body/section[contains-token(@class,'metadata')]/descendant::p[contains-token(@class,'label')][1]"/>
+  </xsl:variable>
+  <!--select="/*/body/section[contains-token(@class,'metadata')]/descendant::p[contains-token(@class,'label')][1]"-->
+  
+  <xsl:param name="start-pageno" as="xs:string">1</xsl:param>
+  
+  <xsl:template mode="get-metadata-value" match="p" priority="2">
+    <xsl:apply-templates mode="#current"/>
+  </xsl:template>
+  
+  <xsl:template mode="get-metadata-value" match="span[contains-token(@class,'lbl')]"/>
+  
+  <xsl:variable name="document-header-code">NIST SP 800-53</xsl:variable>
+  
+  <xsl:template name="oscal-source-notice">
+    <fo:block font-style="italic" text-align="center">This document is produced from <fo:basic-link color="blue"
+        external-destination="{$oscal-source-link}">OSCAL source data</fo:basic-link></fo:block>
+      <!--<fo:block font-style="italic" text-align="center">This document is produced from OSCAL source data</fo:block>-->
+  </xsl:template>
   
   <xsl:template match="/">
     <fo:root>
@@ -42,10 +73,11 @@
   
   <xsl:template name="main-page-layout">
     <fo:simple-page-master master-name="simple" page-height="11in" page-width="8.5in"
-      margin-top="0.5in" margin-bottom="0.5in" margin-left="1in" margin-right="1in">
-      <fo:region-body region-name="main" margin-top="0.5in" margin-bottom="1in"/>
+      margin-top="0.5in" margin-bottom="0.5in" margin-left="0.25in" margin-right="1in">
+      <fo:region-body   region-name="main" margin-top="0.5in" margin-bottom="1in" margin-left="1in"/>
       <fo:region-before region-name="header" extent="1in"/>
-      <fo:region-after region-name="footer" extent="0.5in"/>
+      <fo:region-after  region-name="footer" extent="0.5in"/>
+      <fo:region-start  region-name="callout-left" extent="1in"/>
     </fo:simple-page-master>
   </xsl:template>
 
@@ -54,20 +86,10 @@
   </xsl:template>
     
   <xsl:template match="section[@class='metadata']">
-    <!--
-      old cover page is a simple dump - - 
-      <fo:page-sequence master-reference="cover" font-family="serif" initial-page-number="auto">
-      <fo:flow flow-name="main">
-        <fo:block>
-          <xsl:apply-templates select="../h1"/>
-          <xsl:apply-templates/>
-        </fo:block>
-      </fo:flow>
-    </fo:page-sequence>  -->
     <xsl:variable name="metadata" select="."/>
     <fo:page-sequence master-reference="simple" font-family="{ $body-font-family }" initial-page-number="auto" force-page-count="no-force">
       <fo:static-content flow-name="footer">
-        <fo:block text-align="center" font-size="{ $frame-font-size }" font-family="{ $frame-font-family }" padding-before="1em" font-style="italic">This document is produced from OSCAL source data</fo:block>
+        <xsl:call-template name="oscal-source-notice"/>        
       </fo:static-content>
       <fo:flow flow-name="main">
         <fo:block text-align="end" margin-left="1.5in">
@@ -80,13 +102,26 @@
             </xsl:for-each>
           </fo:block>
           <xsl:apply-templates select="../h1"/>
-          <fo:block text-align="start" space-before="0.5in">
+          <fo:block-container text-align="start" space-before="0.5in">
             <xsl:call-template name="black-border"/>
             <xsl:apply-templates mode="cover-page" select="details/div[contains-token(@class, 'parties')]"/>
-          </fo:block>
+            <xsl:call-template name="pdf-production-block"/>
+          </fo:block-container>
         </fo:block>
       </fo:flow>
     </fo:page-sequence>
+  </xsl:template>
+  
+  <xsl:template name="pdf-production-block">
+    <xsl:variable name="metadata" select="."/>
+    <fo:block>
+      <xsl:text>PDF produced from OSCAL source</xsl:text>
+      <xsl:for-each select="$metadata/details/p[contains-token(@class, 'version')]">
+        <xsl:text> version </xsl:text>
+        <xsl:apply-templates select="." mode="get-metadata-value"/>
+      </xsl:for-each>
+      <xsl:value-of select="format-dateTime(current-dateTime(), ' ([MNn] [D] [Y] [H]:[m])')"/>
+    </fo:block>
   </xsl:template>
   
   <xsl:template name="black-border">
@@ -153,8 +188,8 @@
       <fo:static-content flow-name="header">
         <xsl:apply-templates select="ancestor::body" mode="header-table"/>
       </fo:static-content>
-      <fo:static-content flow-name="footer" font-size="{ $frame-font-size }" font-family="{ $frame-font-family }" text-align="center">
-        <fo:block space-before="1em" font-style="italic">This document is produced from OSCAL source data</fo:block>
+      <fo:static-content flow-name="footer" font-family="{ $frame-font-family }" text-align="center" padding-top="1em">
+        <xsl:call-template name="oscal-source-notice"/>
         <fo:block space-before="1em">PAGE <fo:page-number/></fo:block>
       </fo:static-content>
       <xsl:call-template name="page-left-column"/>
@@ -166,17 +201,25 @@
     </fo:page-sequence>
   </xsl:template>
   
-  <!-- hook for ornamenting the page on a region-start -->
-  <xsl:template name="page-left-column"/>
+  <xsl:template name="page-left-column">
+    <fo:static-content flow-name="callout-left" font-family="{ $frame-font-family }" >
+      <fo:block-container reference-orientation="-90">
+        <fo:block color="#A0A0A0" text-align="center" padding-top="0.5em" font-size="{$small}"
+          margin-left="1in" margin-right="1in" margin-bottom="8pt" border-width="0.5pt"
+          border-top-style="solid" border-top-color="#A0A0A0">
+          This publication is available free of charge from: <fo:basic-link external-destination="https://doi.org/10.6028/NIST.SP.800-53r5">https://doi.org/10.6028/NIST.SP.800-53r5</fo:basic-link></fo:block>
+      </fo:block-container>
+    </fo:static-content>
+  </xsl:template>
   
   <xsl:template match="section">
     <fo:page-sequence master-reference="simple" force-page-count="no-force"
-      initial-page-number="{ if (exists(preceding-sibling::section|preceding-sibling::main)) then 'auto' else '1'}">
+      initial-page-number="{ if (exists(preceding-sibling::section|preceding-sibling::main)) then 'auto' else $start-pageno}">
       
-      <fo:static-content flow-name="header">
+      <fo:static-content flow-name="header" font-family="{ $frame-font-family }" >
         <xsl:apply-templates select="ancestor::body" mode="header-table"/>
       </fo:static-content>
-      <fo:static-content flow-name="footer">
+      <fo:static-content flow-name="footer" font-family="{ $frame-font-family }" >
         <xsl:call-template name="footer-table">
           <xsl:with-param name="left-side">
             <xsl:if test="not(@id='references')">FAMILY: </xsl:if>
@@ -185,7 +228,7 @@
             </fo:basic-link>
           </xsl:with-param>
           <xsl:with-param name="notice">
-            <fo:block font-style="italic" text-align="center">This document is produced from OSCAL source data</fo:block>
+            <xsl:call-template name="oscal-source-notice"/>
           </xsl:with-param>
           <xsl:with-param name="right-side">
             <xsl:text>PAGE </xsl:text>
@@ -212,25 +255,25 @@
       </fo:flow>
     </fo:page-sequence>
   </xsl:template>
-
-  <xsl:variable name="document-header-code">NIST SP 800-53</xsl:variable>
   
   <xsl:template match="body" mode="header-table">
-    <fo:table border-after-style="solid">
+    <fo:table border-after-style="solid" table-layout="fixed" width="6.25in">
+      <fo:table-column width="2.75in"/>
+      <fo:table-column width="3.5in"/>
       <fo:table-body>
         <fo:table-row>
-          <fo:table-cell>
+          <fo:table-cell width="2.75in">
             <fo:block font-size="{$small}">
-              <xsl:sequence select="$document-header-code"/>
-              <xsl:text> </xsl:text>
+              <xsl:sequence select="$header-name"/>
+              <!--<xsl:text> </xsl:text>
               <xsl:value-of select="section[@class='metadata']/descendant::p[contains-token(@class,'version')]/text()"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="section[@class='metadata']/descendant::p[contains-token(@class,'last-modified')]/text()
-                ! replace(.,'T.*$','') ! format-date(xs:date(.), '[MN,3-3] [D] [Y]')"/>
+              <xsl:text> </xsl:text>-->
+              <!--<xsl:value-of select="section[@class='metadata']/descendant::p[contains-token(@class,'last-modified')]/text()
+                ! replace(.,'T.*$','') ! format-date(xs:date(.), '[MN,3-3] [D] [Y]')"/>-->
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell>
-            <fo:block font-size="{$small}" text-align="right">
+          <fo:table-cell width="3.5in">
+            <fo:block font-size="{$extra-small}" text-align="right">
               <xsl:apply-templates select="h1[@class='title']" mode="#current"/>
             </fo:block>
           </fo:table-cell>
@@ -243,7 +286,7 @@
     <xsl:param name="left-side"/>
     <xsl:param name="notice"/>
     <xsl:param name="right-side"/>
-    <fo:table font-size="{ $frame-font-size }" font-family="{ $frame-font-family }">
+    <fo:table font-size="8pt" font-family="{ $frame-font-family }">
       <fo:table-body>
         <xsl:if test="matches($notice,'\S')">
           <fo:table-row>
@@ -254,12 +297,12 @@
         </xsl:if>
         <fo:table-row>
           <fo:table-cell>
-            <fo:block>
+            <fo:block text-transform="uppercase"><!-- font-variant="small-caps" -->
               <xsl:copy-of select="$left-side"/>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block text-align="right">
+            <fo:block text-align="right" text-transform="uppercase">
               <xsl:copy-of select="$right-side"/>
             </fo:block>
           </fo:table-cell>
@@ -269,7 +312,7 @@
   </xsl:template>
   
   <xsl:template match="details[@class='ToC']/summary[@class='toc-listing']">
-    <fo:block font-family="{ $header-font-family }" space-before="0.5em" keep-with-next="always">
+    <fo:block font-family="{ $display-font-family }" space-before="0.5em" keep-with-next="always">
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -327,9 +370,25 @@
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
-
+  
+  <xsl:template match="h2 | h3 | h4">
+    <fo:block font-size="{ $big }" font-weight="bold" keep-with-next="always">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template match="div[contains-token(@class,'overview')]/h4">
+    <fo:block font-size="{ $big }" font-weight="bold" keep-with-next="always" text-align="center">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template match="div[contains-token(@class,'overview')]/h4//text()">
+    <xsl:value-of select="upper-case(.)"/>
+  </xsl:template>
+  
   <xsl:template priority="5" match="section[@class='group']/details/summary">
-    <fo:block font-family="{ $header-font-family }" keep-with-next="always" text-transform="uppercase">
+    <fo:block font-family="{ $display-font-family }" keep-with-next="always" text-transform="uppercase">
       <fo:inline font-weight="bold">FAMILY:</fo:inline>
       <xsl:text> </xsl:text>
       <xsl:variable name="title">
@@ -346,7 +405,7 @@
   </xsl:template>
 
   <xsl:template match="summary[contains-token(@class,'h3')]">
-    <fo:block font-family="{ $header-font-family }" font-size="{ $big }" font-weight="bold" keep-with-next="always">
+    <fo:block font-family="{ $display-font-family }" font-size="{ $big }" font-weight="bold" keep-with-next="always">
       <xsl:if test="empty(ancestor::main)">
         <xsl:attribute name="font-size">120%</xsl:attribute>
         <xsl:attribute name="text-align">center</xsl:attribute>
@@ -360,13 +419,20 @@
   
   <!--special handling for control enhancements (nested controls)-->
   <xsl:template priority="5" match="div[contains-token(@class,'control')]//div[contains-token(@class,'control')]//summary[contains-token(@class,'h3')]">
-    <fo:block font-family="{ $header-font-family }" keep-with-next="always" text-transform="uppercase" font-size="{ $big }">
+    <fo:block font-family="{ $display-font-family }" keep-with-next="always" text-transform="uppercase" font-size="{ $big }">
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
   
   <xsl:template priority="5" match="div[contains-token(@class,'control')]//div[contains-token(@class,'control')]//div[contains-token(@class,'statement')]">
     <fo:block font-weight="bold" keep-with-next="always">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template priority="5" match="section[@class='group']/details/div[contains-token(@class,'overview')]">
+    <fo:block border-style="solid" border-width="1pt" border-color="black"
+      margin="2em" padding="2em" space-before="2em" background-color="#c6d9f1">
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>

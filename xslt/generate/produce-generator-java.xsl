@@ -87,7 +87,6 @@
         </xsl:choose>
     </xsl:template>
     
-    
     <xsl:template mode="optional-flags" priority="10" match="define-flag[not(@required='no')]"/>
     
     <xsl:template mode="optional-flags" match="define-flag">
@@ -124,8 +123,6 @@
             </XSLT:text>
         </XSLT:comment>
     </xsl:template>
-    
-    
     
     <xsl:template name="include-uuid-support"/>
     
