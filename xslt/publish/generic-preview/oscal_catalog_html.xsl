@@ -452,7 +452,7 @@
       </a>
    </xsl:template>
    
-   <xsl:template match="control" mode="link-text">
+   <xsl:template match="control | part[prop/@name='label']" mode="link-text">
       <xsl:sequence>
          <xsl:value-of select="prop[@name='label']/@value"/>
          <xsl:on-empty>[Error: no 'label' property on link target]</xsl:on-empty>

@@ -384,7 +384,7 @@
    
    <xsl:template match="part" mode="link-text">
       <xsl:for-each select="ancestor::control[1] | ancestor-or-self::part">
-         <xsl:value-of select="prop[@name='label']"/>
+         <xsl:value-of select="prop[@name='label']/@value"/>
       </xsl:for-each>
    </xsl:template>
    
