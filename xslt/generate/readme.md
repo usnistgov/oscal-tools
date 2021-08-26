@@ -75,7 +75,7 @@ For SaxonHE, EE and PE (requires Saxon 10):
 $ java -jar /path/to/saxon-he-10.jar -xsl:generate-oscal.xsl -it:make-catalog
 ```
 
-Produces a `catalog`. Adjust the `-it` (initial template) setting as needed. (See [Runtime Configuration](#runtime-configuration)) below.)
+Produces a `catalog`. Adjust the `-it` (initial template) setting as needed. (See [Runtime Configuration](#runtime-configuration)) below. The name of the document type is always spelled out: so `-it-make-system-security-plan`.)
 
 This will run in versions of Saxon before 10, but support for the [`random-number-generator()`](https://www.w3.org/TR/xpath-functions-31/#func-random-number-generator) function (needed for UUID generation) comes into SaxonHE only with version 10.
 
@@ -100,7 +100,7 @@ $ xslt3 -xsl:generate-oscal.xsl -it:make-catalog
 Produces an OSCAL catalog (template) document, with new UUIDs. YMMV on performance.
 
 ```bash
-$ xslt3 -xsl:generate-oscal.xsl -it:component-definition include=all
+$ xslt3 -xsl:generate-oscal.xsl -it:nake-component-definition include=all
 ```
 
 As above, delivers the same result (this time a `component-definition` not a `catalog`), except optional elements and attributes are included.
@@ -112,7 +112,7 @@ $ xslt3 -xsl:generate-oscal-blank.xsl -it:make-profile
 Produces a (blank) OSCAL profile (template), except that UUID fields have a 'dummy' value.
 
 ```bash
-$ xslt3 -xsl:generate-oscal-blank.sef -it:assessment-plan
+$ xslt3 -xsl:generate-oscal-blank.sef -it:make-assessment-plan
 ```
 
 The same -- this time an `assessment-plan` -- with the compiled SEF version (faster).
