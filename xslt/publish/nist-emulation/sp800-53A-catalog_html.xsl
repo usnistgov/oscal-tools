@@ -13,6 +13,10 @@
       metadata back-matter annotation party person org rlink address resource role responsible-party citation
       profile import merge custom modify include exclude set-parameter alter add"/>
    
+   
+   <!-- Names of any properties we wish to drop in display...  -->
+   <xsl:variable name="drop-properties" as="xs:string*" select="'fisma-baseline'"/>
+   
    <xsl:template match="back-matter" mode="toc">
       <xsl:if test="exists(resource)">
          <p class="toc-listing">
@@ -34,7 +38,7 @@
    </xsl:template>
    
    <xsl:template match="control">
-      <xsl:variable name="withdrawn" select="matches(prop[@name='status'],'Withdrawn','i')"/>
+      <xsl:variable name="withdrawn" select="some $p in (prop[@name='status']) satisfies matches($p/@value,'Withdrawn','i')"/>
       <div class="control{ $withdrawn[boolean(.)] ! ' withdrawn' }">
          <xsl:copy-of select="@id"/>
          <details>
@@ -60,6 +64,10 @@
             </summary>
             <div class="control-body">
                <xsl:apply-templates select="* except (control | link)"/>
+               
+               <xsl:call-template name="guidance-links">
+                  <xsl:with-param name="links" select="link[@rel = 'related']"/>
+               </xsl:call-template>
                
                <xsl:if test="empty(parent::control)">
                   <xsl:call-template name="unconditional-listing">
@@ -142,11 +150,11 @@
             <xsl:apply-templates/>
             <!-- Drop a paragraph for links in if no text will appear to which they would be appended.
                  See template matching 'part[@name='guidance']//text()' -->
-            <xsl:if test="@name='guidance' and empty(* except (part|link))">
+            <!--<xsl:if test="@name='guidance' and empty(* except (part|link))">
                <p class="link">
                   <xsl:call-template name="guidance-links"/>
                </p>
-            </xsl:if>
+            </xsl:if>-->
          </details>
       </div>
    </xsl:template>
@@ -166,6 +174,8 @@
       </div>
    </xsl:template>
    
+<!-- Statements of withdrawn controls are picked up with the 'withdrawn' prop below. -->
+   <xsl:template  priority="5" match="control[matches(prop[@name='status'][1]/@value,'Withdrawn','i')]/part[@name='statement']"/>
    
    <xsl:template match="control/part[@name='statement']/p">
       <xsl:choose>
@@ -261,8 +271,12 @@
       <xsl:apply-templates mode="#current" select="prop[@name='label']"/>
    </xsl:template>
    
+   <xsl:template match="prop" mode="part-number">
+      <xsl:value-of select="@value"/>
+   </xsl:template>
+   
    <xsl:template priority="3" match="part[@name='objective']" mode="part-number">
-      <xsl:variable name="inherited-no" select="ancestor::*[prop/@name='label'][1]/prop[@name='label']"/>
+      <xsl:variable name="inherited-no" select="ancestor::*[prop/@name='label'][1]/prop[@name='label']/@value"/>
       <xsl:variable name="inherited-trimmed" select="translate($inherited-no,' ','')"/>
       <p class="part-number">
          <xsl:value-of select="substring-after(translate(prop[@name='label'],' ',''),$inherited-trimmed)"/>
@@ -302,65 +316,58 @@
    
    <xsl:template match="part[@name='guidance']/link"/>
    
-   <xsl:template match="prop[@name='status'][matches(.,'Withdrawn','i')]">
+   <xsl:template match="prop[@name='status'][matches(@value,'Withdrawn','i')]">
       <p class="withdrawn-status">
          <xsl:text>[Withdrawn</xsl:text>
-         <xsl:for-each-group select="../link[@rel='incorporated-into']" group-by="true()">
+         <xsl:variable name="withdrawn-to" select="../link[@rel = ('moved-to', 'incorporated-into')]"/>
+         <xsl:variable name="link-label">
             <xsl:choose>
-               <xsl:when test="count(current-group()) gt 2">: Capability provided by </xsl:when>
-               <xsl:otherwise>: Incorporated into </xsl:otherwise>
+               <xsl:when test="empty($withdrawn-to)">. </xsl:when>
+               <xsl:when test="$withdrawn-to/@rel = 'incorporated-into'">: Incorporated into </xsl:when>
+               <xsl:otherwise>: Moved to </xsl:otherwise>
             </xsl:choose>
-            <xsl:for-each select="current-group()">
-               <xsl:if test="position() gt 1">, </xsl:if>
-               <xsl:apply-templates select="." mode="link-as-link"/>
+         </xsl:variable>
+         <xsl:variable name="withdrawn-statement">
+            <xsl:sequence select="$link-label"/>
+            <xsl:for-each-group select="$withdrawn-to" group-by="true()">
+               <xsl:for-each select="current-group()">
+                  <xsl:if test="position() gt 1">, </xsl:if>
+                  <xsl:apply-templates select="." mode="link-as-link"/>
+               </xsl:for-each>
+            </xsl:for-each-group>
+            <xsl:for-each select="../part[@name = 'statement']/*">
+               <xsl:apply-templates/>
             </xsl:for-each>
-            <xsl:text>.</xsl:text>
-         </xsl:for-each-group>
+         </xsl:variable>
+         <xsl:sequence select="$withdrawn-statement"/>
+         <xsl:if test="not(matches(string($withdrawn-statement), '\.\s*$'))">.</xsl:if>
          <xsl:text>]</xsl:text>
       </p>
    </xsl:template>
-   
+
    <xsl:template match="prop[@name='sort-id']"/>
+   
+<!-- Don't want to display -->
+   <xsl:template match="prop[@name=$drop-properties]"/>
    
    <!-- overriding the imported stylesheet to suppress labeling of links  -->
    <xsl:template match="link" mode="link-label"/>
       
    <xsl:template match="part[@name='objective']//part[@name='objective']" priority="2" mode="title"/>
    
-   <!--<xsl:template match="part[@name='guidance']/p" name="guidance-paragraph">
-     <p>
-        <xsl:apply-templates/>
-        <xsl:if test="empty(following-sibling::p)">
-           <xsl:call-template name="guidance-links">
-              <xsl:with-param name="links" select="following-sibling::link[@rel = 'related']"/>
-           </xsl:call-template>
-        </xsl:if>
-     </p>   
-   </xsl:template>-->
-   
-   <!-- Makes links to related controls at the end of the last text inside the 'guidance' part
-        before any subparts or links. All 'related' links within the (closest) control are collected  -->
-   <xsl:template match="part[@name='guidance']//text()" mode="#default html-ns">
-      <xsl:variable name="scope" select="ancestor::part[@name='guidance']/(* except (part|link))"/>
-      <xsl:value-of select="."/>
-      <xsl:if test=". is ($scope/descendant::text())[last()]">
-         <xsl:call-template name="guidance-links">
-            <xsl:with-param name="links" select="ancestor::control[1]//link[@rel = 'related']"/>
-         </xsl:call-template>
-      </xsl:if>
-   </xsl:template>
-   
-   
    <xsl:template name="guidance-links">
       <xsl:param name="links" select="link[@rel = 'related']"/>
-      <xsl:for-each-group select="$links" group-by="true()">
-         <xsl:text expand-text="true"> Related { if (count(current-group()) eq 1) then 'control' else 'controls' }: </xsl:text>
-         <xsl:for-each select="current-group()">
-            <xsl:if test="position() gt 1">, </xsl:if>
-            <xsl:apply-templates select="." mode="link-as-link"/>
-         </xsl:for-each>
+      <p>
+           <xsl:for-each-group select="$links" group-by="true()" expand-text="true">
+         <span class="inline-head"> Related { if (count(current-group()) eq 1) then 'control' else 'controls' }</span>
+              <xsl:text>: </xsl:text>
+            <xsl:for-each select="current-group()">
+               <xsl:if test="position() gt 1">, </xsl:if>
+               <xsl:apply-templates select="." mode="link-as-link"/>
+            </xsl:for-each>
          <xsl:text>.</xsl:text>
       </xsl:for-each-group>
+        </p>
    </xsl:template>
    
    <xsl:template match="part[empty(title)]" mode="title">
@@ -375,6 +382,12 @@
       </p>
    </xsl:template>
    
+   <xsl:template match="part" mode="link-text">
+      <xsl:for-each select="ancestor::control[1] | ancestor-or-self::part">
+         <xsl:value-of select="prop[@name='label']/@value"/>
+      </xsl:for-each>
+   </xsl:template>
+   
    <xsl:template match="part[@name='objects']/p">
       <p class="object">
          <input type="checkbox" class="box"/>
@@ -384,12 +397,26 @@
    
    <xsl:key name="param-for-id" match="param" use="@id"/>
    
+   <xsl:key name="by-id" match="*" use="@id"/>
+   
    <xsl:template match="insert">
-      <xsl:variable name="best-param"
-         select="(key('param-for-id',@param-id) intersect ancestor-or-self::*/param)[last()]"/>
+      <xsl:variable name="target" select="key('by-id',@id-ref)[last()]"/>
+      <span class="insert">
+         <xsl:apply-templates select="$target" mode="inline-ref"/>
+      </span>
+   </xsl:template>
+   
+   <xsl:template match="*" mode="inline-ref">
+      <xsl:message expand-text="true">cross-reference fallback on { name() }</xsl:message>
+      <xsl:value-of select="(child::title,@id,name()) => head()"/>
+   </xsl:template>
+   
+   <xsl:template match="insert[@type='param']">
+      <xsl:variable name="param"
+         select="key('param-for-id',@id-ref)[last()]"/>
       <!-- Providing substitution via declaration not yet supported -->
       <span class="insert">
-         <xsl:apply-templates select="$best-param/(value, select , label)[1]"/>
+         <xsl:apply-templates select="$param/(value, select , label)[1]"/>
       </span>
    </xsl:template>
    
@@ -468,7 +495,7 @@
    
    <xsl:template match="resource[empty(citation)][exists(rlink/@href)]/title" priority="6">
       <td class="{ local-name() }" colspan="2">
-         <a href="../rlink/@href">
+         <a href="{../rlink/@href}">
            <xsl:apply-templates/>
          </a>
       </td>   
@@ -483,7 +510,7 @@
    
    <xsl:template priority="2" match="resource/citation/text">
       <xsl:apply-templates/>
-      <xsl:if test="not(matches(string(.),'\.$'))">.</xsl:if>
+      <xsl:if test="not(matches(string(.),'\.\s*$'))">.</xsl:if>
    </xsl:template>
    
    <xsl:template match="rlink" priority="2"/>
@@ -497,12 +524,9 @@
       <xsl:if test="not(matches(@href,'\.$'))">.</xsl:if>
    </xsl:template>
    
-   
-   
-   
    <xsl:template match="control" mode="link">
       <a href="#{@id}">
-         <xsl:value-of select="prop[@name='label']"/>
+         <xsl:value-of select="prop[@name='label']/@value"/>
       </a>
    </xsl:template>
    

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="3.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns="http://www.w3.org/1999/xhtml"
@@ -10,6 +10,8 @@
    <xsl:import href="oscal_fallback_html.xsl"/>
    
    <xsl:import href="oscal_metadata_html.xsl"/>
+   
+   
    
    <xsl:param name="css-path" as="xs:string" select="''"/>
    <xsl:param name="with-toc" as="xs:string">yes</xsl:param>
@@ -127,20 +129,20 @@
       </summary>
    </xsl:template>
    
-   
    <xsl:template match="prop[@name='label']" mode="toc-listing">
       <span class="toc-label">
-         <xsl:value-of select="."/>
+         <xsl:value-of select="@value"/>
       </span>
    </xsl:template>
    
    <xsl:template priority="2" match="control/control/prop[@name='label']" mode="toc-listing">
-      <xsl:variable name="parent-label" select="../parent::control/prop[@name='label']"/>
+      <xsl:variable name="parent-label" select="../parent::control/prop[@name='label']/@value"/>
       <span class="toc-label">
-         <xsl:value-of select="substring-after(.,$parent-label)"/>
+         <xsl:value-of select="substring-after(@value,$parent-label)"/>
       </span>
    </xsl:template>
-
+   
+   
    <xsl:template match="group">
       <section class="group">
          <xsl:copy-of select="@id"/>
@@ -160,7 +162,6 @@
             <summary>
                <xsl:apply-templates select="title"/>
             </summary>
-            
             <xsl:apply-templates select="* except title"/>
          </details>
       </section>
@@ -168,12 +169,14 @@
 
    <xsl:key name="param-for-id" match="param" use="@id"/>
    
-   <!-- Working around Saxon bug https://saxonica.plan.io/issues/4624  -->
-   <xsl:key name="param-for-id" match="param" use="@id" xmlns:o="http://csrc.nist.gov/ns/oscal/1.0"/>
+   <!-- Note: prop is matched in imported oscal_metadata_html.xsl producing a p with labeled content -->
+   <xsl:template match="prop">
+      <xsl:apply-imports/>
+   </xsl:template>
    
    <xsl:template match="insert">
       <xsl:variable name="best-param"
-         select="(key('param-for-id',@param-id) intersect ancestor-or-self::*/param)[last()]"/>
+         select="(key('param-for-id',@id-ref) intersect ancestor-or-self::*/param)[last()]"/>
       <!-- Providing substitution via declaration not yet supported -->
       <xsl:variable name="unassigned">
          <xsl:if test="empty($best-param)"> unassigned</xsl:if>
@@ -184,16 +187,18 @@
                <xsl:apply-templates select="." mode="param-id-block"/>
             </a>
             <xsl:apply-templates mode="inline"/>
-            <xsl:if test="empty(value | ./default)">
+            <xsl:if test="empty(value)">
                <span class="value">
                   <xsl:apply-templates select="value" mode="param-value"/>
-                  <xsl:if test="empty(value)">[NO PARAMETER VALUE GIVEN]</xsl:if>
+                  <!--<xsl:if test="empty(value)">[NO PARAMETER VALUE GIVEN]</xsl:if>-->
                </span>
             </xsl:if>
          </xsl:for-each>
          <xsl:if test="empty($best-param)">[NO PARAMETER ASSIGNED]</xsl:if>
       </span>
    </xsl:template>
+   
+   <xsl:template match="guideline" mode="inline"/>
    
    <xsl:template match="param" mode="param-id-block">
       <span class="param-id">
@@ -225,10 +230,10 @@
       </h3>
    </xsl:template>
    
-   <xsl:template match="*" mode="seal"/>
+   <xsl:template match="*" mode="badge"/>
    
    <xsl:template match="control/title">
-      <xsl:apply-templates select=".." mode="seal"/>
+      <xsl:apply-templates select=".." mode="badge"/>
       <span class="h2 control-title">
          <!--<xsl:for-each select="ancestor::group/title">
             <small><xsl:apply-templates/>
@@ -244,7 +249,7 @@
    </xsl:template>
    
    <xsl:template priority="3" match="control/control/title">
-      <xsl:apply-templates select=".." mode="seal"/>
+      <xsl:apply-templates select=".." mode="badge"/>
       <span class="h4 subcontrol-title">
          <xsl:for-each select="../ancestor::control/title">
             <small>
@@ -256,10 +261,10 @@
       </span>
    </xsl:template>
    
-   <xsl:template match="control" mode="seal">
-      <span class="seal">
+   <xsl:template match="control" mode="badge">
+      <span class="badge">
          <xsl:for-each select="prop[@name='label']">
-            <xsl:apply-templates/>
+            <xsl:value-of select="@value"/>
          </xsl:for-each>
       </span>
    </xsl:template>
@@ -305,6 +310,12 @@
       </span>
    </xsl:template>
    
+   <xsl:template priority="5" match="param/prop" mode="param-inline">
+      <xsl:apply-templates select="." mode="decorate-inline"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="@value"/>
+   </xsl:template>
+   
    <xsl:template match="param/*" mode="param-inline">
       <xsl:apply-templates select="." mode="decorate-inline"/>
       <xsl:text> </xsl:text>
@@ -315,6 +326,13 @@
       <p class="parameter-{local-name()}">
          <xsl:apply-templates select="." mode="param-inline"/>
       </p>
+   </xsl:template>
+   
+   <xsl:template priority="5" match="param/guideline">
+      <div class="guideline">
+         <xsl:apply-templates select="." mode="decorate-inline"/>
+         <xsl:apply-templates/>
+      </div>
    </xsl:template>
    
    <xsl:template match="param/select/choice">
@@ -400,49 +418,56 @@
       </a>
    </xsl:template>
    
+   <xsl:template match="control" mode="link-as-link" expand-text="true">
+      <a href="#{ @id }">{ prop[@name='label']/@value }</a>
+   </xsl:template>
+   
    <xsl:template priority="2" match="resource[empty(rlink)]" mode="link-as-link">
       <xsl:param name="link" select="()"/>
          <xsl:for-each select="$link">
             <span class="ref-label">
                <xsl:apply-templates/>
             </span>
-            <xsl:if test="exists(description | citation/text)">
+            <xsl:if test="exists(desc | citation/text)">
               <xsl:text>: </xsl:text>
             </xsl:if>
          </xsl:for-each>
-      <xsl:apply-templates select="child::description"/>
+      <xsl:apply-templates select="child::desc"/>
       <xsl:apply-templates select="child::citation/text"/>
    </xsl:template>
    
    <xsl:template match="resource" mode="link-as-link">
       <xsl:param name="link" select="()"/>
       <a href="{ child::rlink[1]/@href }">
-         <xsl:for-each select="$link/text">
+         <xsl:for-each select="$link[exists(text)]">
             <span class="ref-label">
               <xsl:apply-templates/>
             </span>
             <xsl:text>: </xsl:text>
          </xsl:for-each>
-         <xsl:apply-templates select="child::description | child::text"/>
-         <xsl:if test="empty(child::description | child::text)" expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:if>
+         <xsl:sequence>
+            <xsl:apply-templates select="." mode="link-text"/>
+            <xsl:on-empty expand-text="true">{ child::rlink[1]/@href }{ child::rlink[1]/@media-type ! ( ' (' || . || ')' ) }</xsl:on-empty>
+         </xsl:sequence>
       </a>
    </xsl:template>
    
-   <xsl:template match="control" mode="link-text">
-      <xsl:choose>
-         <xsl:when test="prop[@name='label']">
-            <xsl:for-each select="prop[@name='label']">
-               <xsl:apply-templates/>
-            </xsl:for-each>
-         </xsl:when>
-         <xsl:otherwise>[Error: no 'label' property on link target]</xsl:otherwise>
-      </xsl:choose>
+   <xsl:template match="control | part[prop/@name='label']" mode="link-text">
+      <xsl:sequence>
+         <xsl:value-of select="prop[@name='label']/@value"/>
+         <xsl:on-empty>[Error: no 'label' property on link target]</xsl:on-empty>
+      </xsl:sequence>
    </xsl:template>
    
    <xsl:template match="*" mode="link-text">
       <xsl:choose>
-         <xsl:when test="title">
+         <xsl:when test="exists(title)">
             <xsl:for-each select="title">
+               <xsl:apply-templates/>
+            </xsl:for-each>
+         </xsl:when>
+         <xsl:when test="exists(desc)">
+            <xsl:for-each select="desc">
                <xsl:apply-templates/>
             </xsl:for-each>
          </xsl:when>

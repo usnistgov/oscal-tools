@@ -106,14 +106,16 @@
       </p>
    </xsl:template>
    
-   <xsl:template match="party/name">
-      <p class="line party-name">
-         <xsl:apply-templates/>
-      </p>
-   </xsl:template>
-   
    <xsl:template priority="2" match="address">
       <xsl:apply-templates/>
+   </xsl:template>
+   
+   <xsl:template priority="3" match="party/name">
+      <p class="line name">
+         <span class="lbl2">name</span>
+         <xsl:text> </xsl:text>
+         <xsl:apply-templates/>
+      </p>
    </xsl:template>
    
    <xsl:template priority="3" match="email-address">
@@ -121,7 +123,7 @@
          <span class="lbl2">email</span>
          <xsl:text> </xsl:text>
          <a href="mailto:{.}">
-           <xsl:apply-templates/>
+            <xsl:apply-templates/>
          </a>
       </p>
    </xsl:template>
@@ -131,8 +133,9 @@
    <xsl:template match="prop">
       <p class="{ @ns ! (. || '_') || @name ! (. || ' ')}prop">
          <xsl:apply-templates select="." mode="decorate-inline"/>
-         <xsl:apply-templates/>
+         <xsl:value-of select="@value"/>
       </p>
+      <xsl:apply-templates select="remarks"/>
    </xsl:template>
    
    <!-- Any @id or @uuid is considered suitable to target via href -->
@@ -177,7 +180,7 @@
    </xsl:template>
    
    <xsl:template match="remarks">
-      <div class="remarks">
+      <div class="{ parent::prop/@name ! ( . || '-property ' ) }remarks">
          <xsl:apply-templates/>
       </div>
    </xsl:template>
@@ -238,7 +241,7 @@
    </xsl:template>
 
    <xsl:template priority="-0.4"
-                 match="link | published | last-modified | version | oscal-version | doc-id | prop | party-id | person-id | org-id | person-name | org-name | short-name | addr-line | city | state | postal-code | country | email | phone | url | desc | hash | title | base64 | target">
+                 match="link | published | last-modified | version | oscal-version | doc-id | prop | party-id | person-id | org-id | name | short-name | addr-line | city | state | postal-code | country | email-address | telephone | url | desc | hash | title | base64 | target">
       <p class="{name()}">
          <span class="tag">
             <xsl:value-of select="name()"/>: </span>
