@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://csrc.nist.gov/ns/oscal/1.0 https://raw.githubusercontent.com/usnistgov/OSCAL/master/xml/schema/oscal_catalog_schema.xsd" uuid="e9d4d24e-d6f3-4c8c-891d-7e7f1a400d06">
+  <metadata>
+    <title>Test Catalog</title>
+    <last-modified>2021-04-17T16:01:47.575-04:00</last-modified>
+    <version>0</version>
+    <oscal-version>1.0.0-rc2</oscal-version>
+    <revisions>
+      <revision>
+        <oscal-version>00</oscal-version>
+        <!--<accordion key="b-flat"/>-->
+      </revision>
+    </revisions>
+  </metadata>
+  <group>
+    <title>A group</title>
+    <control id="cA">
+      <title>Control A</title>
+      <param id="oo"><value>boo</value></param>
+      <part name="statement">
+        <p>A control designates a policy, practice, procedure, mechanism, protocol or rule intended to promote transparent and smooth operation.</p>
+        <part name="item">
+          <p>A statement can have items.</p>
+        </part>
+      </part>
+    </control>
+  </group>
+</catalog>

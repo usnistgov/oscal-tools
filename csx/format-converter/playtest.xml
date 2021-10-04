@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="http://csrc.nist.gov/ns/oscal/1.0"
+         uuid="a78454eb-0f90-48d0-8291-8a58ba07b8fc">
+   <metadata>
+      <title>Text and (inline) markup</title>
+      <last-modified>2021-09-23T15:06:57.725-04:00</last-modified>
+      <version>string</version>
+      <oscal-version>string</oscal-version>
+      <prop name="name" value="value"><remarks><p></p></remarks></prop>
+   </metadata>
+</catalog>
