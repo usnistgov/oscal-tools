@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  docs:
+    extends:
+      file: ../build/docker-compose.yml
+      service: cli
+    ports:
+      - "1313:1313"
+    volumes:
+      - "./:/docs"
+    entrypoint: /docs/run-server.sh
