@@ -18,14 +18,13 @@ Run a web server such as nodejs `http-server` from this directory to serve the a
 
 Maintained here to keep it from being published....
 
-* Test each project
-  * copy readmes from XMLjellysandwich
-  * test in /csx
-  * fill out top-level summary /demos/csx/_index.md (expander box?)
-  * migrate and test in /docs/content/demos/csx
-  * write up publishing model (readme.md)
-* Spiff up "About" page w/ links
-* Fill out projects/csx page
-* Page favicons (layouts/partials/head.html)
-
+- [ ] Test each project
+    - [ ] copy readmes from XMLjellysandwich
+    - [ ] test in /csx
+    - [ ] fill out top-level summary /demos/csx/_index.md (expander box?)
+    - [ ] migrate and test in /docs/content/demos/csx
+    - [ ] write up publishing model (readme.md)
+- [ ] Spiff up "About" page w/ links
+- [ ] Fill out projects/csx page
+- [ ] Page favicons (layouts/partials/head.html)
    
