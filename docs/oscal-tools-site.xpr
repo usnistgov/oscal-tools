@@ -5,6 +5,7 @@
         <options/>
     </meta>
     <projectTree name="oscal-tools-site.xpr">
+        <folder path="../csx/"/>
         <folder path="."/>
     </projectTree>
 </project>

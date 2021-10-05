@@ -9,7 +9,7 @@ toc:
   enabled: true
 ---
 
-Like any tools, those published here were mainly developed in the context of research and development projects with specific goals.
+The tools published on this site have been developed for the most part in the context of research and development projects with specific goals.
 
 See each project for more information regarding:
 
@@ -17,6 +17,8 @@ See each project for more information regarding:
 - Project goals and outcomes
 - Software architecture
 - Technical dependencies
-- Technical contracts (inputs/outputs)
-
+- Technical contracts
+  - Inputs and outputs
+  - functional requirements
+  - use cases
 

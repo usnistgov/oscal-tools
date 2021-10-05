@@ -5,12 +5,14 @@
     <rect width="100%" height="100%" fill="tan"/>
     <image xlink:href="adjustable-wrench.jpg" x="0" y="-300" width="2100" height="1750"/> <!--5184 div 4356 = 1.2 -->
     <g alignment-baseline="baseline"
-        transform="translate(960 290) rotate(42) skewX(-5) skewY(-8)" font-size="100" font-weight="bold" >
+        transform="translate(960 290) rotate(43) skewX(-6) skewY(-8)" font-size="100" font-weight="bold"  font-family="Consolas">
         
-        <text x="5" y="10"
-            fill="black" font-family="Consolas">&lt;control></text>
-        <text font-weight="bold"
-            fill="white" font-family="Consolas">&lt;control></text>
+        <text x="-2" y="8" 
+            fill="black">&lt;control></text>
+        <text font-weight="bold"  x="2" y="3"
+            fill="steelblue">&lt;control></text>
+        <text font-weight="bold" 
+            fill="white">&lt;control></text>
         
     </g>
 </svg>

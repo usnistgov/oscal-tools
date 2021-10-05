@@ -2,22 +2,16 @@
 title: Profile Import Examiner
 custom_css:
 - "css/csx/nist-emulation.css"
+- "css/csx/import-examiner.css"
 ---
 
 {{< rawhtml >}}
   
-<script type="text/javascript" src="../../lib/Saxon-JS-2.3/SaxonJS2.js"> </script>
+<script type="text/javascript" src="../lib/Saxon-JS-2.2/SaxonJS2.js"> </script>
   <script xml:space="preserve">
-  /*  window.onload = function () {
-      SaxonJS.transform({
-        sourceLocation: "NIST_SP-800-53_rev5_catalog.xml",
-        stylesheetLocation: "profile-matrix.sef.json",
-        initialTemplate: "initialize"
-      });
-    } */
-    
-    function loadOSCAL(fileSet) {
-      for (const eachFile of fileSet) {
+
+function loadOSCAL(fileSet) {
+    for (const eachFile of fileSet) {
         let frdr = new FileReader();
         frdr.onload = function () {
           SaxonJS.transform({
@@ -28,21 +22,21 @@ custom_css:
               "fileName": eachFile.name
             }
           },"async")
-        }
-        frdr.readAsText(eachFile);
-      }
     }
-    
-    function refreshBaseline(baseline, importIndex) {
-      SaxonJS.transform({
+    frdr.readAsText(eachFile);
+    }
+}
+
+function refreshBaseline(baseline, importIndex) {
+    SaxonJS.transform({
         stylesheetLocation: "profile-checker.sef.json",
         initialTemplate:     "refresh-baseline",
         stylesheetParams: {
               "baseline":     baseline,
               "import-index": importIndex
             }
-          },"async")
-      }
+      },"async")
+}
 </script>
         <div id="bxheader">
           <h3 id="page-title" onclick="void(0)">OSCAL Import Examiner</h3>
