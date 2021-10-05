@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>OSCAL Profile Maker</title>
+      <meta charset="utf-8"/>
+      <style type="text/css" id="xmljellysandwich_css"><!-- Include your CSS here ... or target #xmljellysandwich_css from your XSLT ... --></style>
+      <script type="text/javascript"
+              src="../lib/Saxon-JS-2.3.0/SaxonJS.min.js"><!-- parsers are so easily confused --></script>
+      <script>
+          window.onload = function() {
+          SaxonJS.transform({
+            sourceLocation:     "../NIST_SP-800-53_rev5_catalog.xml",
+            stylesheetLocation: "profile-maker.sef.json",
+            initialTemplate:    "catalog-blank"
+          });
+          }     
+        </script>
+   </head>
+   <body>
+      <div id="header-div">
+         <h1 id="main-h1">OSCAL Profile Maker</h1>
+         <!--<h2>Also Sniffer (reads <code>ods</code> files) and Editor (reads OSCAL profiles)</h2>-->
+      </div>
+      <main id="selection-view"><!-- target with
+      <xsl:result-document href="#selection-view"> .... </xsl:result-document>
+    --></main>
+      <div id="footer">
+         <p>XML+XSLT under JS in the browser using <a href="http://www.saxonica.com/saxon-js/index.xml">SaxonJS</a>, from
+            <a href="http://www.saxonica.com">Saxonica</a>, with help from <a href="http://github.com/wendellpiez/XMLjellysandwich">XML jellysandwich</a>.</p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 900 900">
+    <desc>OSCAL Tools wrench icon</desc>
+    <rect width="100%" height="100%" fill="tan"/>
+    <!--<image xlink:href="adjustable-wrench.jpg" x="0" y="-300" width="2100" height="1750"/> <!-\-5184 div 4356 = 1.2 -\->-->
+    
+    <g transform="translate(450 300)">
+        <g transform="translate(0 10)">
+            <path d="M -121 70 L 0 140 L 121 70 L 121 -70 L 0 -140 L -121 -70 z" fill="skyblue"/>
+        </g>
+        
+        <path d="M -121 70 L 0 140 L 121 70 L 121 -70 L 0 -140 L -121 -70 z" fill="blue"/>
+        <circle cx="0" cy="-5" r="67" fill="skyblue"/>
+        <circle cx="0" cy="5"  r="67" fill="white"/>
+        
+        <path d="M -150 150 L 150 150 L 150 -150 Q 260 0 260 200 L 0 400 L -160 900 L -300 900  L -160 400 L -240 300 Q -240 0 -150 -150 z" fill="blue"/>
+    </g>
+    
+    
+</svg>
