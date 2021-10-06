@@ -91,28 +91,6 @@
         </xsl:for-each>
     </xsl:template>
     
-    <!--<xsl:template match="html:button[@id='show-all-button']" mode="ixsl:onclick">
-        <xsl:for-each select="id('directory')//html:input[@type='checkbox']">
-            <ixsl:set-property name="checked" select="true()"/>
-            <ixsl:add-attribute name="checked" select="'checked'"/>
-        </xsl:for-each>
-        <xsl:apply-templates select="id('directory')//html:label/child::html:a" mode="show-or-hide">
-            <xsl:with-param name="show" select="true()"/>
-            <xsl:with-param name="as" select="'inline'"/>
-        </xsl:apply-templates>
-    </xsl:template>
-    
-    <xsl:template match="html:button[@id='clear-all-button']" mode="ixsl:onclick">
-        <xsl:apply-templates select="id('directory')//html:label/child::html:a" mode="show-or-hide">
-            <xsl:with-param name="show" select="false()"/>
-            <xsl:with-param name="as" select="'inline'"/>
-        </xsl:apply-templates>
-        <xsl:for-each select="id('directory')//html:input[@type='checkbox']">
-            <ixsl:set-property name="checked" select="false()"/>
-            <ixsl:remove-attribute name="checked"/>
-        </xsl:for-each>
-    </xsl:template>-->
-    
     <xsl:template match="html:button[@id='expand-all-button']" mode="ixsl:onclick">
         <xsl:for-each select="ixsl:page()//html:details[@class = 'family']">
           <ixsl:set-attribute name="open" select="'open'"/>
@@ -215,7 +193,7 @@
 
     <xsl:template match="control" mode="filter-tables">
         <xsl:param tunnel="true" name="catalog" as="document-node()" required="true"/>
-        <xsl:variable name="withdrawn" select="prop[@name='status']='withdrawn'"/>
+        <xsl:variable name="withdrawn" select="prop[@name='status']/@value='withdrawn'"/>
         <tr id="{@id}"
             class="{ if (contains(@class,'enhancement') or exists(parent::control)) then 'enhancement' else 'control' } lineitem{ ' withdrawn'[$withdrawn] }">
             <td class="controlno">
@@ -242,7 +220,7 @@
                             <xsl:apply-templates select="." mode="label"/>
                         </a>
                     </xsl:for-each>
-                    <xsl:if test="not(matches($targets[last()]/prop[@name='label'],'\.\s*$'))">.</xsl:if>
+                    <xsl:if test="not(matches($targets[last()]/prop[@name='label']/@value,'\.\s*$'))">.</xsl:if>
                 </xsl:for-each-group>
                 
                 <!--<xsl:for-each-group select="link[@rel='incorporated-into']" group-by="true()">
@@ -265,16 +243,16 @@
     </xsl:template>
 
     <xsl:template mode="filter-tables" match="control/prop[@name = 'label']">
-        <a target="oob-docs" href="https://nvd.nist.gov/800-53/Rev4/control/{.}">
-            <xsl:apply-templates/>
+        <a target="oob-docs" href="https://nvd.nist.gov/800-53/Rev4/control/{@value}">
+            <xsl:value-of select="@value"/>
         </a>
     </xsl:template>
     
     <xsl:template mode="filter-tables" match="control/control/prop[@name = 'label']" priority="5">
-        <xsl:variable name="controlno" select="substring-before(.,'(')"/>
-        <xsl:variable name="enhancementno" select="substring-after(.,$controlno) => replace('\D','')"/>
+        <xsl:variable name="controlno" select="substring-before(@value,'(')"/>
+        <xsl:variable name="enhancementno" select="substring-after(@value,$controlno) => replace('\D','')"/>
         <a target="oob-docs" href="https://nvd.nist.gov/800-53/Rev4/control/{$controlno}#enhancement-{$enhancementno}">
-            <xsl:apply-templates/>
+            <xsl:value-of select="@value"/>
         </a>
     </xsl:template>
     
@@ -299,11 +277,11 @@
     </xsl:function>
     
     <xsl:template mode="label" match="control">
-        <xsl:value-of select="prop[@name='label']"/>
+        <xsl:value-of select="prop[@name='label']/@value"/>
     </xsl:template>
     
     <xsl:template mode="label" match="part">
-        <xsl:value-of select="ancestor-or-self::*/prop[@name='label']" separator=""/>
+        <xsl:value-of select="ancestor-or-self::*/prop[@name='label']/@value" separator=""/>
     </xsl:template>
     
     <xsl:template match="title" mode="filter-tables">
@@ -314,7 +292,7 @@
 
     <xsl:template match="prop" mode="filter-tables">
         <span class="{@name}">
-            <xsl:apply-templates mode="#current"/>
+            <xsl:value-of select="@value"/>
         </span>
     </xsl:template>
 
@@ -368,15 +346,17 @@
                 <p>
                     <xsl:apply-templates select="$baseline-profile/profile/metadata/title"/>
                 </p>
-                <xsl:where-populated>
-                    <h5>Imports</h5>
-                    <ul>
-                        <xsl:for-each select="$baseline-profile/profile/import">
-                            <xsl:variable name="importing" select="XJS:okay-for-import(.)"/>
-                            <li class="import{' importing'[$importing]}">{ @href }</li>
-                        </xsl:for-each>
-                    </ul>
-                </xsl:where-populated>
+                <xsl:sequence><!-- nice tip, AG -->
+                    <xsl:on-non-empty><h5>Imports</h5></xsl:on-non-empty>
+                    <xsl:where-populated>
+                        <ul>
+                            <xsl:for-each select="$baseline-profile/profile/import">
+                                <xsl:variable name="importing" select="XJS:okay-for-import(.)"/>
+                                <li class="import{' importing'[$importing]}">{ @href }</li>
+                            </xsl:for-each>
+                        </ul>
+                    </xsl:where-populated>
+                </xsl:sequence>
                 <xsl:choose>
                     <xsl:when test="empty($baseline-profile/profile)">
                         <p class="ineligible">Ineligible: the loaded document is not an <a href="https://pages.nist.gov/OSCAL/documentation/schema/profile-layer/" target="oob-docs">OSCAL profile</a>.</p>

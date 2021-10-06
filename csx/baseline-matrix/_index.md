@@ -6,7 +6,7 @@ custom_css:
 
 {{< rawhtml >}}
 <script src="../lib/Saxon-JS-2.2/SaxonJS2.js"></script>
-<script src="baseline-matrix-csx-runtime.js">
+<script>
 
 window.onload = function () {
       SaxonJS.transform({

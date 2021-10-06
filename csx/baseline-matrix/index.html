@@ -2,37 +2,34 @@
     <head>
         <title>Baseline Matrix: An SP800-53B Emulator</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="../nist-emulation.css" />
-        <style type="text/css" xml:space="preserve">
-      a { color: inherit; text-decoration: none }
-      a:hover { text-decoration: underline }
-     </style>
-        <script type="text/javascript" src="../../lib/Saxon-JS-2.0/SaxonJS2.js"> </script>
-        <script xml:space="preserve">
-    window.onload = function () {
+      <link rel="stylesheet" href="../nist-emulation.css" />
+      <link rel="stylesheet" href="baseline-matrix.css" />
+      <script type="text/javascript" src="../../lib/Saxon-JS-2.0/SaxonJS2.js"> </script>
+      <script xml:space="preserve">
+window.onload = function () {
+  SaxonJS.transform({
+    sourceLocation: "../NIST_SP-800-53_rev5_catalog.xml",
+    stylesheetLocation: "profile-matrix.sef.json",
+    initialTemplate: "initialize"
+  });
+}
+
+function applyTransform(fileSet) {
+  for (const eachFile of fileSet) {
+    let frdr = new FileReader();
+    frdr.onload = function () {
       SaxonJS.transform({
-        sourceLocation: "NIST_SP-800-53_rev5_catalog.xml",
+        sourceText: frdr.result,
         stylesheetLocation: "profile-matrix.sef.json",
-        initialTemplate: "initialize"
-      });
-    }
-    
-    function applyTransform(fileSet) {
-      for (const eachFile of fileSet) {
-        let frdr = new FileReader();
-        frdr.onload = function () {
-          SaxonJS.transform({
-            sourceText: frdr.result,
-            stylesheetLocation: "profile-matrix.sef.json",
-            initialTemplate: "amend-table",
-            stylesheetParams: {
-              "fileName": eachFile.name
-            }
-          },"async")
+        initialTemplate: "amend-table",
+        stylesheetParams: {
+          "fileName": eachFile.name
         }
-        frdr.readAsText(eachFile);
-      }
-    }</script>
+      },"async")
+    }
+    frdr.readAsText(eachFile);
+  }
+}</script>
 
     </head>
     <body>
