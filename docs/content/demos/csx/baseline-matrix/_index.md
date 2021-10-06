@@ -2,6 +2,7 @@
 title: "Baseline Matrix: An SP800-53B Emulator"
 custom_css:
   - "css/csx/nist-emulation.css"
+  - "css/csx/baseline-matrix.css"
 ---
 
 {{< rawhtml >}}
@@ -10,7 +11,7 @@ custom_css:
 
 window.onload = function () {
       SaxonJS.transform({
-        sourceLocation: "NIST_SP-800-53_rev5_catalog.xml",
+        sourceLocation: "../NIST_SP-800-53_rev5_catalog.xml",
         stylesheetLocation: "profile-matrix.sef.json",
         initialTemplate: "initialize"
       },"async");
@@ -33,10 +34,6 @@ function applyTransform(fileSet) {
   }
 }
 </script>
-<style type="text/css" xml:space="preserve">
-  a { color: inherit; text-decoration: none }
-  a:hover { text-decoration: underline }
-</style>
 <div id="bxheader">
   <h3 id="page-title" onclick="void(0)">SP-800-53 Baseline Control Matrix</h3>
   <p style="font-style: italic">Load your OSCAL profile XML file(s) here ... <input

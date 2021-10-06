@@ -12,7 +12,7 @@ Demonstrations, project documentation and links from the NIST (ITL/CSD) OSCAL Te
 {{% usa-tagline caption="Tools supporting OSCAL processing." %}}
 NIST, in collaboration with industry, is developing the [Open Security Controls Assessment Language (OSCAL)](http://pages.nist.gov/OSCAL). OSCAL is a set of formats expressed in XML, JSON, and YAML. These formats provide machine-readable representations of control catalogs, control baselines and overlays, system security plans, and assessment plans and results.
 
-This site documents and presents some of the OSCAL tooling developed by NIST project members and released for public use, testing and emulation. All the source code for projects and demonstrations described here is available in the [public Github repository](https://github.com/usnistgov/oscal-tools "Github repo").
+This site documents and presents some of the OSCAL tooling developed by NIST project members and released for public use, testing and emulation. Source code for projects and demonstrations described here is maintained (and can be examined, cloned or copied) in the [public Github repository](https://github.com/usnistgov/oscal-tools "Github repo").
 
 For more tools produced by OSCAL community members including independent developers, vendors, and user groups, see the [OSCAL Tools](https://pages.nist.gov/OSCAL/tools/ "OSCAL Tools") listing on the main OSCAL site.
 {{% /usa-tagline %}}

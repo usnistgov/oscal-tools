@@ -1,6 +1,6 @@
 ---
 title: CSX - Client-side XSLT
-description: Demonstrations of Client-side XSLT (CSX)
+description: Process your OSCAL data in the web browser (load but no upload)
 toc:
   enabled: true
 suppresstopiclist: true 

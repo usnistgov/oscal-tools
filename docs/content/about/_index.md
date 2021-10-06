@@ -19,7 +19,7 @@ This site offers documentation and demonstration applications supporting and rel
 
 Not all applications will be equally mature, and some may not even be fully usable or conformant (if and as specifications continue to evolve). If appearing here, an application should be said (unless stated otherwise) to come *without warranty, as these are R&amp;D applications not always tested fully*. That being said, real cupcakes can be baked in a toy oven, and each project here should document its own version(s) and dependencies.
 
-This site is conceptually organized in two parallel branches, [Projects](/projects) and [Demos](/demos/). [Projects](/projects) pages will sometimes link to [Demos](/demos/) pages. [Demos](/demos/) pages should always link to [Projects](/projects) pages.  (This reflects how some but not all projects come with demonstrations.) Source code for both is maintained in the [Github repository](https://github.com/usnistgov/oscal-tools) - which also contains code *not* documented on this site (but presenting embedded `readme` documentation in the usual way).
+This site is conceptually organized in two parallel branches, [Projects](/projects) and [Demos](/demos/). [Projects](/projects) pages will sometimes link to [Demos](/demos/) pages. [Demos](/demos/) pages should always link to [Projects](/projects) pages.  (This reflects how some but not all projects come with demonstrations.) Source code for both is maintained in the [Github repository](https://github.com/usnistgov/oscal-tools) - which also contains functioning code *not* documented on this site but described in `readme` documentation in the usual way.
 
 Refer to the [OSCAL tools page](https://pages.nist.gov/OSCAL/tools/) for more applications and software supporting OSCAL.
 

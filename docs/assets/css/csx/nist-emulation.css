@@ -56,6 +56,15 @@ span.profilecode { text-transform: uppercase; font-size: 80%;
 
 .occur {  text-align: center; max-width: 4em }
 
+
+#bxbody input:not([disabled]):focus { outline: none }
+#bxbody button:not([disabled]):focus { outline: none }
+#bxbody select:not([disabled]):focus { outline: none }
+#bxbody textarea:not([disabled]):focus { outline: none }
+
+/* for baseline-reviewer */
+details.group table td, details.group table th { border: none; padding: 0em }
+
 #bxfooter { margin-top: 1em; border-top: thin solid black;
  border-bottom: 0.4em solid #1f497d  }
  

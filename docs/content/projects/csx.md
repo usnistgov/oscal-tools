@@ -1,17 +1,18 @@
 ---
 title: "CSX Applications"
+description: "Client-side XSLT - process your data in the browser locally"
 heading: "CSX: Client-side XSLT"
 toc:
   enabled: true
 ---
 
-Client-side [XSLT](https://www.w3.org/TR/xslt-30/) is an architecture in which application logic is distributed to web clients (browsers) to apply to data under local control, without exposure. These applications depend on the [SaxonJS](https://www.npmjs.com/package/saxon-js) implementation of XSLT 3.0 within nodeJS or browser execution frameworks.
+Client-side [XSLT](https://www.w3.org/TR/xslt-30/) is an architecture in which application logic is distributed to web clients (browsers) to apply to data under local control, without exposure. These applications depend on the [SaxonJS](https://www.npmjs.com/package/saxon-js) implementation of XSLT 3.0 within nodeJS or browser execution frameworks. Source code in XSLT is compiled into a JSON transformation map, which can be downloaded with a page and applied by SaxonJS in the browser.
 
 See the [CSX Demonstrations](/demos/csx) page for more specifics on each of the demonstrations.
 
 ## Why client-side?
 
-Simply put, an application running entirely on a user's system has no need to guard data in transit (over the wire) or in a foreign system (where it tends to persist), since it does not transmit it. Data loaded into a web browser in isolation is not always entirely secure (depending on what other pages a user may have open or what plugins are installed), but it is more easily secured than the combination of browser, server and channels (protocols) that characterizes a client/server deployment.
+Simply put, an application running entirely on a user's system has no need to guard data in transit (over the wire) or in a foreign system (where it tends to persist), since it does not transmit it. Data loaded into a web browser in isolation is not always entirely secure (depending on what other pages a user may have open or what plugins are installed), but it is more easily secured than the combination of browser, remote server(s) and channels (protocols) that characterizes a client/server deployment supporting local data processing.
 
 More broadly, CSX combines the advantages of a lightweight deployment model with the power of general-purpose XSLT and the flexibility, adaptability and transparency of declarative programming.
 
