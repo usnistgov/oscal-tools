@@ -1,0 +1,98 @@
+{
+  "catalog": {
+    "uuid": "abe474a5-26aa-426d-8221-a0508c62dce3",
+    "metadata": {
+      "title": "OSCAL CATalog",
+      "last-modified": "2021-07-30T14:54:06.481-04:00",
+      "version": "0.1",
+      "oscal-version": "1.0.0"
+    },
+    "controls": [
+      {
+        "id": "dry.food",
+        "title": "Crunchies aka \"dry food\"",
+        "parts": [
+          {
+            "name": "statement",
+            "prose": "Shelf-stable, dry feline nutriments (\"dry cat food\" or \"crunchies\") must be available at all times in an accessible location, with only such wrapping or packaging to make it entertaining to extract (using only teeth and claws), or preferably, open in a bowl. Flavors based on chicken or fish are preferred."
+          }
+        ]
+      },
+      {
+        "id": "canned.food",
+        "title": "Wet cat food",
+        "parts": [
+          {
+            "name": "statement",
+            "prose": "Delicious tasty morsels of canned cat food should be provided at regular intervals in sufficient quantities for all cats to be satisfied."
+          },
+          {
+            "name": "guidance",
+            "prose": "Wet cat food may be referred to as \"cat fud\" on shopping lists. When not otherwise qualified, \"cat fud\" should be taken to refer to wet (i.e., canned) cat food, not dry.\n\nTable scraps are not acceptable as wet cat food (or acceptable in general). Prey animals also do not count, although they may also be enjoyed."
+          }
+        ]
+      },
+      {
+        "id": "kitchen.cabinets",
+        "title": "Kitchen Cabinets and drawers",
+        "parts": [
+          {
+            "name": "statement",
+            "prose": "Kitchen drawers and cabinets should be kept closed to prevent feline incursion."
+          }
+        ]
+      },
+      {
+        "id": "boxes",
+        "title": "Boxes",
+        "links": [
+          {
+            "href": "#toys",
+            "rel": "related"
+          }
+        ],
+        "parts": [
+          {
+            "name": "statement",
+            "prose": "Cardboard or other disposable delivery boxes may be left in the living room as temporary cat fortresses."
+          }
+        ]
+      },
+      {
+        "id": "treats",
+        "title": "Treats",
+        "params": [
+          {
+            "id": "p1",
+            "label": "maximum treat allowance",
+            "guidelines": [
+              {"prose": "A natural language description of how many treats are permitted within a given period, to be determine by the cat's \"owner\" given appropriate veterinary advice."}
+            ]
+          }
+        ],
+        "parts": [
+          {
+            "name": "statement",
+            "prose": "Treats may be given freely by a feline's caretaker or companion on demand, up to a maximum of {{ insert: param, p1 }}."
+          }
+        ]
+      },
+      {
+        "id": "toys",
+        "title": "Toys",
+        "links": [
+          {
+            "href": "#boxes",
+            "rel": "related"
+          }
+        ],
+        "parts": [
+          {
+            "name": "statement",
+            "prose": "Any small objects or objects of any size with holes, passages, hatches or flaps may be considered cat toys, defined as objects designated for feline play. Store-bought cat toys are acceptable but a cat may select its own toys such as string, rubber bands or jewelry."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+a { color: inherit; text-decoration: none }
+
+a:hover { text-decoration: underline }
+
+.family-item label { padding-left: 0.5em }
+
+input:not([disabled]):focus { outline: none }
+
+table.control-matrix th { font-weight: bold }
