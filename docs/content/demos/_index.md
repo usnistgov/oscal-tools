@@ -4,6 +4,7 @@ description: Assorted demonstrations and proofs of concept for OSCAL application
 menu:
   primary:
     name: Demos
+    weight: 15
 toc:
   enabled: true
 ---
