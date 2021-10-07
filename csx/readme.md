@@ -44,3 +44,10 @@ Maintained here to keep it from being published....
 ### Further demos
 
 See project directories for more.
+
+### Ideas
+
+Map-driven link rewriter
+  User configures map
+  utility rewrites file path and mime type
+
