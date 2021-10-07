@@ -43,11 +43,6 @@ Maintained here to keep it from being published....
 
 ### Further demos
 
-See project directories for more.
+See project directories for more, including a next-gen Baseline Composer (building on the Reviewer) that accepts spreadsheet inputs.
 
 ### Ideas
-
-Map-driven link rewriter
-  User configures map
-  utility rewrites file path and mime type
-

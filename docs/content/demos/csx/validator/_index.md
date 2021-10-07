@@ -1,7 +1,8 @@
 ---
 title: "Schema Validation Emulator"
 custom_css:
-- "css/csx/csx-validator.css"
+  - "css/csx/nist-emulation.css"
+  - "css/csx/csx-validator.css"
 ---
 
 {{< rawhtml >}}
