@@ -14,9 +14,14 @@ Test an application standalone before providing (and documenting) its mirroring 
 
 Run a web server such as nodejs `http-server` from this directory to serve the applications from `localhost`.
 
-## Web site to do
+## Deployment Model
 
-Maintained here to keep it from being published....
+Currently each demo is maintained in its own directory, where it can also be served for preview (outside Hugo or Pages).
+
+For pages.nist.gov integration, an application (or an operational subset) must be copied (echoed) to the /docs folder where the Hugo site is configured and stocked.
+
+Note that migration is typically not simply copying, but also sometimes rewiring or resetting configuration. For example, the location of the SaxonJS distribution changes. These divergences help ensure that deployment is not done without due care and deliberation.
+Typically this means that the analogous folder in /docs must be examined to see that things are accounted for properly. Typically either file headers or links can be impacted.
 
 ### Baseline Matrix
 
@@ -25,24 +30,34 @@ Maintained here to keep it from being published....
 
 ### Baseline Reviewer
 
-- test and write up readme
+- retest and write up readme
 
 ### Format Converter
 
-- test and write up readme
+- retest and write up readme
 - extend to support profile
 
 ### Import Examiner
 
-- test and write up readme
+- retest and write up readme
 
 ### Validator
 
-- test and write up readme
+- retest and write up readme
 - extend to support other models?
+
+### OSCAL Mapper
+
+Reads spreadsheet (ODS) in, emits OSCAL
+
+user designs an (XML) template with queries into the spreadsheet
+an XSLT is derived from this and executed over the spreadsheet contents
+emitting the required XML
+which can be saved
 
 ### Further demos
 
-See project directories for more, including a next-gen Baseline Composer (building on the Reviewer) that accepts spreadsheet inputs.
+See project directories for more....
 
 ### Ideas
+

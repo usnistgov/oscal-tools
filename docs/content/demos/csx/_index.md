@@ -12,6 +12,14 @@ Several of these applications were first offered at [Balisage: The Markup Confer
 
 Notwithstanding this support these applications should be regarded as *experimental* and suitable primarily for *demonstration* and *testing*. 
 
+## Sample data
+
+Users who have OSCAL XML data (catalogs and profiles) may wish to try them in the demonstrations.
+
+For testing without providing your own data, some small sample test files are also available for [download](oscal-examples.zip).
+
+For creating "blank" OSCAL data (that is, valid tagging without meaningful contents), consider the [XSLT](/projects/xslt) OSCAL generator utility.
+
 ## Current demonstrations
 
 {{< accordian >}}
