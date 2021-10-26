@@ -4,6 +4,7 @@ description: "XSLT 3.0 stylesheets for display (web and PDF)"
 heading: "XSLT for OSCAL Formatting"
 toc:
   enabled: true
+usabanner: true
 ---
 
 [XSLT](https://www.w3.org/TR/xslt-30/) is the Extensible Stylesheet Language, defined by the [World-Wide Web Consortium](https://www.w3.org/) and now in version 3.0.

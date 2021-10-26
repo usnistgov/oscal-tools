@@ -7,6 +7,7 @@ menu:
     weight: 15
 toc:
   enabled: true
+usabanner: true
 ---
 
 Some of the software available in the repository is also capable of demonstration in your browser, as served by this site.

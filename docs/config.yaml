@@ -35,6 +35,7 @@ params:
   searchAffiliate: oscal
   sidenav:
 #    debug: true
+  
 menu:
   primary:
   - name: "OSCAL"

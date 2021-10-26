@@ -1,5 +1,6 @@
 ---
 title: "OSCAL Catalog XML-to-JSON Converter"
+usabanner: true
 custom_css:
 - "css/csx/nist-emulation.css"
 - "css/csx/converters.css"

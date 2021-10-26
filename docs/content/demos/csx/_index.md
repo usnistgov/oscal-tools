@@ -4,6 +4,7 @@ description: Process your OSCAL data in the web browser (load but no upload)
 toc:
   enabled: true
 suppresstopiclist: true 
+usabanner: true
 ---
 
 Client-side [XSLT](https://www.w3.org/TR/xslt-30/) (CSX) is an architecture in which application logic written in XSLT (a declarative fourth-generation language) is distributed to web clients (browsers) to apply to data under local control, without exposure. These particular applications depend on the [SaxonJS](https://www.saxonica.com/saxon-js/documentation/index.html) implementation of XSLT within nodeJS or browser execution frameworks.
@@ -11,6 +12,12 @@ Client-side [XSLT](https://www.w3.org/TR/xslt-30/) (CSX) is an architecture in w
 Several of these applications were first offered at [Balisage: The Markup Conference 2021](https://www.balisage.net/Proceedings/vol26/cover.html), and are reproduced here with grateful acknowledgement to conference organizers and attendees (as well as to NIST colleagues) for helping to motivate their longer-term support and maintenance. Early versions were hosted on the developer's [personal repository](https://github.com/wendellpiez/XMLjellysandwich), which still hosts a number of [interesting CSX applications](https://wendellpiez.github.io/XMLjellysandwich/) not based on OSCAL.
 
 Notwithstanding this support these applications should be regarded as *experimental* and suitable primarily for *demonstration* and *testing*. 
+
+See [CSX Project page](/projects/csx) for more details.
+
+Source code for the demonstrations is available in the [Github repository](https://github.com/usnistgov/oscal-tools/tree/master/csx). For the source of a JSON SEF file (a compiled Saxon Execution Plan in JSON) look for the XSLT file with the same base name (so `csx/validator/apply-validator.sef.json` is compiled from ` csx/validator/apply-validator.xsl`).
+
+**Note regarding page tracking** - Although it is a feature of CSX that all processing occurs in the browser and nothing is communicated back to a server, this is not always or necessarily the case with a web server or web pages in which CSX is embedded. In particular, passively-enabled page tracking configuration such as what is commonly supported by static site generators (including the generator that produced this web site) will still function normally regarding such page requests as are issued. The differences are that CSX can be made to avoid any page requests beyond the initial download of required resources (eliminating further traffic); and does not require posting user's data to any server even if 'uploaded' into the application.
 
 ## Sample data
 

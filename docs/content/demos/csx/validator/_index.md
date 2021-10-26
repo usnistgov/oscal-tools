@@ -1,5 +1,6 @@
 ---
 title: "Schema Validation Emulator"
+usabanner: true
 custom_css:
   - "css/csx/nist-emulation.css"
   - "css/csx/csx-validator.css"

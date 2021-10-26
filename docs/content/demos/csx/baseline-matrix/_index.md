@@ -1,5 +1,6 @@
 ---
 title: "Baseline Matrix: An SP800-53B Emulator"
+usabanner: true
 custom_css:
   - "css/csx/nist-emulation.css"
   - "css/csx/baseline-matrix.css"

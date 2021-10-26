@@ -1,5 +1,6 @@
 ---
 title: Profile Import Examiner
+usabanner: true
 custom_css:
 - "css/csx/nist-emulation.css"
 - "css/csx/import-examiner.css"
