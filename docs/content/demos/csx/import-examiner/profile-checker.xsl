@@ -14,6 +14,13 @@
     xpath-default-namespace="http://csrc.nist.gov/ns/oscal/1.0"
     >
 
+    <!--
+  status levels:
+
+  problematic - pink (ERROR)
+  remarkable - yellow (WARNING)
+  noteworthy - green (INFO)
+-->
     <xsl:output indent="yes"/>
 
     <xsl:param name="fileName" as="xs:string"/>
@@ -41,14 +48,17 @@
     
     <xsl:template name="examine-profile">
         <xsl:result-document href="#bxbody" method="ixsl:append-content">
-            <details>
-                <summary>XML source</summary>
-                <pre id="profile-source">
-                    <xsl:value-of select="serialize(/,$indented-serialization)"/>
+            <section class="filereport">
+                <h2>Examining <code><xsl:value-of select="$fileName"/></code></h2>
+                <details>
+                    <summary>XML source</summary>
+                    <pre id="profile-source">
+                    <xsl:value-of select="serialize(/, $indented-serialization)"/>
                 </pre>
-            </details>
-            <section class="examination">
-                <xsl:apply-templates mode="examine"/>
+                </details>
+                <section class="examination">
+                    <xsl:apply-templates mode="examine"/>
+                </section>
             </section>
         </xsl:result-document>
     </xsl:template>
@@ -73,7 +83,6 @@
     
     <xsl:template priority="100" match="/*" mode="examine">
             <section class="notifications">
-                <h2>Test results</h2>
                 <section>
                     <h3>Profile structure (top level)</h3>
                     <div class="report">
@@ -92,7 +101,7 @@
             </section>
             
             <section class="map">
-                <h2>Profile map</h2>
+                <h3>Profile map</h3>
                 <xsl:apply-templates select="." mode="map"/>
             </section>
     </xsl:template>
@@ -176,46 +185,26 @@
                     select="exists( $good-calls )"/>
                 <xsl:with-param name="title">Viable as SP 800-53?</xsl:with-param>
                 <xsl:with-param name="msg" expand-text="true">{ count($good-calls) } SP 800-53 control { if (count($good-calls) eq 1) then 'ID is' else 'IDs are'} called.</xsl:with-param>
-                <xsl:with-param name="status">
-                    <xsl:choose>
-                        <xsl:when test="not(XJS:rev5-import(.)) or $refreshing">remarkable</xsl:when>
-                        <xsl:otherwise>noteworthy</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
+                <xsl:with-param name="status" select="if ( not(XJS:rev5-import(.) or $refreshing) ) then 'remarkable' else 'noteworthy'"/>
             </xsl:call-template>
             <xsl:call-template name="tell">
                 <xsl:with-param name="when"
                     select="exists(include-controls) and empty( include-controls/with-id[not(. = $all-rev5-controls/@id)] )"/>
                 <xsl:with-param name="title">Viable as SP 800-53?</xsl:with-param>
                 <xsl:with-param name="msg"><em>All included controls</em> appear in SP 800-53, rev 5.</xsl:with-param>
-                <xsl:with-param name="status">
-                    <xsl:choose>
-                        <xsl:when test="not(XJS:rev5-import(.)) or $refreshing">remarkable</xsl:when>
-                        <xsl:otherwise>noteworthy</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
+                <xsl:with-param name="status" select="if ( not(XJS:rev5-import(.) or $refreshing) ) then 'remarkable' else 'noteworthy'"/>
             </xsl:call-template>
             <xsl:call-template name="tell">
                 <xsl:with-param name="when" select="not($baseline='sp800-53rev5') and exists(include-controls/with-id[ . = $baseline-controls/@id ])"/>
                 <xsl:with-param name="title">Viable selecting from this baseline?</xsl:with-param>
                 <xsl:with-param name="msg" expand-text="true">One or more control IDs are called from <b>{ $baseline-title }</b>.</xsl:with-param>
-                <xsl:with-param name="status">
-                    <xsl:choose>
-                        <xsl:when test="not(XJS:rev5-import(.)) or $refreshing">remarkable</xsl:when>
-                        <xsl:otherwise>noteworthy</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
+                <xsl:with-param name="status" select="if ( not(XJS:rev5-import(.) or $refreshing) ) then 'remarkable' else 'noteworthy'"/>
             </xsl:call-template>
             <xsl:call-template name="tell">
                 <xsl:with-param name="when" select="not($baseline='sp800-53rev5') and exists(include-controls/with-id) and empty(include-controls/with-id[ not(. = $baseline-controls/@id) ])"/>
                 <xsl:with-param name="title">Viable selecting from this baseline?</xsl:with-param>
                 <xsl:with-param name="msg" expand-text="true"><em>All included controls</em> appear in <b>{ $baseline-title }</b>.</xsl:with-param>
-                <xsl:with-param name="status">
-                    <xsl:choose>
-                        <xsl:when test="not(XJS:rev5-import(.)) or $refreshing">remarkable</xsl:when>
-                        <xsl:otherwise>noteworthy</xsl:otherwise>
-                    </xsl:choose>
-                </xsl:with-param>
+                <xsl:with-param name="status" select="if ( not(XJS:rev5-import(.) or $refreshing) ) then 'remarkable' else 'noteworthy'"/>
             </xsl:call-template>
             <xsl:call-template name="tell">
                 <xsl:with-param name="when"
@@ -230,27 +219,42 @@
         <xsl:apply-templates mode="examine"/>
     </xsl:template>
     
+    <xsl:template match="import/*" priority="-0.1" mode="examine">
+        <xsl:where-populated>
+            <div class="report">
+                <xsl:call-template name="tell">
+                    <xsl:with-param name="when" select="true()"/>
+                    <xsl:with-param name="status">remarkable</xsl:with-param>
+                    <xsl:with-param name="title">Unknown element</xsl:with-param>
+                    <xsl:with-param name="msg" expand-text="true">Unknown element <b>{ name() }</b> has no effect.</xsl:with-param>
+                </xsl:call-template>
+            </div>
+        </xsl:where-populated>
+    </xsl:template>
+    
+    <xsl:template match="include-all" mode="examine"/>
+    
     <xsl:template match="include-controls" mode="examine">
         <xsl:where-populated>
-        <div class="report">
-            <xsl:sequence>
-                <xsl:variable name="rev5-calls" select="child::with-id[. = $baseline-controls/@id]"/>
-                <xsl:call-template name="tell">
-                    <xsl:with-param name="when" select="empty(../include-all | $rev5-calls)"/>
-                    <xsl:with-param name="title">No Rev 5 controls</xsl:with-param>
-                    <xsl:with-param name="msg">Include directive shows no controls calling SP 800-53 Rev 5 (by with-id).</xsl:with-param>
-                </xsl:call-template>
-                <xsl:apply-templates mode="examine"/>
-                <!--<xsl:on-empty>
+            <div class="report">
+                <xsl:sequence>
+                    <xsl:variable name="rev5-calls" select="child::with-id[. = $baseline-controls/@id]"/>
+                    <xsl:call-template name="tell">
+                        <xsl:with-param name="when" select="empty(../include-all | $rev5-calls)"/>
+                        <xsl:with-param name="title">No Rev 5 controls</xsl:with-param>
+                        <xsl:with-param name="msg">Include directive shows no controls calling SP 800-53 Rev 5 (by with-id).</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:apply-templates mode="examine"/>
+                    <!--<xsl:on-empty>
                     <h4 class="title noteworthy"><code>include</code> check</h4>
                     <p class="msg noteworthy">
                         <xsl:text>Checks okay.</xsl:text>
                     <xsl:if test="empty(all)" expand-text="true">{ count( $rev5-calls ) } controls are called.</xsl:if></p>
                 </xsl:on-empty>-->
-            </xsl:sequence>
-        </div>
+                </xsl:sequence>
+            </div>
         </xsl:where-populated>
-            
+        
     </xsl:template>
     
     <xsl:template match="exclude-controls/with-id" mode="examine" expand-text="true">

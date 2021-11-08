@@ -2,7 +2,7 @@
 
 `_index.md` for Hugo consumption is made by trimming down `index.html`.
 
-`index.html` is available for local testing.
+`index.html` is available for local testing (from a web server serving up the static page).
 
 Note that the paths to CSS (in the header) and SaxonJS (in the script) are not the same.
 
