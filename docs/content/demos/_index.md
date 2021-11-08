@@ -8,6 +8,7 @@ menu:
 toc:
   enabled: true
 usabanner: true
+draftbanner: true
 ---
 
 Some of the software available in the repository is also capable of demonstration in your browser, as served by this site.

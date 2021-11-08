@@ -8,6 +8,7 @@ menu:
 toc:
   enabled: true
 usabanner: true
+draftbanner: true
 ---
 
 [OSCAL, the Open Security Controls Assessment Language](http://pages.nist.gov/OSCAL), is being developed by NIST (the National Institute of Standards and Technology) in partnership with government and industry. It is an open resource available for use and study by developers and organizations in the public and private sectors.
