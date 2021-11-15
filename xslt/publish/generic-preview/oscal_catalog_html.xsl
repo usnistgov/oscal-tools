@@ -391,8 +391,8 @@
      from their citation targets. -->
    <xsl:template match="link" mode="link-as-link">
       <a href="{@href}">
-         <xsl:apply-templates/>
-         <xsl:if test="not(matches(.,'\S'))" expand-text="true">
+         <xsl:apply-templates select="text"/>
+         <xsl:if test="not(matches(text,'\S'))" expand-text="true">
             <xsl:value-of select="@href"/> 
          </xsl:if>
       </a>

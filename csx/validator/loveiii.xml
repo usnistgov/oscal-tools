@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pub>
+    <title>Love III</title>
+    <author>George Herbert</author>
+    <source><title>The Temple</title> (1633)</source>
+    <style>
+        
+.verse { clear: both; margin-top: 1em; margin-bottom: 1em }
+        
+.stanza { margin-top: 1em; margin-bottom: 1em; margin-right: 2%; 
+          width: 28%; float: left; line-height: 150%; opacity: 1 }
+
+.l:nth-child(2n) { padding-left: 6em }
+
+/* moving toc to bottom */
+h5.toc-entry { display: inline-block; margin: 0em }
+h5.toc-entry:before { content: " ☙ " }
+h5.toc-entry:first-child:before { content: "" }
+
+    </style>
+    <verse>
+        <stanza>
+            <l>Love bade me welcome, yet my soul drew back,</l>
+            <l>Guilty of dust and sin.</l>
+            <l>But quick-eyed Love, observing me grow slack</l>
+            <l>From my first entrance in,</l>
+            <l>Drew nearer to me, sweetly questioning</l>
+            <l>If I lacked anything.</l>
+        </stanza>
+        <stanza>
+            <l><i>A guest,</i> I answered, <i>worthy to be here</i>;</l>
+            <l>Love said, <love>You shall be he.</love></l>
+            <l><i>I, the unkind, the ungrateful? ah my dear,</i></l>
+            <l><i>I cannot look on thee.</i></l>
+            <l>Love took my hand and smiling did reply,</l>
+            <l><love>Who made the eyes but I?</love></l>
+        </stanza>
+        <stanza>
+            <l><i>Truth, Lord, but I have marred them; let my shame</i></l>
+            <l><i>Go where it doth deserve.</i></l>
+            <l><love>And know you not,</love> says Love, <love>who bore the blame?</love></l>
+            <l><i>My dear, then I will serve.</i></l>
+            <l><love>You must sit down,</love> says Love, <love>and taste my meat.</love></l>
+            <l>So I did sit and eat.</l>
+        </stanza>
+    </verse>
+</pub>

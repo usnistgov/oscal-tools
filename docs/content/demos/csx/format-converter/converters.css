@@ -1,0 +1,8 @@
+#converter-grid { display: grid; grid-template-columns: 1fr 1fr; grid-gap: 2vh }
+#converter-grid textarea {    box-sizing: border-box; width: 100% }     
+
+#resultbox h4:first-child { margin-top: 0em }
+
+.codedump { white-space: pre-wrap; border: thin solid black; padding: 0.5em }
+.inxml { background-color: aliceblue }
+.injson { background-color: mintcream }

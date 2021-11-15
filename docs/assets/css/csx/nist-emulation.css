@@ -1,0 +1,70 @@
+html, body { font-family: Calibri, Arial, sans-serif }
+
+code { font-family: Consolas, monospace }
+
+#bxbody { margin-top: 1em; padding-top: 1em; border-top: medium solid black }
+
+
+#bxfooter { margin-top: 1em; border-top: thin solid black  }
+ 
+table.control-matrix { border-collapse: collapse;
+  border-bottom: 1.4em solid #1f497d  }
+  
+table.control-matrix  td,
+table.control-matrix  th  { border: thin solid black; padding: 0.2em 0.6em }
+
+table.control-matrix th { background-color: #b8cce4 } /* dark dusky blue*/
+
+table.control-matrix td { background-color: #dbe5f1 } /* lighter dusky blue  */
+
+tr.control-matrix-header > * { text-transform: uppercase }
+tr.control-matrix-header > th.controlno { font-size: 80% }
+
+#directory { columns: auto 2 }
+#directory div { break-inside: avoid }
+
+#directory input[type='checkbox'] + label { color: grey }
+#directory input[type='checkbox']:checked + label { color: black }
+    
+#file-roster { display: grid; grid-auto-columns: max-content;
+    grid-auto-rows: auto; grid-auto-flow: column;
+    grid-gap: 0.5em; margin-bottom: 1em
+}
+
+.filelisting { margin-top: 0.8em; padding: 0.2em; border: thin outset gainsboro; background-color: oldlace; }
+
+.filelisting *               { margin: 0em }
+
+span.profilecode { text-transform: uppercase; font-size: 80%;
+  font-weight: normal; padding: 0.2em; background-color: #b8cce4 }
+
+.withdrawn { color: grey }
+
+.withdrawnnotice { font-size: 90% }
+
+.import { color: darkgrey }
+.importing { color: forestgreen; font-weight: bold }
+.ineligible { color: darkred; font-style: italic }
+
+.family { margin-top: 1em }
+
+.family .h2.title   { text-transform: uppercase; font-size: 140%; font-weight: bold }
+
+.family > * { margin-bottom: 1em }
+
+.control     .title { font-weight: bold }
+.enhancement .title { font-size: 80%; font-weight: normal; text-transform: uppercase }
+
+.control     .label { font-weight: bold }
+
+.occur {  text-align: center; max-width: 4em }
+
+
+#bxbody input:not([disabled]):focus { outline: none }
+#bxbody button:not([disabled]):focus { outline: none }
+#bxbody select:not([disabled]):focus { outline: none }
+#bxbody textarea:not([disabled]):focus { outline: none }
+
+/* for baseline-reviewer */
+details.group table td, details.group table th { border: none; padding: 0em }
+

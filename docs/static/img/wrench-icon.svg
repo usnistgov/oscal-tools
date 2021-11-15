@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 900 900">
+    <desc>OSCAL Tools wrench icon</desc>
+    <!--<rect width="100%" height="100%" fill="tan"/>-->
+    <!--<image xlink:href="adjustable-wrench.jpg" x="0" y="-300" width="2100" height="1750"/> <!-\-5184 div 4356 = 1.2 -\->-->
+    
+    <g transform="translate(450 240) scale(-1 1)">
+    
+        <g transform="translate(0 -50)">
+            <g transform="translate(0 15)">
+                <path d="M -121 70 L 0 140 L 121 70 L 121 -70 L 0 -140 L -121 -70 z" fill="steelblue"/>
+        </g>
+        
+        <path d="M -121 70 L 0 140 L 121 70 L 121 -70 L 0 -140 L -121 -70 z" fill="midnightblue"/>
+        <circle cx="0" cy="-10" r="67" fill="steelblue"/>
+        <circle cx="0" cy="5"  r="67" fill="white"/>
+        
+        </g>
+        
+        <path d="M -240 160 L 120 160 Q 160 160 160 120 L 160 -160  Q 320 -40 320 160  Q 320 280   160 360  Q 40 440   0 660
+            L -240 660 C -200 440 -350 280 -350 160" fill="midnightblue"/>
+        <path d="M -160 -160  Q -320 -40 -320 160 L -160 160 z" fill="black"/>
+        
+        <!-- tracer path -->
+       <!-- <path d="M                                        160 -160  L         320 160  L 320 280 L 160 360  L 40 440 L 0 660
+            L -240 660 L -200 440 L -350 280 L -350 160
+            " fill="none" stroke="red" stroke-width="5"/>-->
+        
+    </g>
+    
+    
+</svg>

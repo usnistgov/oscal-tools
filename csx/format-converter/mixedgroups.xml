@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<example>
+  <METASCHEMA>
+    <model>
+      <choice maxOccurs="unbounded">
+        <group-as name="pqr-seq" in-xml="UNWRAPPED"/>
+        <define-field name="p" json-value-key="data">
+          <define-field name="pv"/>
+          <json-value-key>data</json-value-key>
+        </define-field>
+        <define-field name="q" json-value-key="data">
+          <define-field name="qv" as-type="boolean"/>
+          <json-value-key>data</json-value-key>
+        </define-field>
+        <field ref="r">
+          <use-name>R</use-name>
+        </field>
+      </choice>
+    </model>
+  </METASCHEMA>
+  <VALIDXML>
+      <p pv="x">p1</p>
+      <q qv="true">q1</q>
+      <R>r1</R>
+      <p>p2</p>
+      <p>p3</p>
+      <q>q2</q>
+      <R>r2</R>
+  </VALIDXML>
+  <JSONVERSION>
+  { "pqr-seq": [
+    { "_n": "p", "data": "p1", "pv": "x" },
+    { "_n": "q", "data": "q1", "qv": true },
+    { "_n": "R", "data": "r1" },
+    { "_n": "p", "data": "p2" },
+    { "_n": "p", "data": "p3" },
+    { "_n": "q", "data": "q2" },
+    { "_n": "R", "data": "r2" } ] }
+  </JSONVERSION>
+  <notes>
+    We can validate the XML by casting to XSD (or other preferred schema language)
+    We can validate the JSON if we infer
+    - if choice/@minOccurs=1 then an object 'pqr-seq' is required (array or singleton-or-array)
+    - choice/@maxOccurs governs the cardinality of the entire array: note that child fields do not have @minOccurs|@maxOccurs (which is interesting)
+    - each member of this array is an object with an "_n" property with value one of 'p', 'q', 'R' (metaschema defined)
+    - other validations of each node must be keyed to those node names (defined in the 'pqr-seq' context) keeping use-name in mind
+        (Can JSON Schema even do something like that?)
+    This model leaves out namespaces, assuming all XML is in the same namespace
+  </notes>
+</example>

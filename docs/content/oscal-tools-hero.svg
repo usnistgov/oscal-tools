@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2266" height="850" viewBox="0 0 2266 850">
+    <desc>OSCAL TOOLS </desc>
+    <rect width="100%" height="100%" fill="tan"/>
+    <image xlink:href="adjustable-wrench.jpg" x="0" y="-300" width="2100" height="1750"/> <!--5184 div 4356 = 1.2 -->
+    <g alignment-baseline="baseline"
+        transform="translate(960 290) rotate(43) skewX(-6) skewY(-8)" font-size="100" font-weight="bold"  font-family="Consolas">
+        
+        <text x="-2" y="8" 
+            fill="black">&lt;control></text>
+        <text font-weight="bold"  x="2" y="3"
+            fill="steelblue">&lt;control></text>
+        <text font-weight="bold" 
+            fill="white">&lt;control></text>
+        
+    </g>
+</svg>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 900 900">
+    <desc>OSCAL Tools wrench icon</desc>
+    <!--<rect width="100%" height="100%" fill="tan"/>-->
+    <!--<image xlink:href="adjustable-wrench.jpg" x="0" y="-300" width="2100" height="1750"/> <!-\-5184 div 4356 = 1.2 -\->-->
+    
+    <g transform="translate(450 300)">
+        <g transform="translate(0 10)">
+            <path d="M -121 70 L 0 140 L 121 70 L 121 -70 L 0 -140 L -121 -70 z" fill="black"/>
+        </g>
+        
+        <path d="M -121 70 L 0 140 L 121 70 L 121 -70 L 0 -140 L -121 -70 z" fill="blue"/>
+        <circle cx="0" cy="-5" r="67" fill="black"/>
+        <circle cx="0" cy="5"  r="67" fill="white"/>
+        
+        <!--<path d="M -240 160 L 80 120 Q 120 120 120 80 L 160 -60 Q 200 -40 200 80
+            Q 200 200 160 200 L 80 200 Q -120 400 -120 540 L -280 540 L -200 400 C -200 280 -240 120 -240 80" fill="blue"/>-->
+        
+        <path d="M -240 160 L 120 160 Q 160 160 160 120 L 160 -160  Q 320 -40 320 160  C 320 200 280 280   160 360  Q 40 440   0 600
+            L -240 600 C -200 440 -300 280 -300 160" fill="black" stroke="black"/>
+        <path d="M -160 -160  Q -320 -40 -320 160 L -160 160 z" fill="black"/>
+        
+        
+        <!--<path d="M                                        160 -160  L         320 160 L 320 200  L 280 280 L 160 360  L 40 440 L 0 600
+            L -240 600 L -200 440 L -300 280 L -300 160
+            " fill="none" stroke="red" stroke-width="5"/>-->
+        
+        <!--<path d="M -150 150 L 150 150 L 150 -150 Q 260 0 260 200 L 0 400 L -160 900 L -300 900  L -160 400 L -240 300 Q -240 0 -150 -150 z" fill="blue"/>-->
+    </g>
+    
+    
+</svg>

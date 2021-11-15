@@ -1,0 +1,53 @@
+#overview { border: thin inset grey; padding: 0.5em; margin: 0em 0.5em }
+
+a { color: inherit; text-decoration: none }
+a:hover { text-decoration: underline }
+
+section.examination { display: grid; grid-template-columns: 1fr auto; grid-gap: 1em }
+
+section.notifications > section { margin-top: 1em; padding: 0.5em; border: thin dotted black }
+section.notifications > section > *:first-child { margin-top: 0em }
+
+section.map p { margin: 0em }
+section.map div div.element { margin-left: 1em; margin-top: 0.2em }
+section.map p.tag { display: inline-block; background-color: midnightblue; color: aliceblue; padding: 0.2em }
+section.map p.tag.ON {  background-color: deepskyblue }
+p.tag span.flag { display: inline-block; background-color: aliceblue; color: black; padding: 0.1em; margin-left: 0.5em }
+
+.xml-source { border: thin solid black; padding: 0.5em; margin: 0.5em; }
+
+code { background-color: gainsboro; font-family: monospace; font-weight: bold }
+
+
+section.validation { border-top: thin solid black; margin-top: 1em }
+
+
+div.report { display: grid; grid-template-columns: 1fr 2fr 1fr;
+background-color: aliceblue; border: thin solid black; padding: 0.4em; margin-top: 1em }
+div.report > * { margin: 0em; padding: 0.2em }
+div.report .title  { grid-column: 1; font-weight: normal }
+div.report .msg  { grid-column: 2 }
+div.report .path { grid-column: 3 }
+
+div.control-list { display: grid; grid-template-columns: auto auto }
+div.control-list > * { margin: 0em; padding: 0.2em }
+
+.msg          { background-color: lightgreen; border: thin solid green }
+.problematic  { background-color: pink;       border: thin solid red }
+.remarkable   { background-color: yellow;     border: thin solid orange }
+.path         { font-family: monospace; padding-left: 0.2em }
+
+.xpath { font-family: monospace; font-size: 95%; background-color: white }
+
+code.ctrl { background-color: white; padding: 0.1em; display: inline-block; border: thin outset black }
+      
+.outline { display: flex; flex-flow: row; margin-top: 0em }
+.outline div { flex-grow: 0; margin: 0.1rem  }
+.outline div:first-child { margin-top: 0rem  }
+.outline div:last-child  { margin-bottom: 0rem  }
+
+.oll { font-size: 80%; background-color: gold; padding: 0.2em }
+
+.outline div.olt { border: thin solid cadetblue; background-color: ivory;
+     padding: 0.1rem; font-size: 60%; font-family: "Open Sans", sans-serif }
+
