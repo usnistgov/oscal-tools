@@ -8,6 +8,11 @@ on:
   workflow_dispatch:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/website-deploy.yml'
 name: Publish Website
 env:
   # the name of the repo
@@ -37,6 +42,13 @@ jobs:
         run: |
           git pull --ff-only
         working-directory: ${{ env.OSCAL_HOME }}
+      # use this for pull request builds where checkout uses the builtin token
+      - name: Checkout PR
+        uses: actions/checkout@v2
+        if: ${{ github.repository != env.HOME_REPO || github.event_name != 'push' }}
+        with:
+          path: ${{ env.OSCAL_HOME }}
+          submodules: recursive
       # Setup runtime environment
       # -------------------------
       # Operating System packages
