@@ -1,7 +1,7 @@
 ---
-title: Format Converters
+title: Catalog Converters
 usabanner: true
-description: Making your OSCAL XML into JSON or your OSCAL JSON into XML
+description: Making your OSCAL XML Catalog into JSON or your OSCAL JSON Catalog into XML
 ---
 
 These rely on the public XSLTs released on the OSCAL web site, packaged and compiled to run in your browser.

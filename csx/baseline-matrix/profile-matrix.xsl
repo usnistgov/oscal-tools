@@ -85,7 +85,7 @@
     
     <xsl:template match="html:div[@id='directory']/html:div[@class='family-item']/html:label/html:a" mode="ixsl:onclick">
         <xsl:variable name="family-id" select="substring-after(@href,'#')"/>
-        <xsl:message expand-text="true">clicked for { $family-id }</xsl:message>
+        <!--<xsl:message expand-text="true">clicked for { $family-id }</xsl:message>-->
         <xsl:for-each select="id($family-id)">
             <ixsl:set-attribute name="open" select="'open'"/>
         </xsl:for-each>
@@ -422,7 +422,7 @@
         <xsl:param tunnel="true" name="profile" as="document-node()" required="true"/>
         <xsl:variable name="controlid" select="parent::html:tr/@id"/>
         <xsl:next-match/>
-        <xsl:message expand-text="true">{ $controlid } CELL -</xsl:message>
+        <!--<xsl:message expand-text="true">{ $controlid } CELL -</xsl:message>-->
         <td class="occur">
             <xsl:sequence select="XJS:mark-baseline-occurrence($profile, $controlid)"/>
         </td>
