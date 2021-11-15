@@ -68,8 +68,8 @@ Like the [Baseline Matrix](baseline-matrix "Baseline Matrix demo"), this applica
 {{< /accordian-entry >}}
 {{< accordian-entry heading="Format Converters">}}
 
-- [Link to the JSON-to-XML catalog converter](format-converter/fromjson/catalog)
-- [Link to the XML-to-JSON catalog converter](format-converter/fromxml/catalog)
+- [Link to the JSON-to-XML catalog converter](format-converter/fromjson)
+- [Link to the XML-to-JSON catalog converter](format-converter/fromxml)
 
 The OSCAL project publishes format converter stylesheets to produce [JSON from XML](https://github.com/usnistgov/OSCAL/tree/main/xml/convert) or [XML from JSON](https://github.com/usnistgov/OSCAL/tree/main/json/convert). These demonstrations apply these transformations to content copied or uploaded into your browser, permitting you to save the results locally.
 
