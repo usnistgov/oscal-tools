@@ -8,6 +8,7 @@ custom_css:
 
 {{< rawhtml >}}
 <script type="text/javascript" src="../../lib/Saxon-JS-2.2/SaxonJS2.js"> </script>
+
         <script xml:space="preserve">
      
     function makeJSONforXML(xmltext) {
