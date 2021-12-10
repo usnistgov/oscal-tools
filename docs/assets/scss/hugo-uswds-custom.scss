@@ -26,7 +26,7 @@
 .usa-banner__button {
   @include at-media("tablet") {
     &:after {
-    -webkit-mask:  url(http://localhost:1313/oscal-tools//img/usa-icons/expand_more.svg) no-repeat center
+    -webkit-mask: url(https://pages.nist.gov/oscal-tools/img/usa-icons/expand_more.svg) no-repeat center
     }
   }
 }
