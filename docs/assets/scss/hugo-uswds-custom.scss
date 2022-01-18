@@ -18,3 +18,15 @@
     float: inherit;
   }
 }
+
+.usa-site-alert--info .usa-alert:before {
+    -webkit-mask: url(https://pages.nist.gov/oscal-tools/img/usa-icons/info.svg) no-repeat center
+    }
+
+.usa-banner__button {
+  @include at-media("tablet") {
+    &:after {
+    -webkit-mask: url(https://pages.nist.gov/oscal-tools/img/usa-icons/expand_more.svg) no-repeat center
+    }
+  }
+}
