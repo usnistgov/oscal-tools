@@ -8,10 +8,9 @@ menu:
 toc:
   enabled: true
 usabanner: true
-draftbanner: true
 ---
 
-[OSCAL, the Open Security Controls Assessment Language](http://pages.nist.gov/OSCAL), is being developed by NIST (the National Institute of Standards and Technology) in partnership with government and industry. It is an open resource available for use and study by developers and organizations in the public and private sectors.
+This site is an open resource available for use and study by developers and organizations in the public and private sectors who wish to explore the Open Security Controls Assessment Language (OSCAL).
 
 All software presented or documented on this site, unless stated otherwise, is subject to the terms of the [NIST Disclaimer Statement](https://www.nist.gov/disclaimer), copied verbatim below (as of October 25 2021).
 
@@ -33,9 +32,22 @@ A link is also provided in the main menu to the [OSCAL web site](https://pages.n
 
 This site is presented as a point of access and source of information regarding tools and demonstrations stored in (and in some cases, served from) its repository, or elsewhere. Each project has its own development and maintenance plan appropriate to its deployment and objectives.
 
-This information should be given on pages describing each project or in the readme files of the respective code bases themselves. Similarly, while users are urged to use the Github Issues interface to report bugs and pose questions, it is likely that this feedback will be passed to the appropriate project owner or developer, with responses provided accordingly through those channels or others.
+This information should be given on pages describing each project or in the readme files of the respective code bases themselves. Similarly, while users are urged to use the [Github Issues](https://github.com/usnistgov/OSCAL/issues) boards to report bugs and pose questions, it is likely that this feedback will be passed to the appropriate project owner or developer, with responses provided accordingly through those channels or others. Community channels such as public meetings, the Github repository Discussions support or resources such as the [OSCAL Gitter "Lobby"](https://gitter.im/usnistgov-OSCAL/Lobby) (real-time chat) are the best ways of determining the activity level and responsiveness for any given OSCAL-related initiative.
 
-The developers of this site plan it as a parallel effort to the main OSCAL initiative, intended to complement and further catalyze those activities. As such we hope it will grow and evolve as long as OSCAL does.
+<div class="usa-alert usa-alert--info usa-alert--slim">
+  <div class="usa-alert__body">
+    <p class="usa-alert__text">Check our <a class="usa-link" href="javascript:void(0);" href="https://github.com/usnistgov/OSCAL/issues">Issues</a> page in the Github repository</p>
+  </div>
+</div>
+<div class="usa-alert usa-alert--info usa-alert--slim">
+  <div class="usa-alert__body">
+    <p class="usa-alert__text">Learn more about <a class="usa-link" href="javascript:void(0);" href="https://pages.nist.gov/OSCAL/contribute/">OSCAL</a></p>
+  </div>
+</div>
+
+
+
+The developers of this site offer it as a parallel effort to the main [OSCAL](https://pages.nist.gov/OSCAL) development project, intended to complement and further catalyze those activities. As such we hope it will grow and evolve as long as OSCAL does.
 
 ## NIST Disclaimer Statement
 

@@ -5,7 +5,6 @@ heading: "CSX: Client-side XSLT"
 toc:
   enabled: true
 usabanner: true
-draftbanner: true
 ---
 
 Client-side [XSLT](https://www.w3.org/TR/xslt-30/) is an architecture in which application logic is distributed to web clients (browsers) to apply to data under local control, without exposure. This project focused on applications built using the [SaxonJS](https://www.npmjs.com/package/saxon-js) implementation of XSLT 3.0, which functions in late-model web browsers (writing in 2021). Source code in XSLT is compiled into a JSON transformation 'plan', which can be downloaded with a page and applied by SaxonJS on the user's machine. Especially of interest to us (although not exclusively) were scenarios in which the data to be processed (main transformation input or source) belongs to, and remains in the custody of, the user. CSX is appealing here because the user presumably wants to see the results of processing the data, but does not wish to expose either data or results to anyone (or at any rate to anyone not already authorized and inside the system). OSCAL offers examples of such use cases in the creation (derivation or authoring), display, analysis, and validation of catalogs, profiles and other information types.

@@ -28,30 +28,35 @@
         <xsl:apply-templates select="*" mode="cast"/>
     </xsl:template>    
     
-    <xsl:template match="*" mode="cast">
+    <xsl:template match="*" mode="cast" expand-text="true">
         <map>
-            <string key="element">
-                <xsl:value-of select="local-name(.)"/>
-            </string>
+            <string key="_gi">{ name(.) }</string>
+            <!--<map key="name">
+                <string key="local">
+                  <xsl:value-of select="local-name(.)"/>
+                </string>
+                <xsl:for-each select="prefix-from-QName( node-name() )">
+                    <string key="prefix">{ . }</string>
+                </xsl:for-each>
+                <xsl:if test="not( namespace-uri(.) eq namespace-uri(parent::node()) )">
+                    <string key="ns">{  namespace-uri(.) }</string>
+                    </xsl:if>
+            </map>-->
             <xsl:apply-templates select="@*" mode="cast"/>
             <xsl:if test="boolean(node())">
-                <array key="content">
+                <array key="_C">
                     <xsl:apply-templates mode="cast"/>
                 </array>
             </xsl:if>
         </map>
     </xsl:template>
     
-    <xsl:template match="text()" mode="cast">
-        <string>
-            <xsl:value-of select="replace(.,'\s+',' ')"/>
-        </string>
+    <xsl:template match="text()" mode="cast" expand-text="true">
+        <string>{ replace(.,'\s+',' ') }</string>
     </xsl:template>
     
-    <xsl:template match="@*" mode="cast">
-        <string key="@{ local-name() }">
-            <xsl:value-of select="."/>
-        </string>
+    <xsl:template match="@*" mode="cast" expand-text="true">
+        <string key="@{ local-name() }">{ string(.) }</string>
     </xsl:template>
     
 <!-- Comments and PIs are dropped. -->
