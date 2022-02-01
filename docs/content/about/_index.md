@@ -29,6 +29,14 @@ These site contents are arranged in two parallel branches, [Projects](/projects)
 
 A link is also provided in the main menu to the [OSCAL web site](https://pages.nist.gov/OSCAL) where normative specifications can be found.
 
+## Site and Project Maintenance Model
+
+This site is presented as a point of access and source of information regarding tools and demonstrations stored in (and in some cases, served from) its repository, or elsewhere. Each project has its own development and maintenance plan appropriate to its deployment and objectives.
+
+This information should be given on pages describing each project or in the readme files of the respective code bases themselves. Similarly, while users are urged to use the Github Issues interface to report bugs and pose questions, it is likely that this feedback will be passed to the appropriate project owner or developer, with responses provided accordingly through those channels or others.
+
+The developers of this site plan it as a parallel effort to the main OSCAL initiative, intended to complement and further catalyze those activities. As such we hope it will grow and evolve as long as OSCAL does.
+
 ## NIST Disclaimer Statement
 
 Any mention of commercial products within NIST web pages is for information only; it does not imply recommendation or endorsement by NIST.
