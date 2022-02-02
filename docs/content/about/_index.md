@@ -36,12 +36,12 @@ This information should be given on pages describing each project or in the read
 
 <div class="usa-alert usa-alert--info usa-alert--slim">
   <div class="usa-alert__body">
-    <p class="usa-alert__text">Check our <a class="usa-link" href="javascript:void(0);" href="https://github.com/usnistgov/OSCAL/issues">Issues</a> page in the Github repository</p>
+    <p class="usa-alert__text">Check our <a class="usa-link" href="https://github.com/usnistgov/OSCAL/issues">Issues</a> page in the Github repository</p>
   </div>
 </div>
 <div class="usa-alert usa-alert--info usa-alert--slim">
   <div class="usa-alert__body">
-    <p class="usa-alert__text">Learn more about <a class="usa-link" href="javascript:void(0);" href="https://pages.nist.gov/OSCAL/contribute/">OSCAL</a></p>
+    <p class="usa-alert__text">Learn more about <a class="usa-link" href="https://pages.nist.gov/OSCAL/contribute/">OSCAL</a></p>
   </div>
 </div>
 
