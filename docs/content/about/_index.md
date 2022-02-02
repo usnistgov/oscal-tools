@@ -18,7 +18,7 @@ This site offers documentation and demonstration applications supporting and rel
 
   - As a springboard or launchpad for understanding
   - As an opportunity to test and demonstrate OSCAL technologies, specifications, and concepts
-  - For use (where appropriate) <q>in the field</q> to address actual data processing requirements
+  - For use (*where appropriate*) <q>in the field</q> to address actual data processing requirements
 
 Not all applications will be equally mature, and some may not even be fully usable or conformant (if and as specifications continue to evolve). If appearing here, an application should be said (unless stated otherwise) to come *without warranty, as these are R&amp;D applications not always tested fully*. That being said, real cupcakes can be baked in a toy oven, and each project here should document its own version(s) and dependencies.
 
