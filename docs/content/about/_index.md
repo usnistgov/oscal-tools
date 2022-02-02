@@ -16,11 +16,12 @@ All software presented or documented on this site, unless stated otherwise, is s
 
 This site offers documentation and demonstration applications supporting and related to OSCAL --
 
-  - As a springboard or launchpad for understanding
-  - As an opportunity to test and demonstrate OSCAL technologies, specifications, and concepts
-  - For use (*where appropriate*) <q>in the field</q> to address actual data processing requirements
+  - As a launchpad for understanding
+  - As a <q>proving ground</q>: an opportunity to test and demonstrate OSCAL technologies, specifications, and concepts
 
-Not all applications will be equally mature, and some may not even be fully usable or conformant (if and as specifications continue to evolve). If appearing here, an application should be said (unless stated otherwise) to come *without warranty, as these are R&amp;D applications not always tested fully*. That being said, real cupcakes can be baked in a toy oven, and each project here should document its own version(s) and dependencies.
+In particular it is necessary to consider when if ever it is appropriate to use these technologies to address actual data processing needs <q>in the field</q>. Conceived for the purposes of R&amp;D, the applications are not equally mature and may not be maintained consistently (depending on the case), and some may not even be fully usable or conformant (if and as specifications continue to evolve). If appearing here, an application should be said (unless stated otherwise) to come *without warranty, as detailed in the disclaimer below*.
+
+That being said, real cupcakes can be baked in a toy oven, and in addition to showing capabilities, each project here should document its own version(s) and dependencies, for users to assess. Our development model (relying on public repositories for long-term access and maintenance management) encourages users to fork, modify and adapt.
 
 ## Site Organization
 
@@ -45,9 +46,7 @@ This information should be given on pages describing each project or in the read
   </div>
 </div>
 
-
-
-The developers of this site offer it as a parallel effort to the main [OSCAL](https://pages.nist.gov/OSCAL) development project, intended to complement and further catalyze those activities. As such we hope it will grow and evolve as long as OSCAL does.
+This site is offered as an effort parallel to the main [OSCAL](https://pages.nist.gov/OSCAL) development project, intended to complement and further catalyze that activity. Accordingly we hope it will grow and evolve as long as OSCAL does.
 
 ## NIST Disclaimer Statement
 
