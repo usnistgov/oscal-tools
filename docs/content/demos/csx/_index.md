@@ -11,7 +11,7 @@ Client-side [XSLT](https://www.w3.org/TR/xslt-30/) (CSX) is an architecture in w
 
 Several of these applications were first offered at [Balisage: The Markup Conference 2021](https://www.balisage.net/Proceedings/vol26/cover.html), and are reproduced here with grateful acknowledgement to conference organizers and attendees (as well as to NIST colleagues) for helping to motivate their longer-term support and maintenance. Early versions were hosted on the developer's [personal repository](https://github.com/wendellpiez/XMLjellysandwich), which still hosts a number of [interesting CSX applications](https://wendellpiez.github.io/XMLjellysandwich/) not based on OSCAL.
 
-Notwithstanding this support these applications should be regarded as *experimental* and suitable primarily for *demonstration* and *testing*. 
+Notwithstanding this support these applications should be regarded as *experimental* and suitable primarily for *demonstration* and *testing*. Additionally, since they were developed to the 1.0.0 version of OSCAL, caution should be exercised when using with later versions (until and unless the tools are also updated).
 
 See [CSX Project page](/projects/csx) for more details.
 
@@ -73,7 +73,7 @@ Like the [Baseline Matrix](baseline-matrix "Baseline Matrix demo"), this applica
 
 The OSCAL project publishes format converter stylesheets to produce [JSON from XML](https://github.com/usnistgov/OSCAL/tree/main/xml/convert) or [XML from JSON](https://github.com/usnistgov/OSCAL/tree/main/json/convert). These demonstrations apply these transformations to content copied or uploaded into your browser, permitting you to save the results locally.
 
-The converter provided works on OSCAL catalogs; other (metaschema-based) models could be supported by similar means (please let us know).
+The converter provided works on OSCAL catalogs; other (metaschema-based) models could be supported by similar means (please let us know). These conversions were generated from the 1.0.0 version of the OSCAL metaschemas and reflect those models.
 
 {{< /accordian-entry >}}
 {{< /accordian >}}
