@@ -56,7 +56,7 @@ As an application its practical usefulness is limited to authors of profiles bas
 
 Picking up from the Import Examiner, the Schema Emulator explores the idea that if a person can write application logic to test constraints over OSCAL data, so can a code generator (given an appropriate information source); and thus a machine-generated XSLT transformation can test the same set of constraints as are declared in an OSCAL metaschema, and as are commonly enforced by a schema language such as XML Schema Definition (XSD) or JSON Schema.
 
-In this case, the rules asserted by the OSCAL Catalog Model (metaschema) are expressed by an XSLT that produces error reports when presented with data that violates the model described. *This is work in progress*.
+In this case, the rules asserted by the OSCAL Catalog Model (metaschema) are expressed by an XSLT that produces error reports when presented with data that violates the model described.
 
 {{< /accordian-entry >}}
 {{< accordian-entry heading="Baseline Reviewer">}}
@@ -72,6 +72,8 @@ Like the [Baseline Matrix](baseline-matrix "Baseline Matrix demo"), this applica
 - [Link to the XML-to-JSON catalog converter](format-converter/fromxml)
 
 The OSCAL project publishes format converter stylesheets to produce [JSON from XML](https://github.com/usnistgov/OSCAL/tree/main/xml/convert) or [XML from JSON](https://github.com/usnistgov/OSCAL/tree/main/json/convert). These demonstrations apply these transformations to content copied or uploaded into your browser, permitting you to save the results locally.
+
+The converter provided works on OSCAL catalogs; other (metaschema-based) models could be supported by similar means (please let us know).
 
 {{< /accordian-entry >}}
 {{< /accordian >}}
