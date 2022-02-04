@@ -8,7 +8,6 @@ menu:
 toc:
   enabled: true
 usabanner: true
-draftbanner: true
 ---
 
 The tools published on this site have been developed for the most part in the context of research and development projects with specific goals.

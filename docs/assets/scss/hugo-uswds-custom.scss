@@ -23,6 +23,10 @@
     -webkit-mask: url(https://pages.nist.gov/oscal-tools/img/usa-icons/info.svg) no-repeat center
     }
 
+.usa-alert--info:before {
+    -webkit-mask: url(https://pages.nist.gov/oscal-tools/img/usa-icons/info.svg) no-repeat center
+    }
+
 .usa-banner__button {
   @include at-media("tablet") {
     &:after {
