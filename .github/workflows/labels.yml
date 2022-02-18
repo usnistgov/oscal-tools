@@ -6,10 +6,10 @@ on:
       - main
     paths:
       - '.github/labels.json'
-name: Create Default Labels
+name: Sync Issue & PR Labels
 jobs:
   labels:
-    name: DefaultLabelsActions
+    name: Update Labels
     runs-on: ubuntu-latest
     permissions:
       contents: read

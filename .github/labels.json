@@ -10,20 +10,13 @@
     { "name": "wontfix", "color":"ffffff", "description":"This will not be worked on"},
 
     { "name": "closable", "color":"0E8A16", "description":"Can be closed by the repository maintainers."},
-    { "name": "discussion required", "color":"fc6b03", "description":"Needs more discussion to be considered"},
-    { "name": "review required", "color":"fc6b03", "description":"Needs more review to be considered"},
-    { "name": "action required", "color":"b50b0b", "description":"Requires the assignee to take some action described in the comments"},
+    { "name": "discussion required", "color":"b30ecc", "description":"Needs more discussion to be considered"},
+    { "name": "review required", "color":"ccb60e", "description":"Needs more review to be considered"},
+    { "name": "action required", "color":"cc540e", "description":"Requires the assignee to take some action described in the comments"},
     { "name": "user story", "color":"a103fc", "description":"User story for a development task"},
 
-    { "name": "LoE: Large", "color":"f9d0c4", "description":"Requires more than 20 hours to address"},
-    { "name": "LoE: Medium", "color":"fef2c0", "description":"Requires more than 8 hours and up to 20 hours to address"},
-    { "name": "LoE: Small", "color":"c2e0c6", "description":"Requires up to 8 hours to address"},
-
     { "name": "Scope: CI/CD", "color":"67efe2", "description":"Related to maintaining repo's continuous integration and continuous deployment environment"},
-    { "name": "Scope: Content", "color":"bfd4f2", "description":"Related to content and examples"},
     { "name": "Scope: Documentation", "color":"bfdadc", "description":"Related to maintaining repo documentation"},
-    { "name": "Scope: Modeling", "color":"2d6fad", "description":"Related to maintaining OSCAL models and their related formats."},
-    { "name": "Scope: Metaschema", "color":"006b75", "description":"Related to maintaining the Metaschema modeling framework and toolchain"},
     { "name": "Scope: Repository", "color":"9a71f2", "description":"Related to maintenance and configuration of the repository"},
     { "name": "Scope: Tooling and APIs", "color":"71ddb7", "description":"Related to developing tooling and APIs"},
     { "name": "Scope: Website", "color":"610999", "description":"Related to the repo's associated website"}
