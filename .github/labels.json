@@ -15,9 +15,9 @@
     { "name": "action required", "color":"cc540e", "description":"Requires the assignee to take some action described in the comments"},
     { "name": "user story", "color":"a103fc", "description":"User story for a development task"},
 
-    { "name": "Scope: CI/CD", "color":"67efe2", "description":"Related to maintaining repo's continuous integration and continuous deployment environment"},
+    { "name": "Scope: CI/CD", "color":"11cc0e", "description":"Related to maintaining repo's continuous integration and continuous deployment environment"},
     { "name": "Scope: Documentation", "color":"bfdadc", "description":"Related to maintaining repo documentation"},
-    { "name": "Scope: Repository", "color":"9a71f2", "description":"Related to maintenance and configuration of the repository"},
+    { "name": "Scope: Repository", "color":"0eccc6", "description":"Related to maintenance and configuration of the repository"},
     { "name": "Scope: Tooling and APIs", "color":"71ddb7", "description":"Related to developing tooling and APIs"},
-    { "name": "Scope: Website", "color":"610999", "description":"Related to the repo's associated website"}
+    { "name": "Scope: Website", "color":"0e24cc", "description":"Related to the repo's associated website"}
 ]
