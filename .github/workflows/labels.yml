@@ -1,0 +1,21 @@
+on:
+  label:
+    types: [created,deleted,edited]
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/labels.json'
+name: Create Default Labels
+jobs:
+  labels:
+    name: DefaultLabelsActions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@1.0.0
+      - uses: lannonbr/issue-label-manager-action@2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
