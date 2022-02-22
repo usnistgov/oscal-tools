@@ -11,6 +11,10 @@
    
    <xsl:import href="oscal_metadata_html.xsl"/>
    
+<!-- Note on use of labels:
+   Where a prop[@name='label'] is assumed to appear in the input, only the first of these
+   given (in document) is called for - look for prop[@name='label'][1]
+   -->
    
    
    <xsl:param name="css-path" as="xs:string" select="''"/>
@@ -96,7 +100,7 @@
    
    <xsl:template match="control" mode="toc-listing">
       <p class="toc-listing">
-         <xsl:apply-templates mode="#current" select="prop[@name='label']"/>
+         <xsl:apply-templates mode="#current" select="prop[@name='label'][1]"/>
          <xsl:text> </xsl:text>
          <xsl:apply-templates mode="#current" select="title"/>
       </p>
@@ -123,7 +127,7 @@
          </a>
          <span class="toc-title">
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="(prop[@name='label'],../@id/upper-case(.))[1]"/>
+            <xsl:value-of select="(prop[@name='label']/@value,../@id/upper-case(.))[1]"/>
             <xsl:text>)</xsl:text>
          </span>
       </summary>
@@ -136,7 +140,7 @@
    </xsl:template>
    
    <xsl:template priority="2" match="control/control/prop[@name='label']" mode="toc-listing">
-      <xsl:variable name="parent-label" select="../parent::control/prop[@name='label']/@value"/>
+      <xsl:variable name="parent-label" select="../parent::control/prop[@name='label'][1]/@value"/>
       <span class="toc-label">
          <xsl:value-of select="substring-after(@value,$parent-label)"/>
       </span>
@@ -263,7 +267,7 @@
    
    <xsl:template match="control" mode="badge">
       <span class="badge">
-         <xsl:for-each select="prop[@name='label']">
+         <xsl:for-each select="prop[@name='label'][1]">
             <xsl:value-of select="@value"/>
          </xsl:for-each>
       </span>

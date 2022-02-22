@@ -4,11 +4,11 @@
 .UNKNOWN .tag { color: darkred }
 
 .lbl { background-color: midnightblue; color: white;
-  font-size: 80%; font-weight: bold; font-family: sans-serif;
+  font-size: 80%; font-weight: bold; font-family: Calibri, sans-serif;
   padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
 
 .lbl2 { background-color: white; color: black; border: thin solid black;
-  font-size: 80%; font-weight: bold; font-family: sans-serif;
+  font-size: 80%; font-weight: bold; font-family: Calibri, sans-serif;
   padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
 
 .metadata, section.ToC { padding: 0.4em; border: thin solid black; margin-top: 1em }
@@ -19,7 +19,7 @@
 
 div > .line { margin: 0.5em 0em 0em 0em }
 
-section.ToC { font-family: sans-serif }
+section.ToC { font-family: Calibri, sans-serif }
 
 div.ToC { margin-left: 2em; margin-top: 0em }
 details p.toc-listing { margin: 0em 0em 0em 1em }
@@ -30,7 +30,7 @@ div.enhancements p.toc-listing { display: inline-block }
 .toc-title { font-weight: bold }
 .enhancements .toc-title { font-weight: inherit; font-size: 80% }
 
-.withdrawn-status { font-family: sans-serif; font-size: 90%; font-style: italic }
+.withdrawn-status { font-family:  Calibri, sans-serif; font-size: 90%; font-style: italic }
 
 .description {  }
 
@@ -45,10 +45,10 @@ div.enhancements p.toc-listing { display: inline-block }
 .annotation:hover { background-color: lemonchiffon }
 
 .roles { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
-.roles:before { content: "Roles:"; display: block; font-family: sans-serif; font-size: 80% }
+.roles:before { content: "Roles:"; display: block; font-family:  Calibri, sans-serif; font-size: 80% }
 
 .parties { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
-.parties:before { content: "Parties:"; display: block; font-family: sans-serif; font-size: 80%  }
+.parties:before { content: "Parties:"; display: block; font-family:  Calibri, sans-serif; font-size: 80%  }
 
 
 .metadata details div.role { background-color: white; border: thin dotted black; padding: 0.5em;
@@ -69,7 +69,7 @@ div.enhancements p.toc-listing { display: inline-block }
 
 
 span.badge { color: midnightblue;
-  font-family: sans-serif; font-weight: bold; border-radius: 0.25em;
+  font-family:  Calibri, sans-serif; font-weight: bold; border-radius: 0.25em;
   padding: 0.25em; border: thin solid midnightblue; margin-right: 0.25em }
 
 span.label { font-weight: normal; padding: 0em 0.5em 0em 0em }
@@ -88,14 +88,14 @@ div.statement div:hover { border: medium solid lightsteelblue }
 
 div.none { display: none }
 
-summary > h2, summary > h3, summary > h4 { display: inline-block; font-family: sans-serif }
+summary > h2, summary > h3, summary > h4 { display: inline-block; font-family:  Calibri, sans-serif }
 
 summary > .head:after { content: ': ' }
 
 summary > h1, summary > h2, summary > h3, summary > h4 { max-width: 80%;
   vertical-align: top; margin: 0em }
 
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .head { font-family: sans-serif }
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .head { font-family:  Calibri, sans-serif }
 
 .h1 { font-size: 2em;    font-weight: bold }
 .h2 { font-size: 1.5em;  font-weight: bold }
@@ -104,10 +104,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .head { font-family: sans-
 .h5 { font-size: .83em;  font-weight: bold }
 .h6 { font-size: .67em;  font-weight: bold }
 
-p .inline-head { text-decoration: underline; font-family: sans-serif; font-size: 90% }
+p .inline-head { text-decoration: underline; font-family:  Calibri, sans-serif; font-size: 90% }
 
 .insert { font-style: italic; font-weight: bold }
-.insert a { font-size: 80%; font-weight: bold; font-family: sans-serif }
+.insert a { font-size: 80%; font-weight: bold; font-family:  Calibri, sans-serif }
 
 .group { border-top: thin solid black; padding: 0.5em 0em }
 
@@ -157,11 +157,11 @@ a:hover { text-decoration: underline }
 
 
 .lbl { background-color: midnightblue; color: white;
-  font-size: 80%; font-weight: bold; font-family: sans-serif;
+  font-size: 80%; font-weight: bold; font-family:  Calibri, sans-serif;
   padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
 
 .lbl2 { display: inline-block; border: thin solid black;
-  font-size: 80%; font-family: sans-serif;
+  font-size: 80%; font-family: Calibri, sans-serif;
   padding: 0.2em 0.5em; margin: 0em 0.5em 0em 0em }
 
 .metadata { padding: 0.4em; border: thin solid black }
@@ -209,11 +209,14 @@ div > .line { margin: 0.5em 0em 0em 0em }
 .role {  }
 
 .roles { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
-.roles:before { content: "Roles:"; display: block; font-family: sans-serif; font-size: 80% }
+.roles:before { content: "Roles:"; display: block; font-family: Calibri, sans-serif; font-size: 80% }
 
 .parties { margin-top: 0.5em; padding: 0.5em; background-color: gainsboro }
-.parties:before { content: "Parties:"; display: block; font-family: sans-serif; font-size: 80%  }
+.parties:before { content: "Parties:"; display: block; font-family: Calibri, sans-serif; font-size: 80%  }
 
+table.objective-table td { padding: 0.4em; font-family: Calibri, sans-serif; border-bottom: thin solid black; border-top: thin solid black; }
+
+.assessment-label { background-color: gainsboro }
 
 .metadata details div.role { background-color: white; border: thin dotted black; padding: 0.5em;
   display: inline-block; margin: 1em 0em 0em 0em; vertical-align: top }
