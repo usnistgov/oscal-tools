@@ -11,6 +11,14 @@ XSLT transformations can be applied to XML data to produce results (outputs) in 
 
 Neither the HTML nor the PDF outputs produced by this software is or can be warranted for any purpose. They are published mainly for the purpose of providing baseline functionality, as a starting point for others.
 
+## XSLT Version
+
+Unless marked otherwise, assume that XSLT in this repository conforms to version 3.0 and may exploit 3.0 features. Accordingly it will not run in older XSLT engines: at least Saxon version 10 is recommended (any platform or license, or the free-to-use Saxon 10 HE).
+
+Some stylesheets may conform to older versions including XSLT 1.0 for use in browsers, but these will be special purpose.
+
+See more below under "XSLT Dependencies".
+
 ## Summary of XSLT transformations available
 
 ### Producing HTML (web pages)
