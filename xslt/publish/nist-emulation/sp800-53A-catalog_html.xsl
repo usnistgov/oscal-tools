@@ -8,20 +8,6 @@
 
    <xsl:import href="../generic-preview/oscal_catalog_html.xsl"/>
    
-<!--  
-   
-   
-   x  confirm run on old data / tweak
-   x confirm run on new data
-   x run to PDF
-   o rename 'objective-part' as 'statement-part'?
-   x paste screen shot
-   o update comments
-   o PR
-   o CSX: catalog display
-   
-   -->
-   
    <!-- Space can be stripped from anything modeled as an assembly. -->
    <xsl:strip-space elements="catalog group control param guideline select part
       metadata back-matter annotation party person org rlink address resource role responsible-party citation

@@ -14,3 +14,10 @@ Although at different stages of development, for the most part these resources h
 `lib` - miscelleneous tooling at different stages of maturity
 
 `publish` - publishing OSCAL in HTML and PDF formats
+
+## XSLT Version
+
+Unless marked otherwise, assume that XSLT in this repository conforms to version 3.0 and may exploit 3.0 features. Accordingly it will not run in older XSLT engines: at least Saxon version 10 is recommended (any platform or license, or the free-to-use Saxon 10 HE).
+
+Some stylesheets may conform to older versions including XSLT 1.0 for use in browsers, but these will be special purpose.
+
