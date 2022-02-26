@@ -7,7 +7,6 @@
 
   <xsl:param name="base-font-size" >10pt</xsl:param>
   
-  
   <xsl:variable name="small"      >9pt</xsl:variable>
   <xsl:variable name="extra-small">7pt</xsl:variable>
   <xsl:variable name="smaller"    >80%</xsl:variable>
@@ -20,7 +19,7 @@
   <xsl:variable name="label-font-family" >'Calibri'</xsl:variable>-->
   
 <!-- YMMV: try with and without quotes -->
-  <xsl:param name="use-font" as="xs:string">'Calibri'</xsl:param>
+  <xsl:param name="use-font" as="xs:string">Calibri, sans-serif</xsl:param>
   
   <xsl:variable name="body-font-family"    select="$use-font"/>
   <xsl:variable name="display-font-family" select="$use-font"/>
@@ -63,8 +62,57 @@
         <xsl:call-template name="main-page-layout"/>
       </fo:layout-master-set>
 
+      <fo:declarations>
+        <x:xmpmeta xmlns:x="adobe:ns:meta/">
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:title>
+                <xsl:value-of select="/html/head/title"/>
+              </dc:title>
+              <!--<dc:creator> XOXOXOXOX </dc:creator>
+              <dc:description>  XOXOXOXOX </dc:description>-->
+            </rdf:Description>
+          </rdf:RDF>
+        </x:xmpmeta>
+      </fo:declarations>
+      <xsl:apply-templates select="/html/body/main" mode="bookmarking"/>
+      
       <xsl:apply-templates select="/html/body"/>
     </fo:root>
+  </xsl:template>
+  
+  <xsl:template match="body/main" mode="bookmarking">
+    <fo:bookmark-tree>
+      <xsl:apply-templates select="section" mode="#current"/>
+    </fo:bookmark-tree>
+  </xsl:template>
+  
+  <!-- set up for 53B tables not for generic bookmarking -
+     maybe factor out to the calling XSLT oscal_sp800-53B-emulator_fo.xsl -->
+  <xsl:template match="body/main/section" mode="bookmarking">
+    <xsl:variable name="family-name" select="details/summary/text()[1]/normalize-space()"/>
+    <fo:bookmark internal-destination="{ @id }">
+      <fo:bookmark-title>
+        <xsl:value-of select="$family-name"/>
+        <xsl:text> Family </xsl:text>
+        <xsl:value-of select="concat('(',upper-case(@id),')')"/>
+      </fo:bookmark-title>
+      <!-- grabs all controls including enhancements, but the enhancements are captured by a no-op template -->
+      <xsl:apply-templates select="details/child::div[@class='control']" mode="#current"/>      
+    </fo:bookmark>
+  </xsl:template>
+  
+  <xsl:template match="div[@class='control']" mode="bookmarking">
+    <fo:bookmark internal-destination="{ @id }">
+      <fo:bookmark-title>
+        <xsl:apply-templates select="details/summary" mode="#current"/>
+      </fo:bookmark-title>
+    </fo:bookmark>
+  </xsl:template>
+  
+  <xsl:template match="span[@class='label']" mode="bookmarking">
+    <xsl:apply-templates/>
+    <xsl:text>: </xsl:text>
   </xsl:template>
   
   <xsl:template name="main-page-layout">
@@ -182,7 +230,7 @@
       <fo:static-content flow-name="header">
         <xsl:apply-templates select="ancestor::body" mode="header-table"/>
       </fo:static-content>
-      <fo:static-content flow-name="footer" font-family="{ $frame-font-family }" text-align="center" padding-top="1em">
+      <fo:static-content flow-name="footer" font-family="{ $frame-font-family }" text-align="center">
         <xsl:call-template name="oscal-source-notice"/>
         <fo:block space-before="1em">PAGE <fo:page-number/></fo:block>
       </fo:static-content>
@@ -251,11 +299,11 @@
   
   <xsl:template match="body" mode="header-table">
     <fo:table border-after-style="solid" table-layout="fixed" width="6.25in">
-      <fo:table-column width="2.75in"/>
-      <fo:table-column width="3.5in"/>
+      <fo:table-column column-width="2.75in"/>
+      <fo:table-column column-width="3.5in"/>
       <fo:table-body>
         <fo:table-row>
-          <fo:table-cell width="2.75in">
+          <fo:table-cell width="2.25in">
             <fo:block font-size="{$small}">
               <xsl:sequence select="$header-name"/>
               <!--<xsl:text> </xsl:text>
@@ -265,7 +313,7 @@
                 ! replace(.,'T.*$','') ! format-date(xs:date(.), '[MN,3-3] [D] [Y]')"/>-->
             </fo:block>
           </fo:table-cell>
-          <fo:table-cell width="3.5in">
+          <fo:table-cell width="4in">
             <fo:block font-size="{$extra-small}" text-align="right">
               <xsl:apply-templates select="h1[@class='title']" mode="#current"/>
             </fo:block>
@@ -442,9 +490,29 @@
 
   <xsl:template match="summary[contains-token(@class,'h4')]" priority="2"/>
   
-  <xsl:template priority="5" match="details[contains-token(@class,'none')]/summary[contains-token(@class,'h4')]">
-    <fo:block space-before="0.5em" keep-with-next="always">
+  <xsl:template priority="5" match="details[contains-token(@class,'none')]/summary[contains-token(@class,'h4')] |
+    details[table/@class='objective-table']/summary">
+    <fo:block space-before="0.5em" keep-with-next="always" text-decoration="underline">
       <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+  
+  <xsl:template match="div[contains-token(@class,'assessment-method')]">
+    <fo:block space-before="0.5em" id="{@id}">
+      <xsl:for-each select="details/summary">
+        <fo:inline font-family="{ $label-font-family }" text-decoration="underline"
+          font-size="{ $small }">
+          <xsl:apply-templates/>
+        </fo:inline>
+        <fo:inline font-family="{ $label-font-family }" font-size="{ $small }">
+          <xsl:text> (select from): </xsl:text>
+        </fo:inline>
+      </xsl:for-each>
+      <xsl:for-each select="details/div/p">
+        <xsl:if test="position() gt 1">; </xsl:if>
+        <xsl:apply-templates/>
+      </xsl:for-each>
+      <xsl:text>.</xsl:text>
     </fo:block>
   </xsl:template>
   
@@ -590,11 +658,13 @@
 <!-- We recognize certain sorts of tables (indicated by 'class') as def-list structures,
      potentially nested. (A useful pattern.) -->
   
-  <xsl:variable name="list-tables" select="('objective-part','resources')"/>
+  <xsl:variable name="outline-grid-classes" select="('objective-part')"/>
+  <xsl:variable name="resource-grid-classes" select="('resources')"/>
+  <xsl:variable name="assessment-grid-classes" select="('objective-table')"/>
   
 <!-- for now, every table is assumed to be a layout structure.
      They should have a @class to distinguish them. -->
-  <xsl:template match="table[@class=$list-tables]">
+  <xsl:template match="table[@class=($outline-grid-classes,$resource-grid-classes,$assessment-grid-classes)]">
     <fo:list-block provisional-distance-between-starts="2em"
       provisional-label-separation="1em"  space-before="0.5em">
       <xsl:copy-of select="@id"/>
@@ -602,7 +672,24 @@
     </fo:list-block>
   </xsl:template>
   
-  <xsl:template match="table[@class=$list-tables]//tr">
+  <xsl:template match="table[@class=$outline-grid-classes]//tr">
+    <fo:list-item space-before="0.5em">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates select="." mode="tailor-list-item"/>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block>
+          <xsl:apply-templates select="child::td[1]"/>
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block>
+          <xsl:apply-templates select="child::* except child::td[1]"/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  
+  <xsl:template match="table[@class=$resource-grid-classes]//tr">
     <fo:list-item space-before="0.5em">
       <xsl:copy-of select="@id"/>
       <xsl:apply-templates select="." mode="tailor-list-item"/>
@@ -613,7 +700,24 @@
       </fo:list-item-label>
       <fo:list-item-body start-indent="body-start()">
         <fo:block>
-          <xsl:apply-templates select="child::*[@class=('citation','title')] => head()"/>
+          <xsl:apply-templates select="(child::*[@class='citation'], child::*[@class='title'])[1]"/>
+        </fo:block>
+      </fo:list-item-body>
+    </fo:list-item>
+  </xsl:template>
+  
+  <xsl:template match="table[@class=$assessment-grid-classes]//tr">
+    <fo:list-item space-before="0.5em">
+      <xsl:copy-of select="@id"/>
+      <xsl:apply-templates select="." mode="tailor-list-item"/>
+      <fo:list-item-label end-indent="label-end()">
+        <fo:block>
+          <xsl:apply-templates select="child::td[@class='assessment-label']"/>
+        </fo:block>
+      </fo:list-item-label>
+      <fo:list-item-body start-indent="body-start()">
+        <fo:block>
+          <xsl:apply-templates select="child::td[@class='assessment-label']/../td[not(@class='assessment-label')]"/>
         </fo:block>
       </fo:list-item-body>
     </fo:list-item>
@@ -621,7 +725,7 @@
   
   <xsl:template match="*" mode="tailor-list-item"/>
   
-  <xsl:template match="table[@class='resources']//tr" mode="tailor-list-item">
+  <xsl:template match="table[@class=($resource-grid-classes,$assessment-grid-classes)]//tr" mode="tailor-list-item">
     <xsl:attribute name="provisional-distance-between-starts">8em</xsl:attribute>
     <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
   </xsl:template>
@@ -713,6 +817,15 @@
       <xsl:apply-templates/>
     </fo:basic-link>
   </xsl:template>
+  
+  <!-- can make a 'ballot box' char &#9744; \u2610; if you have a font that can manage it -->
+  <!--<xsl:template match="input[@type='checkbox']">&#9744; </xsl:template>-->
+  
+  <!-- emits an em dash assuming your font has no checkbox -->
+  <!--<xsl:template match="input[@type='checkbox']">— </xsl:template>-->
+  
+  <!-- blanks it -->
+  <xsl:template match="input[@type='checkbox']"/>
   
   <xsl:template match="a" mode="link-features">
     <xsl:attribute name="color">blue</xsl:attribute>

@@ -3,6 +3,10 @@
 
 The repository provides XSLT transformations that together form a starter/demo OSCAL publishing platform. The stylesheets are in the public domain, and are designed to be freely used, adapted, and reverse engineered.
 
+For all work in this repository the standard NIST DISCLAIMER applies, as documented here: https://www.nist.gov/disclaimer
+
+(Also copied below as of February 2022.)
+
 XSLT transformations can be applied to XML data to produce results (outputs) in various formats, including other forms of XML, HTML or PDF (for processing by software that know how to read those formats). Since this is a publishing application (that is, aiming at legible display for human readers), we aim at HTML (readily installed into any web site) and PDF.
 
 Neither the HTML nor the PDF outputs produced by this software is or can be warranted for any purpose. They are published mainly for the purpose of providing baseline functionality, as a starting point for others.
@@ -62,7 +66,7 @@ The stylesheets described, however, can be used inside any architecture or stack
 
 ### XSLT dependencies
 
-The XSLT is documented internally, but developers can assume that features of XSLT 3.0 are sometimes exploited, meaning these stylesheets will not always run correctly, unaltered, in an XSLT 1.0 environment.
+The XSLT is documented internally, but developers can assume that features of XSLT 3.0 are sometimes exploited, meaning these stylesheets will generally not run correctly, unaltered, in an XSLT 1.0 environment.
 
 The Saxon processor from Saxonica.com is the leading XSLT 3.0 processor and has been used for testing. Its open-source version is recommended. However, the XSLT code is conformant to standards and should also run in any (conformant) XSLT 3.0 engine.
 
@@ -199,6 +203,7 @@ A command line for producing a PDF version of the "NIST emulation" HTML, will lo
 
 ```bash
 > ./fop -xml name.xml -xsl name2fo.xsl -pdf name.pdf
+```
 
 Note that in order to work, however, the script `fop.sh` will have been modified to call SaxonHE instead of the built-in Java transformation engine (Xalan), which is used by default.
 
@@ -206,3 +211,18 @@ Note that in order to work, however, the script `fop.sh` will have been modified
 ## Customization
 
 Either or both of these XSLT transformations may be further customized, either by direct intervention or by importing or including into local/customizing XSLT stylesheets.
+
+## NIST DISCLAIMER STATEMENT
+
+Also see https://www.nist.gov/disclaimer.
+
+> ### Software Disclaimer
+>
+> NIST-developed software is provided by NIST as a public service. You may use, copy and distribute copies of the software in any medium, provided that you keep intact this entire notice. You may improve, modify and create derivative works of the software or any portion of the software, and you may copy and distribute such modifications or works. Modified works should carry a notice stating that you changed the software and should note the date and nature of any such change. Please explicitly acknowledge the National Institute of Standards and Technology as the source of the software.
+> 
+> NIST-developed software is expressly provided "AS IS." NIST MAKES NO WARRANTY OF ANY KIND, EXPRESS, IMPLIED, IN FACT OR ARISING BY OPERATION OF LAW, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT AND DATA ACCURACY. NIST NEITHER REPRESENTS NOR WARRANTS THAT THE OPERATION OF THE SOFTWARE WILL BE UNINTERRUPTED OR ERROR-FREE, OR THAT ANY DEFECTS WILL BE CORRECTED. NIST DOES NOT WARRANT OR MAKE ANY REPRESENTATIONS REGARDING THE USE OF THE SOFTWARE OR THE RESULTS THEREOF, INCLUDING BUT NOT LIMITED TO THE CORRECTNESS, ACCURACY, RELIABILITY, OR USEFULNESS OF THE SOFTWARE.
+> 
+> You are solely responsible for determining the appropriateness of using and distributing the software and you assume all risks associated with its use, including but not limited to the risks and costs of program errors, compliance with applicable laws, damage to or loss of data, programs or equipment, and the unavailability or interruption of operation. This software is not intended to be used in any situation where a failure could cause risk of injury or damage to property. The software developed by NIST employees is not subject to copyright protection within the United States.
+> 
+> [See the NIST Privacy, Security Notice, and Accessibility Statement](https://www.nist.gov/property-fieldsection/privacy-statementsecuritynoticeaccessibility-statement)
+> [More information about copyright, fair use and licensing for SRD, data and software](https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications)

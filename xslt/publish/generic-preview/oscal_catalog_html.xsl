@@ -423,7 +423,7 @@
    </xsl:template>
    
    <xsl:template match="control" mode="link-as-link" expand-text="true">
-      <a href="#{ @id }">{ prop[@name='label']/@value }</a>
+      <a href="#{ @id }">{ prop[@name='label'][1]/@value }</a>
    </xsl:template>
    
    <xsl:template priority="2" match="resource[empty(rlink)]" mode="link-as-link">

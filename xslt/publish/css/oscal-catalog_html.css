@@ -234,3 +234,5 @@ table.objective-table td { padding: 0.4em; font-family: Calibri, sans-serif; bor
 
 .resource td { padding-top: 0.5em }
 .resource td.title { width: 10% }
+
+tr.resource:nth-child(odd) { background-color: gainsboro }
