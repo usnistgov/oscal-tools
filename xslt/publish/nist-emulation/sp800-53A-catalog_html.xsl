@@ -48,7 +48,7 @@
             </xsl:if>
             <summary class="h3">
                <span class="label">
-                  <xsl:apply-templates mode="part-number" select="prop[@name = 'label']"/>
+                  <xsl:apply-templates mode="part-number" select="prop[@name = 'label'][1]"/>
                </span>
                <xsl:for-each select="ancestor::control/title">
                   <small>
@@ -198,7 +198,16 @@
       </div>
    </xsl:template>
    
-   <xsl:template match="part[@name='assessment']/prop[@name='method']"/>   
+   <xsl:template match="part[@name=('assessment','assessment-method')]/prop[@name='method']"/>   
+   
+   <xsl:template match="part[@name=('assessment','assessment-objects')]/p">
+      <p>
+         <xsl:copy-of select="@*"/>
+         <input type="checkbox"/>
+         <xsl:text> </xsl:text>
+         <xsl:apply-templates mode="#current"/>
+      </p>
+   </xsl:template>   
    
    <xsl:template match="part[@name='item'] | part[@name='objective']">
       <div class="part">
@@ -227,21 +236,50 @@
                <xsl:apply-templates select="." mode="summary-title"/>
             </summary>
             <table class="objective-part">
-            <tbody>
-               <tr>
-                  <td>
-                     <xsl:apply-templates select="." mode="part-number"/>
-                  </td>
-                  <td>
-                     <xsl:apply-templates/>
-                  </td>
-               </tr>
-            </tbody>
-         </table>
+               <tbody>
+                  <tr>
+                     <td>
+                        <xsl:apply-templates select="." mode="part-number"/>
+                     </td>
+                     <td>
+                        <xsl:apply-templates/>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
          </details>
-         
-         
       </div>
+   </xsl:template>
+   
+   <xsl:template priority="3" match="control/part[@name='assessment-objective']">
+      <div class="part">
+         <xsl:copy-of select="@id"/>
+         <details>
+            <summary>
+               <xsl:apply-templates select="." mode="summary-title"/>
+            </summary>
+            <table class="objective-table">
+               <tbody>
+                  <xsl:apply-templates select="." mode="assessment-table"/>
+               </tbody>
+            </table>
+         </details>
+      </div>
+   </xsl:template>
+   
+   <xsl:template priority="5" mode="assessment-table" match="part[@name='assessment-objective']//part[@name='assessment-objective']">
+      <xsl:apply-templates mode="#current"/>
+   </xsl:template>
+   
+   <xsl:template priority="8" mode="assessment-table" match="part[@name='assessment-objective'][exists(p)]">
+      <tr>
+         <td class="assessment-label">
+           <xsl:apply-templates select="." mode="part-number"/>
+         </td>
+         <td>
+            <xsl:apply-templates/>
+         </td>
+      </tr>
    </xsl:template>
    
    <xsl:template match="*" mode="summary-title">
@@ -268,7 +306,7 @@
    <xsl:template match="part" mode="part-number"/>
    
    <xsl:template match="part[prop/@name='label']" mode="part-number">
-      <xsl:apply-templates mode="#current" select="prop[@name='label']"/>
+      <xsl:apply-templates mode="#current" select="prop[@name='label'][1]"/>
    </xsl:template>
    
    <xsl:template match="prop" mode="part-number">
@@ -305,10 +343,24 @@
       </h4>
    </xsl:template>
    
+   <xsl:template priority="2" match="part[@name='assessment-objective']" mode="title">
+      <h4>
+         <xsl:text>Assessment Objective</xsl:text>
+         <xsl:if test="part">s</xsl:if>
+      </h4>
+   </xsl:template>
+   
+   <xsl:template priority="2" match="part[@name='assessment-method']" mode="title">
+      <h4>
+         <xsl:text>Assessment Method: </xsl:text>
+         <xsl:value-of select="prop[@name='method']/@value"/>
+      </h4>
+   </xsl:template>
+   
    <xsl:template  priority="2" match="part[@name='assessment']" mode="title">
       <h4>
          <xsl:text>Assessment: </xsl:text>
-         <xsl:value-of select="prop[@name='method']"/>
+         <xsl:value-of select="prop[@name='method']/@value"/>
       </h4>
    </xsl:template>
    
@@ -469,7 +521,7 @@
    </xsl:template>
    
    <xsl:template match="back-matter/resource">
-      <tr class="resource" id="{@uuid}">
+      <tr class="resource" id="resource-{@uuid}">
          <xsl:apply-templates/>
       </tr>
    </xsl:template>
