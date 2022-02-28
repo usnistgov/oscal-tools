@@ -205,16 +205,31 @@ Since this XSLT is a customization of the generic preview (HTML) XSLT, it accept
 
 ### PDF production
 
-PDF production is supported by an XSLT 3.0 transformation applied to the HTML (either 'preview' or 'NIST emulation') produced in earlier steps.
-
-A command line for producing a PDF version of the "NIST emulation" HTML, will look like this:
+PDF production is supported by an XSLT 3.0 transformation applied to the *HTML (either 'preview' or 'NIST emulation') produced in earlier steps*.
 
 ```bash
-> ./fop -xml name.xml -xsl name2fo.xsl -pdf name.pdf
+java -cp saxon-he-10.0.jar net.sf.saxon.Transform -t -s:latest-catalog-pre-fo.html -xsl:nist-emulation/oscal_sp800-53-emulator_fo.xsl -o:latest-catalog-formatted.fo
 ```
 
-Note that in order to work, however, the script `fop.sh` will have been modified to call SaxonHE instead of the built-in Java transformation engine (Xalan), which is used by default.
+This produces an XML instance (with file suffix `.fo`) suitable for processing directly in Apache FOP (see [Apache FOP documentation](https://xmlgraphics.apache.org/fop/0.95/running.html) for more info.
 
+```bash
+> ./fop -fo latest-catalog-formatted.fo -pdf name.pdf
+```
+
+Alternatively, these two steps can be combined into one by a script that calls a transformation internally before invoking Xalan.
+
+In general, a command line for producing a PDF version of the "NIST emulation" HTML, can be constructed in the form:
+
+```bash
+> ./fop -xml latest-catalog-formatted.html -xsl nist-emulation/oscal_sp800-53-emulator_fo.xsl -pdf latest-catalog-formatted.pdf
+```
+
+In this configuration, the first stage of the two-step process is embedded. In order to work with these stylesheets, however, the script `fop.sh` will have been modified to call SaxonHE instead of the built-in Java transformation engine (Xalan), which is used by default.
+
+The two transformations (producing HTML and FO format representations) can also be chained with the third (PDF production from FO format) for an end-to-end OSCAL-to-PDF pipeline.
+
+XML desktop applications, editors or IDEs may have support for XSL-FO based transformations (using FOP or a commercial engine) built in, along with features to support these configurations and others (for example, using them as libraries for other transformations).
 
 ## Customization
 
