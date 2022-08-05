@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapp=self.webpackChunkapp||[]).push([[2964],{2964:(O,o,a)=>{a.r(o),a.d(o,{CatMetaPageModule:()=>u});var n=a(9808),M=a(4182),E=a(2974),l=a(4477),P=a(3930),t=a(2096);let u=(()=>{class _{}return _.\u0275fac=function(D){return new(D||_)},_.\u0275mod=t.oAB({type:_}),_.\u0275inj=t.cJS({imports:[[n.ez,M.u5,E.Pc,l.Y,P.K]]}),_})()}}]);
