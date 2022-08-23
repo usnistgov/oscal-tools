@@ -43,4 +43,4 @@ Please review [the application's source code repository](https://github.com/usni
 
 ## How do I request support with my own deployment of OSCAL CAT, report bugs, or file features?
 
-The developers of OSCAL CAT will provide support on a best-effort basis by responding to the general community [by opening issues on GitHub](https://github.com/usnistgov/oscal-cat/issues/new). Interested community members are also encouraged to select and implement the features of interest.
+The developers of OSCAL CAT will provide support on a best-effort basis by responding to the general community [by opening issues on GitHub](https://github.com/usnistgov/oscal-cat/issues/new) or contact [oscal@nist.gov](mailto:oscal@nist.gov). Interested community members are also encouraged to select and implement the features of interest.
