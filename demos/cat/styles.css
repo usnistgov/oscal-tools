@@ -66,6 +66,65 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+  /** Custom baseline colors: Baseline High **/
+  --ion-color-baseline-high: #ff6666;
+  --ion-color-baseline-high-rgb: 255, 102, 102;
+  --ion-color-baseline-high-contrast: #000000;
+  --ion-color-baseline-high-contrast-rgb: 0, 0, 0;
+  --ion-color-baseline-high-shade: #e05a5a;
+  --ion-color-baseline-high-tint: #ff7575;
+  /** Custom baseline colors: Baseline Medium **/
+  --ion-color-baseline-medium: #ffff99;
+  --ion-color-baseline-medium-rgb: 255, 255, 153;
+  --ion-color-baseline-medium-contrast: #000000;
+  --ion-color-baseline-medium-contrast-rgb: 0, 0, 0;
+  --ion-color-baseline-medium-shade: #e0e087;
+  --ion-color-baseline-medium-tint: #ffffa3;
+  /** Custom baseline colors: Baseline Low **/
+  --ion-color-baseline-low: #99ee99;
+  --ion-color-baseline-low-rgb: 153, 238, 153;
+  --ion-color-baseline-low-contrast: #000000;
+  --ion-color-baseline-low-contrast-rgb: 0, 0, 0;
+  --ion-color-baseline-low-shade: #87d187;
+  --ion-color-baseline-low-tint: #a3f0a3;
+  --ion-color-baseline-privacy: #9999ff;
+  --ion-color-baseline-privacy-rgb: 153, 153, 255;
+  --ion-color-baseline-privacy-contrast: #000000;
+  --ion-color-baseline-privacy-contrast-rgb: 0, 0, 0;
+  --ion-color-baseline-privacy-shade: #8787e0;
+  --ion-color-baseline-privacy-tint: #a3a3ff;
+}
+.ion-color-baseline-high {
+  --ion-color-base: var(--ion-color-baseline-high);
+  --ion-color-base-rgb: var(--ion-color-baseline-high-rgb);
+  --ion-color-contrast: var(--ion-color-baseline-high-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-baseline-high-contrast-rgb);
+  --ion-color-shade: var(--ion-color-baseline-high-shade);
+  --ion-color-tint: var(--ion-color-baseline-high-tint);
+}
+.ion-color-baseline-low {
+  --ion-color-base: var(--ion-color-baseline-low);
+  --ion-color-base-rgb: var(--ion-color-baseline-low-rgb);
+  --ion-color-contrast: var(--ion-color-baseline-low-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-baseline-low-contrast-rgb);
+  --ion-color-shade: var(--ion-color-baseline-low-shade);
+  --ion-color-tint: var(--ion-color-baseline-low-tint);
+}
+.ion-color-baseline-medium {
+  --ion-color-base: var(--ion-color-baseline-medium);
+  --ion-color-base-rgb: var(--ion-color-baseline-medium-rgb);
+  --ion-color-contrast: var(--ion-color-baseline-medium-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-baseline-medium-contrast-rgb);
+  --ion-color-shade: var(--ion-color-baseline-medium-shade);
+  --ion-color-tint: var(--ion-color-baseline-medium-tint);
+}
+.ion-color-baseline-privacy {
+  --ion-color-base: var(--ion-color-baseline-privacy);
+  --ion-color-base-rgb: var(--ion-color-baseline-privacy-rgb);
+  --ion-color-contrast: var(--ion-color-baseline-privacy-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-baseline-privacy-contrast-rgb);
+  --ion-color-shade: var(--ion-color-baseline-privacy-shade);
+  --ion-color-tint: var(--ion-color-baseline-privacy-tint);
 }
 @media (prefers-color-scheme: dark) {
   /*
@@ -1522,13 +1581,6 @@ sub {
  * ----------------------------------------------------------------------------
  * Imports a file that can contain Sass/CSS that should be used in the app
   */
-.oscal-modal-prompt-class {
-  --backdrop-opacity: 0.2;
-  --background: linear-gradient(230deg, rgb(4, 4, 88) 1%, rgb(6, 6, 36) 100%);
-  background: linear-gradient(230deg, #12062b 1%, #060624 100%);
-  --min-width: 30%;
-  min-width: 30%;
-}
 .transparent-modal {
   --background: #00000066;
 }
@@ -1552,6 +1604,18 @@ sub {
   --min-width: 34%;
   --backdrop-opacity: 0.2;
   --background:linear-gradient(180deg, rgba(128, 0, 0, 1), rgba(222, 0, 0, 1));
+}
+.prompt-global-class {
+  --min-width: 34%;
+  --backdrop-opacity: 0.2;
+  --background: linear-gradient(230deg, rgb(4, 4, 88) 1%, rgb(6, 6, 36) 100%);
+}
+.oscal-modal-prompt-class {
+  --backdrop-opacity: 0.2;
+  --background: linear-gradient(230deg, rgb(4, 4, 88) 1%, rgb(6, 6, 36) 100%);
+  background: linear-gradient(230deg, #12062b 1%, #060624 100%);
+  --min-width: 30%;
+  min-width: 30%;
 }
 
 /*# sourceMappingURL=styles.css.map*/

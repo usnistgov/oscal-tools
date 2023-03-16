@@ -1,14 +1,14 @@
 {
   "catalog": {
-    "uuid": "be314319-466e-459b-b736-631bd84e3cd7",
+    "uuid": "3bb9ea17-a3f2-4231-844c-09112524b3b7",
     "metadata": {
       "title": "NIST Special Publication 800-53 Revision 4 MODERATE IMPACT BASELINE",
-      "last-modified": "2022-01-25T16:50:49.591338Z",
+      "last-modified": "2022-08-02T18:08:12.072143Z",
       "version": "2015-01-22",
       "oscal-version": "1.0.0",
       "links": [
         {
-          "href": "NIST_SP-800-53_rev4_MODERATE-baseline_profile.xml",
+          "href": "NIST_SP-800-53_rev4_MODERATE-baseline_profile.json",
           "rel": "resolution-source"
         }
       ],
